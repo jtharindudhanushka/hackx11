@@ -69,14 +69,19 @@ function StartGem() {
       viewport={{ once: true }}
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       className="relative flex items-center justify-center z-20"
-      style={{ width: 48, height: 48 }}
+      style={{ width: 64, height: 64 }}
     >
+      {/* ── Background plate: hides the rail behind the gem ── */}
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{ background: "#010814", zIndex: 0 }}
+      />
       {/* Soft glow */}
       <div
         className="absolute inset-0 rounded-full blur-lg"
-        style={{ background: "radial-gradient(circle, rgba(91,184,255,0.4) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(circle, rgba(91,184,255,0.35) 0%, transparent 70%)", zIndex: 0 }}
       />
-      <svg viewBox="0 0 48 48" width={48} height={48} style={{ overflow: "visible" }}>
+      <svg viewBox="0 0 48 48" width={52} height={52} style={{ overflow: "visible", position: "relative", zIndex: 1 }}>
         <defs>
           <linearGradient id="gem-fill" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#d6f0ff" />
@@ -89,7 +94,6 @@ function StartGem() {
           </linearGradient>
         </defs>
 
-        {/* Outer diamond shape */}
         {/* top facet */}
         <polygon points="24,3 9,18 24,22 39,18" fill="url(#gem-fill)" />
         {/* bottom-left facet */}
@@ -97,7 +101,6 @@ function StartGem() {
         {/* bottom-right facet */}
         <polygon points="39,18 24,22 24,45" fill="#1A6FD4" opacity="0.85" />
 
-        {/* Edge lines */}
         <polyline points="24,3 9,18 24,45 39,18 24,3"
           fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="0.8" strokeLinejoin="round" />
         <line x1="9" y1="18" x2="39" y2="18"
@@ -105,7 +108,6 @@ function StartGem() {
         <line x1="24" y1="22" x2="24" y2="45"
           stroke="rgba(255,255,255,0.12)" strokeWidth="0.6" />
 
-        {/* Glint */}
         <ellipse cx="21" cy="11" rx="3" ry="2"
           fill="white" opacity="0.5" transform="rotate(-15 21 11)" />
       </svg>
@@ -125,27 +127,33 @@ function EndOrb() {
       viewport={{ once: true }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className="relative flex items-center justify-center z-20"
-      style={{ width: 56, height: 56 }}
+      style={{ width: 72, height: 72 }}
     >
-      {/* Outer pulse ring 1 */}
+      {/* ── Background plate: hides the rail tip behind the orb ── */}
+      <div
+        className="absolute rounded-full"
+        style={{ width: 40, height: 40, background: "#010814", zIndex: 0 }}
+      />
+
+      {/* Pulse ring 1 */}
       <motion.div
         className="absolute rounded-full"
-        style={{ width: 56, height: 56, border: "1px solid rgba(245,165,36,0.35)" }}
-        animate={{ scale: [1, 1.5, 1], opacity: [0.7, 0, 0.7] }}
+        style={{ width: 60, height: 60, border: "1px solid rgba(245,165,36,0.35)", zIndex: 1 }}
+        animate={{ scale: [1, 1.45, 1], opacity: [0.7, 0, 0.7] }}
         transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut" }}
       />
-      {/* Outer pulse ring 2 — offset */}
+      {/* Pulse ring 2 */}
       <motion.div
         className="absolute rounded-full"
-        style={{ width: 56, height: 56, border: "1px solid rgba(245,165,36,0.2)" }}
-        animate={{ scale: [1, 1.8, 1], opacity: [0.5, 0, 0.5] }}
+        style={{ width: 60, height: 60, border: "1px solid rgba(245,165,36,0.2)", zIndex: 1 }}
+        animate={{ scale: [1, 1.75, 1], opacity: [0.5, 0, 0.5] }}
         transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut", delay: 0.6 }}
       />
 
       {/* Mid ring */}
       <motion.div
         className="absolute rounded-full"
-        style={{ width: 36, height: 36, border: "1.5px solid rgba(245,165,36,0.5)" }}
+        style={{ width: 36, height: 36, border: "1.5px solid rgba(245,165,36,0.55)", zIndex: 2 }}
         animate={{ opacity: [0.5, 1, 0.5] }}
         transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
       />
@@ -156,10 +164,11 @@ function EndOrb() {
         style={{
           width: 18,
           height: 18,
+          zIndex: 3,
           background: "radial-gradient(circle at 38% 36%, #FFE082 0%, #F5A524 55%, #c17200 100%)",
           boxShadow: "0 0 12px rgba(245,165,36,0.8), 0 0 28px rgba(245,165,36,0.4)",
         }}
-        animate={{ scale: [1, 1.1, 1] }}
+        animate={{ scale: [1, 1.12, 1] }}
         transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
       />
     </motion.div>
