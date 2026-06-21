@@ -57,7 +57,8 @@ export default function Hero() {
           initial={{ scale: 0.92, opacity: 0 }}
           animate={{ scale: 1,   opacity: 1 }}
           transition={{ duration: 2.8, ease: [0.16, 1, 0.3, 1] }}
-          style={{ position: "absolute", inset: 0, transformOrigin: "center center" }}
+          className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-[140vw] md:w-full"
+          style={{ transformOrigin: "center center" }}
         >
           <Image
             src="/Hero - BG Img.png"
@@ -82,13 +83,13 @@ export default function Hero() {
       }} />
 
       {/* ── z-5: Hero Title (seen through the cave-opening window) ── */}
-      <motion.div style={{
-        position: "absolute", inset: 0, zIndex: 5,
-        display: "flex", flexDirection: "column",
-        alignItems: "center", justifyContent: "flex-start",
-        paddingTop: "clamp(90px, 18vh, 200px)",
-        y: titleY, opacity: titleOp,
-      }}>
+      <motion.div
+        className="absolute inset-0 z-5 flex flex-col items-center justify-center pt-0 pb-[20vh] md:justify-start md:pt-[clamp(90px,18vh,200px)] md:pb-0"
+        style={{
+          y: titleY,
+          opacity: titleOp,
+        }}
+      >
         <h1 style={{
           fontFamily: "'TT Hoves Pro Expanded', 'TT Hoves Pro', sans-serif",
           fontWeight: 800,
@@ -154,13 +155,11 @@ export default function Hero() {
         left: 0,
         right: 0,
         bottom: "-2px",
-        height: "380px",
+        height: "clamp(180px, 35vh, 380px)",
         zIndex: 51,
         background: "linear-gradient(to bottom, transparent 0%, rgba(1, 8, 20, 0.15) 20%, rgba(1, 8, 20, 0.6) 60%, rgba(1, 8, 20, 0.9) 85%, #010814 100%)",
         pointerEvents: "none",
       }} />
-
-
 
       {/* ── z-60: Subtitle + Buttons (above the foreground) ── */}
       <motion.div style={{
@@ -191,7 +190,7 @@ export default function Hero() {
             maxWidth: "440px",
             lineHeight: 1.8,
             letterSpacing: "0.01em",
-            marginBottom: "26px",
+            marginBottom: "16px",
             padding: "0 24px",
           }}
         >
@@ -202,15 +201,15 @@ export default function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          style={{ display: "flex", gap: "14px", alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}
+          className="flex flex-col md:flex-row gap-3.5 items-center justify-center w-full px-6 md:px-0"
         >
-          <button className="btn-primary">
+          <button className="btn-primary w-full max-w-[280px] md:w-auto">
             Register Now
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
           </button>
-          <button className="btn-secondary">
+          <button className="btn-secondary w-full max-w-[280px] md:w-auto">
             Learn More
           </button>
         </motion.div>
@@ -222,7 +221,7 @@ export default function Hero() {
           transition={{ duration: 1.2, delay: 1.9 }}
           style={{
             display: "flex", flexDirection: "column",
-            alignItems: "center", gap: "7px", marginTop: "26px",
+            alignItems: "center", gap: "7px", marginTop: "16px",
           }}
         >
           <span style={{

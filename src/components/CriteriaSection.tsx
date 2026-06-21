@@ -33,7 +33,7 @@ const CardDecorator = ({
   accentColor: string;
   rotate: any;
 }) => (
-  <div aria-hidden className="relative mx-auto size-48 [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]">
+  <div aria-hidden className="relative mx-auto size-40 md:size-48 [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]">
     {/* Grid lines */}
     <div 
       className="absolute inset-0 opacity-20 transition-opacity duration-300 group-hover:opacity-35"
@@ -46,12 +46,12 @@ const CardDecorator = ({
     {/* Icon with scroll rotation and hover enlarge */}
     <motion.div 
       style={{ rotate }}
-      className="absolute inset-0 m-auto flex size-36 items-center justify-center transition-transform duration-500 group-hover:scale-110"
+      className="absolute inset-0 m-auto flex size-28 md:size-36 items-center justify-center transition-transform duration-500 group-hover:scale-110"
     >
       <img
         src={imageUrl}
         alt="Icon"
-        className="absolute w-32 h-32 object-contain drop-shadow-[0_15px_25px_rgba(0,0,0,0.4)]"
+        className="absolute w-24 h-24 md:w-32 md:h-32 object-contain drop-shadow-[0_15px_25px_rgba(0,0,0,0.4)]"
       />
     </motion.div>
   </div>
@@ -65,7 +65,7 @@ export default function CriteriaSection() {
   });
 
   return (
-    <section id="criteria" ref={sectionRef} className="relative w-full bg-[#010814] py-32 overflow-hidden z-10">
+    <section id="criteria" ref={sectionRef} className="relative w-full bg-[#010814] pt-6 pb-10 md:py-20 overflow-hidden z-10">
       
       {/* Background Ambient - Optimized */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -78,7 +78,7 @@ export default function CriteriaSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-24"
+          className="text-center mb-8 md:mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">
             Who Can Compete
@@ -109,7 +109,7 @@ export default function CriteriaSection() {
                 </div>
 
                 {/* Inner Card Body */}
-                <div className="relative p-10 rounded-[23px] bg-[#010814] h-full w-full flex flex-col items-center text-center group-hover:bg-[#020d20] transition-colors duration-300 z-20">
+                <div className="relative p-6 sm:p-8 md:p-10 rounded-[23px] bg-[#010814] h-full w-full flex flex-col items-center text-center group-hover:bg-[#020d20] transition-colors duration-300 z-20">
                   {/* Visual Grid Decorator */}
                   <CardDecorator 
                     imageUrl={item.imageUrl}
@@ -117,8 +117,8 @@ export default function CriteriaSection() {
                     rotate={useTransform(scrollYProgress, [0, 1], idx % 2 === 0 ? [-20, 20] : [20, -20])}
                   />
 
-                  <h3 className="text-2xl font-bold text-white mt-6 mb-4">{item.title}</h3>
-                  <p className="text-white/60 font-light leading-relaxed text-sm">{item.desc}</p>
+                  <h3 className="text-xl md:text-2xl font-bold text-white mt-6 mb-4">{item.title}</h3>
+                  <p className="text-white/60 font-light leading-relaxed text-sm text-center w-full">{item.desc}</p>
                 </div>
               </motion.div>
             );

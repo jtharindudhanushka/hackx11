@@ -12,10 +12,10 @@ const memories = [
 
 export default function MemoriesSection() {
   return (
-    <section id="memories" className="relative w-full bg-[#010814] py-32 overflow-hidden z-10">
+    <section id="memories" className="relative w-full bg-[#010814] pt-12 pb-10 md:py-20 overflow-hidden z-10">
       {/* Seamless top blend */}
       <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none" style={{ background: "linear-gradient(to bottom, #010814, transparent)" }} />
-      <div className="max-w-7xl mx-auto px-6 relative z-10 mb-16">
+      <div className="max-w-7xl mx-auto px-6 relative z-10 mb-10 md:mb-12">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -28,7 +28,7 @@ export default function MemoriesSection() {
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 tracking-tight">
             Eleven Years. Hundreds of Teams. <br className="hidden md:block"/> One Stage That Changed Everything.
           </h2>
-          <p className="text-lg text-white/60 font-light max-w-3xl mx-auto">
+          <p className="text-lg text-white/60 font-light max-w-3xl mx-auto text-center">
             From the very first edition to a Grand Finals night with the Minister of Science and Technology as Chief Guest, hackX has grown into the innovation platform that defines what Sri Lankan university students can build.
           </p>
         </motion.div>
@@ -77,7 +77,7 @@ export default function MemoriesSection() {
         </motion.div>
       </div>
       
-      <div className="max-w-7xl mx-auto px-6 mt-16 text-center relative z-10">
+      <div className="max-w-7xl mx-auto px-6 mt-10 md:mt-12 text-center relative z-10">
         <p className="text-xl text-white font-medium mb-8">
           Every name on that list started with one idea. What is yours?
         </p>

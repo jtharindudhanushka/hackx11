@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function AskAISection() {
   return (
-    <section id="ask-ai" className="relative w-full bg-[#010814] py-32 overflow-hidden z-10 border-t border-white/5">
+    <section id="ask-ai" className="relative w-full bg-[#010814] py-16 md:py-20 overflow-hidden z-10 border-t border-white/5">
       {/* Background Orbs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div 
@@ -25,7 +25,7 @@ export default function AskAISection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-10 md:mb-12"
         >
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-6 shadow-[0_0_20px_rgba(91,184,255,0.1)]">
             <div className="w-2 h-2 rounded-full bg-[#5BB8FF] animate-pulse" />
@@ -34,7 +34,7 @@ export default function AskAISection() {
             </span>
           </div>
           <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">Got a Question? <br className="hidden md:block"/> Get an Answer.</h2>
-          <p className="text-lg text-white/60 font-light max-w-2xl mx-auto">
+          <p className="text-lg text-white/60 font-light max-w-2xl mx-auto text-center">
             Not sure if your idea qualifies? Wondering what judges look for in a proposal? Ask anything about hackX 11.0 and get an instant AI-powered answer.
           </p>
         </motion.div>

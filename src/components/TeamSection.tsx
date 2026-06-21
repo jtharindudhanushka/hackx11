@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import BorderGlow from "@/components/ui/BorderGlow";
 
@@ -80,10 +80,10 @@ function CoordCard({ coord }: { coord: typeof coordinators[0] }) {
 
         {/* Info overlay (sitting clean on top of the blurred fade background) */}
         <div className="relative z-20 flex flex-col w-full">
-          <p className="text-white font-extrabold text-lg md:text-xl tracking-tight leading-tight mb-1">
+          <p className="text-white font-extrabold text-lg md:text-xl tracking-tight leading-tight mb-1 text-center md:text-left">
             {coord.name}
           </p>
-          <p className="text-[#5BB8FF] text-xs md:text-sm font-semibold tracking-wide mb-4">
+          <p className="text-[#5BB8FF] text-xs md:text-sm font-semibold tracking-wide mb-4 text-center md:text-left">
             {coord.role}
           </p>
 
@@ -123,17 +123,59 @@ export default function TeamSection() {
   const next = useCallback(() => setActive(a => a + 1), []);
   const prev = useCallback(() => setActive(a => a - 1), []);
 
+  const [isMobile, setIsMobile] = useState(false);
+  const [translateXStep, setTranslateXStep] = useState(280);
+  // Use a ref so the auto-scroll interval always reads the live value
+  // without a stale closure — avoids the race condition where isMobile
+  // is false on first render and starts the timer before handleResize fires.
+  const isMobileRef = useRef(false);
+  // Native touch tracking for mobile swipe
+  const touchStartX = useRef<number | null>(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      const mobile = width < 768;
+      isMobileRef.current = mobile;
+      setIsMobile(mobile);
+      if (!mobile) {
+        const val = width * 0.22;
+        setTranslateXStep(Math.max(260, Math.min(val, 310)));
+      }
+    };
+    handleResize(); // sets isMobileRef.current immediately
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Auto-scroll only on desktop — reads live ref value inside the interval
   useEffect(() => {
     const timer = setInterval(() => {
-      setActive((a) => a + 1);
+      if (!isMobileRef.current) {
+        setActive((a) => a + 1);
+      }
     }, 3000);
     return () => clearInterval(timer);
-  }, []);
+  }, []); // empty deps — timer is always running, ref controls whether it advances
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const delta = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(delta) > 50) {
+      if (delta > 0) next(); // swipe left → next
+      else prev();           // swipe right → prev
+    }
+    touchStartX.current = null;
+  };
 
   return (
     <section 
       id="oc"
-      className="relative w-full bg-[#010814] py-32 overflow-hidden z-10" 
+      className="relative w-full bg-[#010814] pt-10 pb-10 md:py-20 overflow-hidden z-10" 
     >
       {/* Ambient background blur */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -154,7 +196,7 @@ export default function TeamSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="text-xs font-bold tracking-[0.2em] uppercase text-[#5BB8FF] mb-3 block"
+              className="text-xs font-bold tracking-[0.2em] uppercase text-[#5BB8FF] mb-3 block text-center md:text-left"
             >
               Organising Committee
             </motion.span>
@@ -163,7 +205,7 @@ export default function TeamSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.65, delay: 0.07 }}
-              className="text-4xl md:text-5xl font-extrabold text-white tracking-tight"
+              className="text-4xl md:text-5xl font-extrabold text-white tracking-tight text-center md:text-left"
             >
               Meet the OC.
             </motion.h2>
@@ -172,7 +214,7 @@ export default function TeamSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.14 }}
-              className="text-white/50 mt-4 text-sm md:text-base font-light leading-relaxed max-w-lg"
+              className="text-white/55 mt-4 text-sm md:text-base font-light leading-relaxed max-w-lg text-center md:text-left mx-auto md:mx-0"
             >
               Have a question? Reach the right person directly. Our team is ready to propel your startup journey forward.
             </motion.p>
@@ -201,11 +243,13 @@ export default function TeamSection() {
 
         {/* ─── Straight Line Carousel ─── */}
         <div 
-          className="relative w-full h-[450px] md:h-[550px] mt-16 flex justify-center items-center overflow-hidden [perspective:1200px]"
+          className="relative w-full h-[350px] md:h-[550px] mt-8 md:mt-16 flex justify-center items-center overflow-hidden [perspective:1200px]"
           style={{
             maskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)",
             WebkitMaskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)",
           }}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
           {[-3, -2, -1, 0, 1, 2, 3].map((offset) => {
             const absoluteIndex = active + offset;
@@ -218,15 +262,24 @@ export default function TeamSection() {
             const translateY = 0;
             
             // Dynamic translation for responsive horizontal spread
-            const translateX = `calc(${offset} * clamp(200px, 20vw, 320px))`; 
+            const translateX = isMobile
+              ? `calc(${offset} * clamp(200px, 20vw, 320px))`
+              : `${offset * translateXStep}px`; 
             
-            const scale = 1 - absOffset * 0.05; // Slightly shrink outer cards for focus/depth
+            const scale = isMobile 
+              ? (1 - absOffset * 0.20) 
+              : (1 - absOffset * 0.05); // Slightly shrink outer cards for focus/depth
+              
+            const opacity = isMobile
+              ? (absOffset > 1 ? 0 : (absOffset === 0 ? 1 : 0.35))
+              : (absOffset > 2 ? 0 : 1); // Hide items too far out
+              
             const zIndex = 20 - absOffset; // Center item on top
             
             return (
               <motion.div
                 key={absoluteIndex}
-                className="absolute w-[220px] h-[320px] md:w-[280px] md:h-[420px] cursor-pointer touch-none"
+                className="absolute w-[220px] h-[320px] md:w-[280px] md:h-[420px] cursor-pointer"
                 initial={{
                   x: translateX,
                   y: translateY,
@@ -240,7 +293,7 @@ export default function TeamSection() {
                   rotateZ: rotateZ,
                   scale: scale,
                   zIndex: zIndex,
-                  opacity: absOffset > 2 ? 0 : 1, // Hide items too far out
+                  opacity: opacity,
                 }}
                 transition={{
                   type: "spring",

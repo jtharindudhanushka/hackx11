@@ -78,7 +78,7 @@ export default function NewSection2() {
     <section 
       ref={sectionRef}
       onMouseMove={handleMouseMove}
-      className="relative w-full bg-[#010814] pt-48 pb-0 overflow-hidden z-10"
+      className="relative w-full bg-[#010814] pt-12 md:pt-28 pb-0 overflow-hidden z-10"
     >
       {/* Ambient blobs - Optimized without CSS blur */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -140,9 +140,9 @@ export default function NewSection2() {
 
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 relative z-50">
         {/* Eyebrow */}
-        <motion.div {...fade(0)} className="flex justify-start mb-16">
+        <motion.div {...fade(0)} className="flex justify-center md:justify-start mb-8 md:mb-16">
           <div className="px-5 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md flex items-center gap-3">
             <div className="w-2 h-2 rounded-full bg-[#5BB8FF] animate-pulse shadow-[0_0_10px_#5BB8FF]" />
             <span className="text-xs font-bold tracking-[0.2em] uppercase text-white/80">
@@ -158,12 +158,12 @@ export default function NewSection2() {
           <div className="md:col-span-6 flex flex-col space-y-8 md:pt-4">
             <motion.h2
               {...fade(0.05)}
-              className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.05]"
+              className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.05] text-center md:text-left"
             >
               More Than a<br className="hidden md:block" /> Hackathon.
             </motion.h2>
 
-            <motion.div {...fade(0.15)} className="space-y-6 text-[1.05rem] md:text-[1.15rem] text-white/55 font-light leading-relaxed relative z-30">
+            <motion.div {...fade(0.15)} className="space-y-6 text-[1.05rem] md:text-[1.15rem] text-white/55 font-light leading-relaxed relative z-30 text-center md:text-left">
               <p>
                 hackX 11.0 is Sri Lanka&apos;s premier inter-university startup challenge, organized by the Industrial
                 Management Science Students&apos; Association at the Department of Industrial Management,
@@ -174,7 +174,7 @@ export default function NewSection2() {
               </p>
             </motion.div>
 
-            <motion.div {...fade(0.25)} className="relative z-30">
+            <motion.div {...fade(0.25)} className="relative z-30 flex justify-center md:justify-start">
               <button className="btn-primary">
                 Delegate Booklet
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -223,7 +223,7 @@ export default function NewSection2() {
         {/* ── Video Player ── */}
         <motion.div
           {...fade(0.2)}
-          className="w-full mt-28 md:mt-40 relative z-30"
+          className="w-full mt-16 md:mt-24 relative z-50"
         >
           {/* Label */}
           <motion.p {...fade(0.1)} className="text-xs font-bold tracking-[0.2em] uppercase text-white/40 mb-6 text-center">
@@ -303,7 +303,7 @@ export default function NewSection2() {
 
       {/* Seamless bottom fade into next section */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none z-40"
+        className="absolute bottom-0 left-0 right-0 h-20 md:h-48 pointer-events-none z-40"
         style={{ background: "linear-gradient(to bottom, transparent, #010814)" }}
       />
     </section>

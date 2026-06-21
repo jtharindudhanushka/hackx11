@@ -48,7 +48,7 @@ export default function PrizesSection() {
   const sectionRef = useRef<HTMLElement>(null);
 
   return (
-    <section ref={sectionRef} className="relative w-full bg-[#010814] py-32 overflow-hidden z-10">
+    <section ref={sectionRef} className="relative w-full bg-[#010814] pt-10 pb-10 md:py-20 overflow-hidden z-10">
 
       {/* Ambient deep glow */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -63,7 +63,7 @@ export default function PrizesSection() {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
 
         {/* Header */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-12 md:mb-16">
           <motion.span {...fade(0)} className="inline-block text-xs font-bold tracking-[0.2em] uppercase text-[#5BB8FF] mb-5">
             What You Win
           </motion.span>
@@ -73,20 +73,25 @@ export default function PrizesSection() {
           >
             Built for Builders.<br className="hidden md:block" /> Rewarded Like Champions.
           </motion.h2>
-          <motion.p {...fade(0.16)} className="text-lg text-white/50 font-light max-w-xl mx-auto leading-relaxed">
+          <motion.p {...fade(0.16)} className="text-lg text-white/50 font-light max-w-xl mx-auto leading-relaxed text-center">
             Three podium spots. Real prizes. Real investor exposure. And recognition on Sri Lanka&apos;s biggest student innovation stage.
           </motion.p>
         </div>
 
-        {/* Prize Cards — Podium layout: 2nd | 1st | 3rd */}
+        {/* Prize Cards — Dynamic Order: 1st | 2nd | 3rd on mobile (via order-x), 2nd | 1st | 3rd on desktop */}
         <div className="flex flex-col md:flex-row items-stretch justify-center gap-6">
-          {[prizes[1], prizes[0], prizes[2]].map((prize, visualIdx) => {
+          {[prizes[0], prizes[1], prizes[2]].map((prize, visualIdx) => {
             const isFirst = prize.size === "large";
+            const orderClass = 
+              prize.rank === "1st" ? "order-1 md:order-2" :
+              prize.rank === "2nd" ? "order-2 md:order-1" :
+              "order-3 md:order-3";
+
             return (
               <motion.div
                 key={prize.rank}
                 {...fade(0.1 + visualIdx * 0.1)}
-                className="w-full md:w-[330px] relative group flex flex-col"
+                className={`w-full md:w-[330px] relative group flex flex-col ${orderClass}`}
                 style={{ alignSelf: "stretch" }}
               >
               <div
@@ -122,7 +127,7 @@ export default function PrizesSection() {
                       <motion.div
                         animate={{ y: [0, -8, 0] }}
                         transition={{ duration: 3 + visualIdx, repeat: Infinity, ease: "easeInOut" }}
-                        className="mb-6 relative"
+                        className="mb-6 relative mx-auto md:mx-0"
                         style={{
                           width: isFirst ? 108 : 86,
                           height: isFirst ? 108 : 86,
@@ -154,7 +159,7 @@ export default function PrizesSection() {
 
                       {/* Rank */}
                       <div
-                        className="font-extrabold tracking-tight mb-2 leading-none"
+                        className="font-extrabold tracking-tight mb-2 leading-none text-center md:text-left"
                         style={{
                           fontSize: isFirst ? "3.5rem" : "2.75rem",
                           background: `linear-gradient(135deg, ${prize.accent} 0%, rgba(255,255,255,0.75) 100%)`,
@@ -166,15 +171,10 @@ export default function PrizesSection() {
                         {prize.rank}
                       </div>
 
-                      <p className="text-white font-bold text-lg mb-3 tracking-tight">{prize.label}</p>
-                      <p className="text-white/45 font-light text-sm leading-relaxed">{prize.tagline}</p>
+                      <p className="text-white font-bold text-lg mb-3 tracking-tight text-center md:text-left">{prize.label}</p>
+                      <p className="text-white/45 font-light text-sm leading-relaxed text-center md:text-left">{prize.tagline}</p>
                     </div>
 
-                    <div className="mt-8 pt-5 border-t border-white/[0.08]">
-                      <p className="text-xs font-bold tracking-widest uppercase" style={{ color: prize.accent, opacity: 0.7 }}>
-                        Grand Finals · hackX 11.0
-                      </p>
-                    </div>
 
                     <div
                       className="absolute bottom-0 right-0 w-32 h-32 pointer-events-none"

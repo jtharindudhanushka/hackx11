@@ -27,9 +27,8 @@ export default function HeroForeground({ scrollProgress }: HeroForegroundProps) 
         initial={{ opacity: 0, scale: 1.08 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-[140vw] md:w-full"
         style={{
-          position: "absolute",
-          inset: 0,
           transformOrigin: "center center",
         }}
       >

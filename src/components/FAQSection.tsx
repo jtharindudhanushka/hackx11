@@ -41,7 +41,7 @@ export default function FAQSection() {
   const [activeIdx, setActiveIdx] = useState<number | null>(0); // Initialize first as open to show the connection effect
 
   return (
-    <section id="faq" className="relative w-full bg-[#010814] py-20 md:py-32 overflow-hidden z-10">
+    <section id="faq" className="relative w-full bg-[#010814] pt-10 pb-12 md:py-20 overflow-hidden z-10">
       {/* Background Ambient */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[600px] h-[600px] bg-[#5BB8FF]/5 rounded-full blur-[150px]" />

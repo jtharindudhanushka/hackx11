@@ -24,7 +24,7 @@ export default function Footer() {
       <div
         className="absolute top-0 inset-x-0 h-48 pointer-events-none"
         style={{
-          zIndex: 5,
+          zIndex: 6,
           background: "linear-gradient(to bottom, #010814 0%, transparent 100%)"
         }}
       />
@@ -53,7 +53,7 @@ export default function Footer() {
       {/* ── LAYER 1: Side pillars ── */}
       {/* Left */}
       <div
-        className="absolute bottom-0 left-0 w-[400px] h-[420px] pointer-events-none overflow-hidden"
+        className="hidden md:block absolute bottom-0 left-0 w-[400px] h-[420px] pointer-events-none overflow-hidden"
         style={{ zIndex: 1, opacity: 0.75 }}
       >
         <div className="relative w-full h-full translate-y-16">
@@ -68,7 +68,7 @@ export default function Footer() {
 
       {/* Right */}
       <div
-        className="absolute bottom-0 right-0 w-[400px] h-[420px] pointer-events-none overflow-hidden"
+        className="hidden md:block absolute bottom-0 right-0 w-[400px] h-[420px] pointer-events-none overflow-hidden"
         style={{ zIndex: 1, opacity: 0.75 }}
       >
         <div className="relative w-full h-full translate-y-16">
@@ -81,11 +81,9 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* ── LAYER 2: Single gradient veil ──
-          Fades the edges so text is readable above the pillars.
-          One CSS background with multiple stops — not two separate divs. */}
+      {/* ── LAYER 2: Horizontal gradient veil (Desktop only) ── */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="hidden md:block absolute inset-0 pointer-events-none"
         style={{
           zIndex: 2,
           background:
@@ -93,46 +91,72 @@ export default function Footer() {
         }}
       />
 
-      {/* ── LAYER 3: Text & logos ── */}
+      {/* ── LAYER 3: Center statue ── */}
       <div
-        className="absolute bottom-0 inset-x-0 pb-8 px-12"
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 pointer-events-none w-[520px] h-[610px] md:w-[560px] md:h-[660px]"
         style={{ zIndex: 3 }}
       >
-        {/* Two-column row */}
-        <div className="max-w-7xl mx-auto grid grid-cols-2 gap-6 mb-8">
-          {/* Left */}
-          <div className="flex flex-col gap-4">
+        <Image
+          src="/footer-center.webp"
+          alt=""
+          fill
+          className="object-contain object-bottom"
+        />
+        {/* Subtle bottom fade */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-12"
+          style={{ background: "linear-gradient(to top, #01050A, transparent)" }}
+        />
+      </div>
+
+      {/* ── LAYER 4: Mobile Vertical Gradient Veil (Ensures readability of text over statue) ── */}
+      <div
+        className="block md:hidden absolute inset-0 pointer-events-none"
+        style={{
+          zIndex: 4,
+          background: "radial-gradient(circle at bottom, rgba(1, 5, 10, 0.95) 0%, rgba(1, 5, 10, 0.8) 45%, rgba(1, 5, 10, 0.3) 70%, transparent 100%)"
+        }}
+      />
+
+      {/* ── LAYER 5: Text & logos ── */}
+      <div
+        className="absolute bottom-0 inset-x-0 pb-8 px-4 md:px-12"
+        style={{ zIndex: 5 }}
+      >
+        {/* Responsive layout: stacked on mobile, 2 columns on desktop */}
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-6 mb-8 text-center md:text-left">
+          {/* Left Column */}
+          <div className="flex flex-col items-center md:items-start gap-4">
             <Link href="/" className="w-fit">
               <div className="relative" style={{ width: "130px", height: "40px" }}>
                 <Image
                   src="/hackxlogo.webp"
                   alt="hackX Logo"
                   fill
-                  style={{ objectFit: "contain", objectPosition: "left center" }}
+                  className="object-contain object-center md:object-left"
                 />
               </div>
             </Link>
-            <p className="text-white/55 text-sm font-light max-w-[240px] leading-relaxed">
+            <p className="text-white/55 text-sm font-light max-w-[320px] md:max-w-[240px] leading-relaxed text-center md:text-left">
               Sri Lanka&apos;s premier national startup challenge for undergraduates across all universities.
             </p>
           </div>
 
-          {/* Right */}
-          <div className="flex flex-col items-end gap-4">
-            <p className="text-white/55 text-sm font-light max-w-[280px] leading-relaxed text-right">
+          {/* Right Column */}
+          <div className="flex flex-col items-center md:items-end gap-4">
+            <p className="text-white/55 text-sm font-light max-w-[320px] md:max-w-[280px] leading-relaxed text-center md:text-right">
               Organized by the Dept. of Industrial Management, University of Kelaniya — under the Patronage of the Ministry of Science &amp; Technology and NSF Sri Lanka.
             </p>
             {/* Organizers logo strip */}
             <div
-              className="relative overflow-hidden"
-              style={{ width: "320px", height: "40px" }}
+              className="relative overflow-hidden w-[280px] sm:w-[320px] h-[40px]"
             >
-              <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[320px] h-[140px]">
+              <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-0 w-[280px] sm:w-[320px] h-[140px]">
                 <Image
                   src="/allorganizerslogo.webp"
                   alt="Organizers"
                   fill
-                  style={{ objectFit: "contain", objectPosition: "right center" }}
+                  className="object-contain object-center md:object-right"
                 />
               </div>
             </div>
@@ -140,44 +164,23 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="max-w-7xl mx-auto pt-5 border-t border-white/10 flex items-center justify-between">
-          <p className="text-xs text-white/30">&copy; {new Date().getFullYear()} hackX 11.0.</p>
+        <div className="max-w-7xl mx-auto pt-5 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-white/30 text-center md:text-left">&copy; {new Date().getFullYear()} hackX 11.0.</p>
           <div className="flex items-center gap-3">
-            <a href="#" className="social-glass" aria-label="Facebook">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            <a href="https://www.facebook.com/hackXJunior" className="social-glass" aria-label="Facebook">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
             </a>
-            <a href="#" className="social-glass" aria-label="Instagram">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            <a href="https://www.instagram.com/imssa.uok" className="social-glass" aria-label="Instagram">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" /></svg>
             </a>
-            <a href="#" className="social-glass" aria-label="YouTube">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+            <a href="https://www.youtube.com/@hackX_UoK" className="social-glass" aria-label="YouTube">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" /><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" /></svg>
             </a>
-            <a href="#" className="social-glass" aria-label="TikTok">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 15.66a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.04-.06z"/></svg>
+            <a href="https://www.linkedin.com/company/imssauok/" className="social-glass" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect x="2" y="9" width="4" height="12" /><circle cx="4" cy="4" r="2" /></svg>
             </a>
           </div>
         </div>
-      </div>
-
-      {/* ── LAYER 4: Center statue — on top of everything ──
-          Anchored to the bottom, sized to fill the full footer height.
-          overflow:hidden on the footer clips the bottom naturally.
-          The head sits at the top of the footer where the gradient blends it above. */}
-      <div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 pointer-events-none"
-        style={{ zIndex: 4, width: "560px", height: "660px" }}
-      >
-        <Image
-          src="/footer-center.webp"
-          alt=""
-          fill
-          style={{ objectFit: "contain", objectPosition: "bottom center" }}
-        />
-        {/* Subtle bottom fade */}
-        <div
-          className="absolute inset-x-0 bottom-0 h-12"
-          style={{ background: "linear-gradient(to top, #01050A, transparent)" }}
-        />
       </div>
     </footer>
   );

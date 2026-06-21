@@ -110,13 +110,12 @@ function EndImage({ scrollYProgress }: { scrollYProgress: any }) {
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className="relative flex items-center justify-center z-20"
-      style={{ width: 140, height: 140 }}
+      className="relative flex items-center justify-center z-20 w-[80px] h-[80px] md:w-[140px] md:h-[140px]"
     >
       {/* Background plate to mask the end of the timeline rail */}
       <div
-        className="absolute rounded-full"
-        style={{ width: 80, height: 80, background: "#010814", zIndex: 0 }}
+        className="absolute rounded-full w-[46px] h-[46px] md:w-[80px] md:h-[80px]"
+        style={{ background: "#010814", zIndex: 0 }}
       />
       
       <motion.img 
@@ -156,11 +155,10 @@ function EventRow({
   return (
     <div
       ref={rowRef}
-      className="relative grid items-center gap-0 py-16 md:py-20"
-      style={{ gridTemplateColumns: "1fr 48px 1fr" }}
+      className="relative grid grid-cols-[48px_1fr] md:grid-cols-[1fr_48px_1fr] items-center gap-0 py-6 md:py-14"
     >
-      {/* ── LEFT ── */}
-      <div className="flex justify-end pr-8 md:pr-12">
+      {/* ── COLUMN 1: LEFT card/image on desktop, DOT on mobile ── */}
+      <div className="hidden md:flex justify-end pr-8 md:pr-12">
         {isEven ? (
           <motion.div style={{ opacity, x: cardX }}>
             <GlassCard event={event} />
@@ -172,8 +170,8 @@ function EventRow({
         )}
       </div>
 
-      {/* ── CENTER dot ── */}
-      <div className="flex justify-center items-center relative z-10">
+      {/* Mobile Dot (first column on mobile) */}
+      <div className="flex md:hidden justify-center items-center relative z-10">
         <motion.div style={{ opacity }}>
           <motion.div
             className="w-4 h-4 rounded-full border-2 flex items-center justify-center"
@@ -195,8 +193,38 @@ function EventRow({
         </motion.div>
       </div>
 
-      {/* ── RIGHT ── */}
-      <div className="flex justify-start pl-8 md:pl-12">
+      {/* ── COLUMN 2: CENTER dot on desktop, CARD on mobile ── */}
+      <div className="hidden md:flex justify-center items-center relative z-10">
+        <motion.div style={{ opacity }}>
+          <motion.div
+            className="w-4 h-4 rounded-full border-2 flex items-center justify-center"
+            style={{ borderColor: event.accentColor }}
+          >
+            <motion.div
+              className="w-2 h-2 rounded-full"
+              style={{ background: event.accentColor }}
+              animate={{
+                boxShadow: [
+                  `0 0 0px 0px ${event.accentColor}00`,
+                  `0 0 8px 3px ${event.accentColor}70`,
+                  `0 0 0px 0px ${event.accentColor}00`,
+                ],
+              }}
+              transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </motion.div>
+        </motion.div>
+      </div>
+
+      {/* Mobile Card (second column on mobile) */}
+      <div className="flex md:hidden justify-start pl-4 pr-2">
+        <motion.div style={{ opacity }} className="w-full">
+          <GlassCard event={event} />
+        </motion.div>
+      </div>
+
+      {/* ── COLUMN 3: RIGHT card/image on desktop, hidden on mobile ── */}
+      <div className="hidden md:flex justify-start pl-8 md:pl-12">
         {isEven ? (
           <motion.div style={{ opacity, x: imgX }} className="w-full flex justify-center max-w-[420px]">
             <EventImage event={event} index={index} rowRef={rowRef} smx={smx} smy={smy} />
@@ -253,10 +281,10 @@ function GlassCard({ event }: { event: (typeof events)[0] }) {
           </span>
         </div>
 
-        <h3 className="text-white font-extrabold text-xl md:text-2xl tracking-tight leading-tight mb-3 relative z-10">
+        <h3 className="text-white font-extrabold text-xl md:text-2xl tracking-tight leading-tight mb-3 relative z-10 text-left">
           {event.title}
         </h3>
-        <p className="text-white/55 text-sm leading-relaxed font-light relative z-10">
+        <p className="text-white/55 text-sm leading-relaxed font-light relative z-10 text-left">
           {event.description}
         </p>
       </div>
@@ -337,7 +365,7 @@ export default function JourneySection() {
       id="timeline"
       ref={sectionRef}
       onMouseMove={handleMouseMove}
-      className="relative w-full bg-[#010814] py-32 overflow-hidden z-10"
+      className="relative w-full bg-[#010814] pt-12 pb-8 md:pt-20 md:pb-20 overflow-hidden z-10"
     >
       {/* Ambient Background - Optimized */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -350,7 +378,7 @@ export default function JourneySection() {
       <div className="max-w-6xl mx-auto px-6 relative z-10">
 
         {/* ─── Header ─── */}
-        <div className="text-center mb-24">
+        <div className="text-center mb-12 md:mb-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -365,7 +393,7 @@ export default function JourneySection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="text-white/40 text-sm mt-4 tracking-wide"
+            className="text-white/40 text-sm mt-4 tracking-wide text-center max-w-md mx-auto"
           >
             Every great venture starts somewhere. Yours starts here.
           </motion.p>
@@ -386,14 +414,14 @@ export default function JourneySection() {
 
           {/* ── Faint background rail — spans full height of this block ── */}
           <div
-            className="absolute top-[24px] bottom-0 w-px pointer-events-none"
-            style={{ left: lineLeft, background: "rgba(255,255,255,0.06)" }}
+            className="absolute top-[24px] bottom-0 w-px pointer-events-none left-6 md:left-1/2 md:-translate-x-1/2"
+            style={{ background: "rgba(255,255,255,0.06)" }}
           />
 
           {/* ── Scroll-filled colored line ── */}
           <div
-            className="absolute top-[24px] w-px overflow-hidden pointer-events-none"
-            style={{ left: lineLeft, height: "calc(100% - 24px)" }}
+            className="absolute top-[24px] w-px overflow-hidden pointer-events-none left-6 md:left-1/2 md:-translate-x-1/2"
+            style={{ height: "calc(100% - 24px)" }}
           >
             <motion.div
               className="w-full origin-top"
@@ -407,7 +435,7 @@ export default function JourneySection() {
 
           {/* ── START IMAGE ── */}
           <div
-            className="relative z-20 flex justify-center pb-8 -mt-4"
+            className="relative z-20 flex justify-start ml-[-16px] md:justify-center md:ml-0 pb-8 -mt-4"
           >
             <StartImage scrollYProgress={scrollYProgress} />
           </div>
@@ -418,14 +446,12 @@ export default function JourneySection() {
           ))}
 
           {/* ── END IMAGE ── pushed down; cover strip blocks line below image center ── */}
-          <div className="relative z-20 flex justify-center" style={{ paddingTop: 24 }}>
+          <div className="relative z-20 flex justify-start ml-[-16px] md:justify-center md:ml-0" style={{ paddingTop: 24 }}>
             {/* Downward cover: blocks the rail that bleeds below the center */}
             <div
-              className="absolute"
+              className="absolute left-6 md:left-1/2 -translate-x-1/2"
               style={{
                 top: "50%",
-                left: "50%",
-                transform: "translateX(-50%)",
                 width: 6,
                 height: "200px",
                 background: "#010814",
