@@ -6,33 +6,39 @@ import { motion, AnimatePresence } from "framer-motion";
 const faqs = [
   { 
     id: "01",
-    category: "REGISTRATION", 
-    title: "REGISTRATION & DEADLINES", 
-    answer: "Registration is open to all university undergraduates. Proposals must be submitted by July 31. Register early to prepare a strong submission." 
+    category: "ELIGIBILITY", 
+    title: "Who can register for hackX 11.0?", 
+    answer: "hackX is open to undergraduate students from recognized universities and higher education institutions in Sri Lanka." 
   },
   { 
     id: "02",
     category: "TEAMS", 
-    title: "TEAM SIZE & ELIGIBILITY", 
-    answer: "Teams must consist of two to five members. All members must be currently enrolled undergraduates from the same Sri Lankan university or higher education institute." 
+    title: "How many people can be in a team?", 
+    answer: "You can participate individually or as a team of up to five members. All team members must be undergraduates from the same university or higher education institute." 
   },
   { 
     id: "03",
-    category: "PROPOSALS", 
-    title: "IDEAS & SUBMISSIONS", 
-    answer: "No finished product is needed at registration—just an idea. A working prototype is required later for the ideaX semi-finals. Submissions are completely free." 
+    category: "FEES", 
+    title: "Is there a registration fee?", 
+    answer: "No. Registration is completely free, and no fee is charged at any stage of the competition." 
   },
   { 
     id: "04",
-    category: "PROGRAM", 
-    title: "DESIGNX & GRAND FINALS", 
-    answer: "designX is an exclusive workshop series for semi-finalists. At the Grand Finals, winners receive cash prizes, national recognition, and investor exposure." 
+    category: "PROTOTYPE", 
+    title: "Do I need a finished product to register?", 
+    answer: "No. A prototype is not required during the initial stages. However, teams that advance to the Semi-Finals and Grand Finals will be expected to demonstrate a fully or partially developed prototype to validate their solution." 
   },
   { 
     id: "05",
-    category: "SUPPORT", 
-    title: "MENTORSHIP & GUIDANCE", 
-    answer: "Throughout the competition, participants will have access to industry experts and mentors to help refine their ideas, technical implementation, and business models." 
+    category: "IDEAS", 
+    title: "What type of ideas can be submitted?", 
+    answer: "Any innovative startup idea, product, service, or solution that addresses a real-world problem and has the potential to create value and grow into a sustainable venture." 
+  },
+  { 
+    id: "06",
+    category: "FACULTIES", 
+    title: "Can students from non-tech faculties participate?", 
+    answer: "Absolutely. hackX welcomes innovation from any discipline. Healthcare, agriculture, finance, education or any other field is fair game as long as there is a technology-driven solution behind it." 
   }
 ];
 
@@ -56,12 +62,12 @@ export default function FAQSection() {
           viewport={{ once: true }}
           className="flex flex-col items-center justify-center w-full mb-12 relative z-20 text-center"
         >
-          <h2 className="text-5xl md:text-6xl xl:text-7xl font-black text-white tracking-tight">
-            FAQ
-          </h2>
-          <p className="text-xs text-[#5BB8FF] tracking-[0.2em] font-mono mt-4 uppercase">
-            Frequently Asked Questions
+          <p className="text-xs text-[#5BB8FF] tracking-[0.2em] font-mono mb-4 uppercase">
+            Everything You Need To Know
           </p>
+          <h2 className="text-4xl md:text-5xl xl:text-6xl font-black text-white tracking-tight">
+            Frequently Asked Questions
+          </h2>
         </motion.div>
 
         {/* ─── Desktop Layout (2-Column Accordion) ─── */}
@@ -75,7 +81,7 @@ export default function FAQSection() {
               // Calculate dynamic cable bending
               const isPushedDown = activeIdx !== null && activeIdx < idx;
               const expansionHeight = 115; // Estimated pixel height of the expanded answer block
-              const baseY = [180, 90, 0, -90, -180][idx];
+              const baseY = [225, 135, 45, -45, -135, -225][idx];
               // If the item is pushed down by an item above it, we subtract the expansion height 
               // from the SVG's endpoint to perfectly counteract the physical downward movement, 
               // anchoring the right end to the exact same physical pixel on the screen!

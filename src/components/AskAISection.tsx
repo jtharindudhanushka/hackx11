@@ -78,8 +78,12 @@ function formatMessageText(text: string) {
 export default function AskAISection() {
   const [messages, setMessages] = useState<Message[]>([
     {
+      sender: "user",
+      text: "Does our product need to be fully built by the time we register?",
+    },
+    {
       sender: "ai",
-      text: "Hi there! 👋\nI'm HackX Assistant. I can help you with all things HackX.\n\nYou can ask me about:",
+      text: "No, it does not. At the registration stage, you only need to submit your idea and a structured proposal outlining the problem, solution, and impact. A working prototype is only required later, by the ideaX Semi-Finals on October 3. Take your time to refine the core concept first!",
       showMenu: true,
     },
   ]);
@@ -222,12 +226,12 @@ export default function AskAISection() {
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-6 shadow-[0_0_20px_rgba(91,184,255,0.1)]">
             <div className="w-2 h-2 rounded-full bg-[#5BB8FF] animate-pulse" />
             <span className="text-xs font-bold tracking-[0.2em] uppercase text-white/80">
-              Ask hackX
+              AI Assistant
             </span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">Got a Question? <br className="hidden md:block"/> Get an Answer.</h2>
+          <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">Ask Mascot Anything</h2>
           <p className="text-lg text-white/60 font-light max-w-2xl mx-auto text-center">
-            Not sure if your idea qualifies? Wondering what judges look for in a proposal? Ask anything about hackX 11.0 and get an instant AI-powered answer.
+            Chat with our AI Assistant to get instant answers about hackX 11.0
           </p>
         </motion.div>
 
@@ -249,7 +253,7 @@ export default function AskAISection() {
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1A6FD4] to-[#5BB8FF] flex items-center justify-center shadow-[0_0_10px_#5BB8FF]">
                   <span className="text-white font-bold text-xs">AI</span>
                 </div>
-                <span className="text-sm font-semibold text-white tracking-wide">hackX Assistant</span>
+                <span className="text-sm font-semibold text-white tracking-wide">Mascot</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-white/10" />
@@ -375,7 +379,7 @@ export default function AskAISection() {
                 </button>
               </div>
               <p className="text-center mt-3 text-[10px] text-white/30 uppercase tracking-widest">
-                Powered by AI. For official queries, contact coordinators.
+                Powered by AI. For official queries, contact the relative coordinators.
               </p>
             </form>
 

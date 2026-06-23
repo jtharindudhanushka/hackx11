@@ -14,15 +14,12 @@ export default function AmbassadorSection() {
           
           {/* Left: Content & Integrated Description */}
           <div className="lg:col-span-6 flex flex-col justify-center">
-            <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#5BB8FF] mb-4 block text-center lg:text-left">
-              Be The Movement
-            </span>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 tracking-tight leading-[1.1] text-center lg:text-left">
-              Carry hackX <br /> to Your Campus.
+              The hackX 11.0 <br className="hidden lg:block" /> Ambassador Network
             </h2>
             <div className="text-[1.05rem] text-white/60 font-light leading-relaxed mb-6 md:mb-10 max-w-xl text-center lg:text-left mx-auto lg:mx-0">
               <p>
-                The hackX 11.0 Campus Ambassador Program connects your university with Sri Lanka&apos;s premier startup challenge. Champion innovation on campus, earn points for referring teams, and climb the leaderboard to secure VIP Grand Finals invites, exclusive merchandise, and national recognition. Every ambassador receives a certified digital credential to boost their CV.
+                Become the official link between hackX 11.0 and your university. As a hackX Ambassador, you&apos;ll promote Sri Lanka&apos;s premier inter-university startup challenge on your campus, share competition updates, encourage students to participate, connect the organizing committee with student communities, and gain official recognition, exclusive learning and networking opportunities, certificates, and exciting rewards.
               </p>
             </div>
 

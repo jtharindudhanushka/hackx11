@@ -22,14 +22,11 @@ export default function MemoriesSection() {
           viewport={{ once: true }}
           className="text-center"
         >
-          <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#5BB8FF] mb-4 block">
-            A Decade of Making Ideas Happen
-          </span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 tracking-tight">
-            Eleven Years. Hundreds of Teams. <br className="hidden md:block"/> One Stage That Changed Everything.
+            Moments of Innovation
           </h2>
           <p className="text-lg text-white/60 font-light max-w-3xl mx-auto text-center">
-            From the very first edition to a Grand Finals night with the Minister of Science and Technology as Chief Guest, hackX has grown into the innovation platform that defines what Sri Lankan university students can build.
+            Experience the highlights, energy, and unforgettable moments that have defined hackX over the years.
           </p>
         </motion.div>
       </div>

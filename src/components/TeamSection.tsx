@@ -7,38 +7,59 @@ import BorderGlow from "@/components/ui/BorderGlow";
 /* ─── OC Data ─── */
 const coordinators = [
   {
-    name: "Ashan Perera",
-    role: "President — hackX 11.0",
-    email: "president@hackx.lk",
-    phone: "+94 77 000 0001",
+    name: "Praveen Madawalage",
+    role: "Chief Coordinator",
+    email: "praveen.hackx@gmail.com",
+    phone: "+94 77 286 8600",
     avatar: "/OC Images/Draft OC.webp",
   },
   {
-    name: "Dilmi Rathnayake",
-    role: "Secretary General",
-    email: "secretary@hackx.lk",
-    phone: "+94 77 000 0002",
+    name: "Tharushi Kulathunga",
+    role: "Chief Coordinator",
+    email: "tharushi.hackx@gmail.com",
+    phone: "+94 70 725 3446",
     avatar: "/OC Images/Draft OC.webp",
   },
   {
-    name: "Kavinda Silva",
-    role: "Head of Technology",
-    email: "tech@hackx.lk",
-    phone: "+94 77 000 0003",
+    name: "Tharindu Dhanushka",
+    role: "Partnership Coordinator",
+    email: "tharindu.hackx@gmail.com",
+    phone: "+94 76 219 5995",
     avatar: "/OC Images/Draft OC.webp",
   },
   {
-    name: "Nethmi Fernando",
-    role: "Head of Marketing",
-    email: "marketing@hackx.lk",
-    phone: "+94 77 000 0004",
+    name: "Thilini Bhagya",
+    role: "Partnership Coordinator",
+    email: "thilini.hackx@gmail.com",
+    phone: "+94 76 947 6496",
     avatar: "/OC Images/Draft OC.webp",
   },
   {
-    name: "Isuru Wickrama",
-    role: "Head of Finance",
-    email: "finance@hackx.lk",
-    phone: "+94 77 000 0005",
+    name: "Sameera Ekanayaka",
+    role: "Financial Coordinator",
+    email: "sameera.hackx@gmail.com",
+    phone: "+94 76 142 7662",
+    avatar: "/OC Images/Draft OC.webp",
+  },
+  {
+    name: "Imasha Karunathilaka",
+    role: "Financial Coordinator",
+    email: "imashaa.hackx@gmail.com",
+    phone: "+94 77 485 2074",
+    avatar: "/OC Images/Draft OC.webp",
+  },
+  {
+    name: "Charith Fonseka",
+    role: "Marketing Coordinator",
+    email: "charith.hackx@gmail.com",
+    phone: "+94 78 256 7430",
+    avatar: "/OC Images/Draft OC.webp",
+  },
+  {
+    name: "Manumi Senevirathna",
+    role: "Marketing Coordinator",
+    email: "manumi.hackx@gmail.com",
+    phone: "+94 77 015 0508",
     avatar: "/OC Images/Draft OC.webp",
   },
 ];
@@ -207,7 +228,7 @@ export default function TeamSection() {
               transition={{ duration: 0.65, delay: 0.07 }}
               className="text-4xl md:text-5xl font-extrabold text-white tracking-tight text-center md:text-left"
             >
-              Meet the OC.
+              Contact Us
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 12 }}
@@ -216,7 +237,7 @@ export default function TeamSection() {
               transition={{ duration: 0.6, delay: 0.14 }}
               className="text-white/55 mt-4 text-sm md:text-base font-light leading-relaxed max-w-lg text-center md:text-left mx-auto md:mx-0"
             >
-              Have a question? Reach the right person directly. Our team is ready to propel your startup journey forward.
+              Have a question? Reach the right person directly. Our team is ready to assist you every step of the way.
             </motion.p>
           </div>
 

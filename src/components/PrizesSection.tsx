@@ -14,8 +14,9 @@ const fade = (delay = 0) => ({
 const prizes = [
   {
     rank: "1st",
-    label: "Grand Champions",
-    tagline: "The pinnacle. National recognition, investor access, and a prize that matches the ambition.",
+    label: "Champions",
+    amount: "LKR 200,000",
+    tagline: "Cash Prize",
     accent: "#FFD700",
     glow: "rgba(255,215,0,0.18)",
     imageUrl: "/winner-cards/1.webp",
@@ -25,7 +26,8 @@ const prizes = [
   {
     rank: "2nd",
     label: "Runners-Up",
-    tagline: "Second on stage. First in line for what comes next.",
+    amount: "LKR 150,000",
+    tagline: "Cash Prize",
     accent: "#C0C8D8",
     glow: "rgba(192,200,216,0.14)",
     imageUrl: "/winner-cards/2.webp",
@@ -34,8 +36,9 @@ const prizes = [
   },
   {
     rank: "3rd",
-    label: "Third Place",
-    tagline: "The podium is proof. Your idea earned its place on a national stage.",
+    label: "Second Runners-Up",
+    amount: "LKR 125,000",
+    tagline: "Cash Prize",
     accent: "#CD8B4A",
     glow: "rgba(205,139,74,0.14)",
     imageUrl: "/winner-cards/3.webp",
@@ -64,17 +67,14 @@ export default function PrizesSection() {
 
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">
-          <motion.span {...fade(0)} className="inline-block text-xs font-bold tracking-[0.2em] uppercase text-[#5BB8FF] mb-5">
-            What You Win
-          </motion.span>
           <motion.h2
             {...fade(0.08)}
             className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.05] mb-6"
           >
-            Built for Builders.<br className="hidden md:block" /> Rewarded Like Champions.
+            hackX 11.0 Awards
           </motion.h2>
           <motion.p {...fade(0.16)} className="text-lg text-white/50 font-light max-w-xl mx-auto leading-relaxed text-center">
-            Three podium spots. Real prizes. Real investor exposure. And recognition on Sri Lanka&apos;s biggest student innovation stage.
+            Celebrating innovation with remarkable rewards and opportunities for the next generation of entrepreneurs.
           </motion.p>
         </div>
 
@@ -172,9 +172,23 @@ export default function PrizesSection() {
                       </div>
 
                       <p className="text-white font-bold text-lg mb-3 tracking-tight text-center md:text-left">{prize.label}</p>
-                      <p className="text-white/45 font-light text-sm leading-relaxed text-center md:text-left">{prize.tagline}</p>
+                      
+                      <div className="text-center md:text-left flex flex-col gap-0.5 mb-6">
+                        <span className="text-white font-extrabold text-2xl tracking-tight select-none">
+                          {prize.amount}
+                        </span>
+                        <span className="text-white/40 font-medium text-[10px] tracking-widest uppercase">
+                          {prize.tagline}
+                        </span>
+                      </div>
                     </div>
 
+                    {/* Card Footer */}
+                    <div className="border-t border-white/5 pt-4 text-center md:text-left relative z-20">
+                      <span className="text-[10px] text-white/30 tracking-widest uppercase font-semibold">
+                        Grand Finals · hackX 11.0
+                      </span>
+                    </div>
 
                     <div
                       className="absolute bottom-0 right-0 w-32 h-32 pointer-events-none"
@@ -187,8 +201,8 @@ export default function PrizesSection() {
         </div>
 
         {/* Note */}
-        <motion.p {...fade(0.5)} className="text-center text-white/30 text-xs mt-12 tracking-wide">
-          Plus: Mentorship access · Investor introductions · National media coverage · hackX Digital Certificate
+        <motion.p {...fade(0.5)} className="text-center text-white/40 text-xs mt-12 tracking-wide font-medium leading-relaxed max-w-2xl mx-auto">
+          Expert mentorship · Industry networking opportunities · National recognition · Investor exposure · Startup development support
         </motion.p>
       </div>
 
