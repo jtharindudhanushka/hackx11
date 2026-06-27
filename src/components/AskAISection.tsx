@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
+import SiriOrb from "@/components/ui/SiriOrb";
 
 type Message = {
   sender: "user" | "ai";
@@ -207,7 +208,7 @@ export default function AskAISection() {
   };
 
   return (
-    <section id="ask-ai" className="relative w-full bg-[#010814] py-16 md:py-20 overflow-hidden z-10 border-t border-white/5">
+    <section id="ask-ai" className="relative w-full bg-[#010814] py-16 md:py-20 overflow-hidden z-10">
       {/* Background Orbs — radial-gradients instead of blur() filters so the
           continuous motion stays GPU-composited (no per-frame blur repaint). */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -263,10 +264,8 @@ export default function AskAISection() {
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-white/[0.02]">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1A6FD4] to-[#5BB8FF] flex items-center justify-center shadow-[0_0_10px_#5BB8FF]">
-                  <span className="text-white font-bold text-xs">AI</span>
-                </div>
-                <span className="text-sm font-semibold text-white tracking-wide">Mascot</span>
+                <SiriOrb size={34} />
+                <span className="text-sm font-semibold text-white tracking-wide">Ask AI</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-white/10" />

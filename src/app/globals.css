@@ -276,6 +276,68 @@
   }
 }
 
+/* ── Siri-like live gradient orb (AI assistant indicator) ── */
+.siri-orb {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  border-radius: 9999px;
+  overflow: hidden;
+  isolation: isolate;
+  background: radial-gradient(circle at 50% 50%, #0A3878, #041A3A);
+  box-shadow:
+    0 0 10px rgba(91, 184, 255, 0.45),
+    inset 0 0 6px rgba(255, 255, 255, 0.18);
+}
+/* Rotating multi-colour conic wash */
+.siri-orb::before {
+  content: "";
+  position: absolute;
+  inset: -45%;
+  background: conic-gradient(
+    from 0deg,
+    #5BB8FF,
+    #1A6FD4,
+    #8B5CF6,
+    #22D3EE,
+    #5BB8FF
+  );
+  filter: blur(5px);
+  animation: siri-rotate 5s linear infinite;
+}
+/* Drifting liquid highlight */
+.siri-orb__blob {
+  position: absolute;
+  inset: -20%;
+  mix-blend-mode: screen;
+  filter: blur(4px);
+  background:
+    radial-gradient(40% 40% at 30% 30%, rgba(91, 184, 255, 0.95), transparent 60%),
+    radial-gradient(40% 40% at 70% 68%, rgba(139, 92, 246, 0.75), transparent 60%);
+  animation: siri-drift 7s ease-in-out infinite;
+}
+/* Glossy sheen */
+.siri-orb__gloss {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(58% 48% at 34% 26%, rgba(255, 255, 255, 0.55), transparent 60%);
+}
+@keyframes siri-rotate {
+  to { transform: rotate(360deg); }
+}
+@keyframes siri-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(8%, -6%) scale(1.1); }
+  66%      { transform: translate(-6%, 6%) scale(0.94); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .siri-orb::before,
+  .siri-orb__blob {
+    animation: none;
+  }
+}
+
 /* ── Vimeo player volume slider ── */
 .vimeo-volume {
   -webkit-appearance: none;
