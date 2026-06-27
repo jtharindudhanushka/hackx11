@@ -101,7 +101,7 @@ export default function PrizesSection() {
               <motion.div
                 key={prize.rank}
                 {...fade(0.1 + visualIdx * 0.1)}
-                className={`w-full md:w-[330px] relative group flex flex-col ${orderClass}`}
+                className={`w-full md:flex-1 relative group flex flex-col ${orderClass}`}
                 style={{ alignSelf: "stretch" }}
               >
               <div
