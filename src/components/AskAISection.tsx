@@ -226,7 +226,7 @@ export default function AskAISection() {
         />
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 md:px-8 lg:px-12 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 relative z-10">
         
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -255,7 +255,7 @@ export default function AskAISection() {
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="relative w-full rounded-3xl p-[1px] group"
+          className="relative w-full max-w-3xl mx-auto rounded-3xl p-[1px] group"
         >
           <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-white/20 via-white/5 to-transparent opacity-50" />
           

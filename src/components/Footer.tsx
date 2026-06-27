@@ -123,7 +123,7 @@ export default function Footer() {
 
       {/* ── LAYER 5: Text & logos ── */}
       <div
-        className="absolute bottom-0 inset-x-0 pb-8 px-4 md:px-12"
+        className="absolute bottom-0 inset-x-0 pb-8 px-6 md:px-8 lg:px-12"
         style={{ zIndex: 5 }}
       >
         {/* Responsive layout: stacked on mobile, 2 columns on desktop */}

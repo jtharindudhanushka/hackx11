@@ -99,6 +99,9 @@
 
   html {
     scroll-behavior: smooth;
+    /* Reserve the scrollbar gutter on both sides so left and right page
+       margins stay symmetric (no content shift from the scrollbar). */
+    scrollbar-gutter: stable both-edges;
   }
 
   body {

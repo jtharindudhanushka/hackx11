@@ -210,7 +210,7 @@ export default function TeamSection() {
         />
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 relative z-10">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
           <div className="max-w-2xl">
