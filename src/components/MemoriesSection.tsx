@@ -15,7 +15,7 @@ export default function MemoriesSection() {
     <section id="memories" className="relative w-full bg-[#010814] pt-12 pb-10 md:py-20 overflow-hidden z-10">
       {/* Seamless top blend */}
       <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none" style={{ background: "linear-gradient(to bottom, #010814, transparent)" }} />
-      <div className="max-w-7xl mx-auto px-6 relative z-10 mb-10 md:mb-12">
+      <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 relative z-10 mb-10 md:mb-12">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -74,7 +74,7 @@ export default function MemoriesSection() {
         </motion.div>
       </div>
       
-      <div className="max-w-7xl mx-auto px-6 mt-10 md:mt-12 text-center relative z-10">
+      <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 mt-10 md:mt-12 text-center relative z-10">
         <p className="text-xl text-white font-medium mb-8">
           Every name on that list started with one idea. What is yours?
         </p>

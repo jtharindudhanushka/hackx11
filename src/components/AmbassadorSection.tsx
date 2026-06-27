@@ -9,7 +9,7 @@ export default function AmbassadorSection() {
         style={{ background: "linear-gradient(to bottom, #010814, transparent)" }} 
       />
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
           
           {/* Left: Content & Integrated Description */}

@@ -51,7 +51,7 @@ const CardDecorator = ({
       <img
         src={imageUrl}
         alt="Icon"
-        className="absolute w-24 h-24 md:w-32 md:h-32 object-contain drop-shadow-[0_15px_25px_rgba(0,0,0,0.4)]"
+        className="w-24 h-24 md:w-32 md:h-32 object-contain drop-shadow-[0_15px_25px_rgba(0,0,0,0.4)]"
       />
     </motion.div>
   </div>
@@ -72,7 +72,7 @@ export default function CriteriaSection() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full" style={{ background: "radial-gradient(ellipse, rgba(91,184,255,0.08) 0%, rgba(91,184,255,0) 70%)" }} />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 relative z-10">
         
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

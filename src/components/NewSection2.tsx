@@ -116,7 +116,7 @@ export default function NewSection2() {
         {/* Top Left (Cylinder) */}
         <motion.div
           style={{ y: y1, rotate: rotate1 }}
-          className="absolute top-[-6%] left-[42%] w-[250px] xl:w-[350px] opacity-90 hidden md:block"
+          className="absolute top-[-6%] left-[42%] w-[250px] xl:w-[350px] opacity-90 hidden lg:block"
         >
           <motion.img
             src="/section 2/Top left.webp"
@@ -129,7 +129,7 @@ export default function NewSection2() {
         {/* Top Right (Pillar) */}
         <motion.div
           style={{ y: y2, rotate: rotate2 }}
-          className="absolute top-[-4%] -right-[2%] xl:-right-[5%] w-[220px] xl:w-[320px] opacity-90 hidden md:block"
+          className="absolute top-[-4%] -right-[2%] xl:-right-[5%] w-[220px] xl:w-[320px] opacity-90 hidden lg:block"
         >
           <motion.img
             src="/section 2/Top Right.webp"
@@ -142,7 +142,7 @@ export default function NewSection2() {
         {/* Bottom Center (Brick) */}
         <motion.div
           style={{ y: y3, rotate: rotate3 }}
-          className="absolute top-[22%] left-[60%] w-[280px] xl:w-[400px] opacity-90 hidden md:block"
+          className="absolute top-[22%] left-[60%] w-[280px] xl:w-[400px] opacity-90 hidden lg:block"
         >
           <motion.img
             src="/section 2/Bottom Center.webp"
@@ -153,14 +153,16 @@ export default function NewSection2() {
         </motion.div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-50">
+      <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 relative z-50">
 
 
-        {/* ── Two-Column Layout: Left = Narrative, Right = Bento Stats ── */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-20 items-start">
+        {/* ── Two-Column Layout: Left = Narrative, Right = Bento Stats ──
+            Stacks on tablet (md) so the stat cards keep full width; the
+            side-by-side split only kicks in at lg where there's room. */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
 
           {/* LEFT — Narrative */}
-          <div className="md:col-span-6 flex flex-col space-y-8 md:pt-4">
+          <div className="lg:col-span-6 flex flex-col space-y-8 lg:pt-4">
             <div className="flex flex-col space-y-3 md:space-y-4">
               <motion.span
                 {...fade(0)}
@@ -196,7 +198,7 @@ export default function NewSection2() {
           </div>
 
           {/* RIGHT — Bento Stats Grid */}
-          <div className="md:col-span-6 grid grid-cols-2 gap-5 relative z-30">
+          <div className="lg:col-span-6 grid grid-cols-2 gap-5 relative z-30">
             {/* Stat: 11 Editions */}
             <StatCard className="col-span-1 min-h-[200px]" delay={0.1}>
               <div className="text-3xl md:text-4xl font-extrabold text-white mb-2 tracking-tight">11</div>
