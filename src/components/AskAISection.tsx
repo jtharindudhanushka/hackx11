@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
+import SiriOrb from "@/components/ui/SiriOrb";
 
 type Message = {
   sender: "user" | "ai";
@@ -106,8 +107,15 @@ export default function AskAISection() {
     setDebugActive(isDebug);
   }, []);
 
-  // Scroll inside the chat container instead of scrolling the page viewport
+  // Scroll inside the chat container instead of scrolling the page viewport.
+  // Skip the very first run so the opening greeting stays visible at the top
+  // on load (auto-scrolling on mount previously hid it).
+  const didMountRef = useRef(false);
   useEffect(() => {
+    if (!didMountRef.current) {
+      didMountRef.current = true;
+      return;
+    }
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTo({
         top: chatContainerRef.current.scrollHeight,
@@ -200,22 +208,25 @@ export default function AskAISection() {
   };
 
   return (
-    <section id="ask-ai" className="relative w-full bg-[#010814] py-16 md:py-20 overflow-hidden z-10 border-t border-white/5">
-      {/* Background Orbs */}
+    <section id="ask-ai" className="relative w-full bg-[#010814] py-16 md:py-20 overflow-hidden z-10">
+      {/* Background Orbs — radial-gradients instead of blur() filters so the
+          continuous motion stays GPU-composited (no per-frame blur repaint). */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <motion.div 
+        <motion.div
           animate={{ x: [0, 60, -60, 0], y: [0, 60, -60, 0], scale: [1, 1.2, 0.8, 1] }}
           transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute top-[20%] right-[10%] w-[500px] h-[500px] bg-[#1A6FD4] opacity-[0.06] blur-[120px] rounded-full" 
+          className="absolute top-[20%] right-[10%] w-[500px] h-[500px] rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(26,111,212,0.12) 0%, rgba(26,111,212,0) 70%)" }}
         />
-        <motion.div 
+        <motion.div
           animate={{ x: [0, -40, 40, 0], y: [0, -40, 40, 0], scale: [1, 0.9, 1.1, 1] }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute bottom-[20%] left-[10%] w-[400px] h-[400px] bg-[#5BB8FF] opacity-[0.05] blur-[100px] rounded-full" 
+          className="absolute bottom-[20%] left-[10%] w-[400px] h-[400px] rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(91,184,255,0.10) 0%, rgba(91,184,255,0) 70%)" }}
         />
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 relative z-10">
         
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -228,11 +239,11 @@ export default function AskAISection() {
             initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-xs font-bold tracking-[0.2em] uppercase text-[#5BB8FF] mb-4 block text-center"
+            className="eyebrow mb-4 text-center"
           >
             AI Assistant
           </motion.span>
-          <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">Ask Mascot Anything</h2>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">Ask Mascot Anything</h2>
           <p className="text-lg text-white/60 font-light max-w-2xl mx-auto text-center">
             Chat with our AI Assistant to get instant answers about hackX 11.0
           </p>
@@ -244,19 +255,17 @@ export default function AskAISection() {
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="relative w-full rounded-3xl p-[1px] group"
+          className="relative w-full max-w-3xl mx-auto rounded-3xl p-[1px] group"
         >
           <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-white/20 via-white/5 to-transparent opacity-50" />
           
-          <div className="relative rounded-[23px] bg-[#010814]/80 backdrop-blur-3xl overflow-hidden border border-white/10 shadow-2xl flex flex-col h-[520px]">
+          <div className="relative rounded-[23px] bg-[#010814]/80 backdrop-blur-3xl overflow-hidden border border-white/10 shadow-2xl flex flex-col h-[560px] md:h-[660px]">
             
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-white/[0.02]">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1A6FD4] to-[#5BB8FF] flex items-center justify-center shadow-[0_0_10px_#5BB8FF]">
-                  <span className="text-white font-bold text-xs">AI</span>
-                </div>
-                <span className="text-sm font-semibold text-white tracking-wide">Mascot</span>
+                <SiriOrb size={34} />
+                <span className="text-sm font-semibold text-white tracking-wide">Ask AI</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-white/10" />

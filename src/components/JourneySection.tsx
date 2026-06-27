@@ -1,8 +1,9 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useSpring, useTransform, useMotionValue } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useScroll, useSpring, useTransform, useMotionTemplate, type MotionValue } from "framer-motion";
 import BorderGlow from "@/components/ui/BorderGlow";
+import TimelineRod from "@/components/ui/TimelineRod";
 
 /* ─── Event Data ─── */
 const events = [
@@ -97,12 +98,15 @@ function StartImage({ scrollYProgress }: { scrollYProgress: any }) {
 }
 
 /* ════════════════════════════════════════════
-   END ICON — rotating end artifact
-   Sits at the very bottom of the line
+   END ICON — rotating end orb, charged by the
+   energy reaching the bottom of the line
    ════════════════════════════════════════════ */
-function EndImage({ scrollYProgress }: { scrollYProgress: any }) {
-  // Continuous smooth rotation across the entire section's scroll length
+function EndImage({ scrollYProgress, progress }: { scrollYProgress: MotionValue<number>; progress: MotionValue<number> }) {
+  // Continuous smooth rotation across the section's scroll length
   const rotate = useTransform(scrollYProgress, [0, 1], [0, 360]);
+  // Glow ramps up as the energy front nears the orb
+  const glow = useTransform(progress, [0.5, 0.95], [0.2, 1]);
+  const glowScale = useTransform(progress, [0.5, 0.95], [0.6, 1]);
 
   return (
     <motion.div
@@ -112,13 +116,26 @@ function EndImage({ scrollYProgress }: { scrollYProgress: any }) {
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className="relative flex items-center justify-center z-20 w-[80px] h-[80px] md:w-[140px] md:h-[140px]"
     >
+      {/* Energy aura that intensifies as the conduit arrives */}
+      <motion.div
+        className="absolute rounded-full pointer-events-none"
+        style={{
+          width: "180%",
+          height: "180%",
+          opacity: glow,
+          scale: glowScale,
+          background: "radial-gradient(circle, rgba(91,184,255,0.45) 0%, rgba(26,111,212,0.12) 45%, transparent 72%)",
+          filter: "blur(6px)",
+          zIndex: 0,
+        }}
+      />
       {/* Background plate to mask the end of the timeline rail */}
       <div
         className="absolute rounded-full w-[46px] h-[46px] md:w-[80px] md:h-[80px]"
-        style={{ background: "#010814", zIndex: 0 }}
+        style={{ background: "#010814", zIndex: 1 }}
       />
-      
-      <motion.img 
+
+      <motion.img
         src="/timeline-images/endorb.webp"
         alt="Timeline End"
         style={{ rotate }}
@@ -128,113 +145,55 @@ function EndImage({ scrollYProgress }: { scrollYProgress: any }) {
   );
 }
 
-/* ─── Individual event row ─── */
+/* ─── Individual event row ───
+   A true scroll-driven orbit around the central pole. As the row passes through
+   the viewport its card revolves on a circle around the rod: it swings in from
+   the right (and slightly behind), sweeps to the front-centre — closest to the
+   camera, largest and clearest — then continues around to the left and away.
+   The composition of `rotateY(θ) translateZ(R)` places the card ON the orbit and
+   turns it to face outward, so it reads like a camera orbiting the pole. */
 function EventRow({
   event,
   index,
-  smx,
-  smy,
+  isDesktop,
 }: {
   event: (typeof events)[0];
   index: number;
-  smx: any;
-  smy: any;
+  isDesktop: boolean;
 }) {
   const rowRef = useRef<HTMLDivElement>(null);
-  const isEven = index % 2 === 0;
 
   const { scrollYProgress } = useScroll({
     target: rowRef,
-    offset: ["start 80%", "start 30%"],
+    offset: ["start end", "end start"],
   });
 
-  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const cardX = useTransform(scrollYProgress, [0, 1], [isEven ? -40 : 40, 0]);
-  const imgX = useTransform(scrollYProgress, [0, 1], [isEven ? 40 : -40, 0]);
+  // θ sweeps right → centre → left as the row crosses the viewport.
+  const rotateY = useTransform(scrollYProgress, [0, 0.5, 1], [112, 0, -112]);
+  const orbitOpacity = useTransform(scrollYProgress, [0, 0.16, 0.84, 1], [0, 1, 1, 0]);
+  const transform = useMotionTemplate`perspective(1300px) rotateY(${rotateY}deg) translateZ(300px)`;
+
+  // Mobile: no room to orbit — a clean fade/slide up.
+  const mobileOpacity = useTransform(scrollYProgress, [0.12, 0.42], [0, 1]);
+  const mobileY = useTransform(scrollYProgress, [0.12, 0.42], [44, 0]);
 
   return (
-    <div
-      ref={rowRef}
-      className="relative grid grid-cols-[48px_1fr] md:grid-cols-[1fr_48px_1fr] items-center gap-0 py-6 md:py-14"
-    >
-      {/* ── COLUMN 1: LEFT card/image on desktop, DOT on mobile ── */}
-      <div className="hidden md:flex justify-end pr-8 md:pr-12">
-        {isEven ? (
-          <motion.div style={{ opacity, x: cardX }}>
-            <GlassCard event={event} />
-          </motion.div>
-        ) : (
-          <motion.div style={{ opacity, x: imgX }} className="w-full flex justify-center max-w-[420px]">
-            <EventImage event={event} index={index} rowRef={rowRef} smx={smx} smy={smy} />
-          </motion.div>
-        )}
-      </div>
-
-      {/* Mobile Dot (first column on mobile) */}
-      <div className="flex md:hidden justify-center items-center relative z-10">
-        <motion.div style={{ opacity }}>
-          <motion.div
-            className="w-4 h-4 rounded-full border-2 flex items-center justify-center"
-            style={{ borderColor: event.accentColor }}
-          >
-            <motion.div
-              className="w-2 h-2 rounded-full"
-              style={{ background: event.accentColor }}
-              animate={{
-                boxShadow: [
-                  `0 0 0px 0px ${event.accentColor}00`,
-                  `0 0 8px 3px ${event.accentColor}70`,
-                  `0 0 0px 0px ${event.accentColor}00`,
-                ],
-              }}
-              transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </motion.div>
-        </motion.div>
-      </div>
-
-      {/* ── COLUMN 2: CENTER dot on desktop, CARD on mobile ── */}
-      <div className="hidden md:flex justify-center items-center relative z-10">
-        <motion.div style={{ opacity }}>
-          <motion.div
-            className="w-4 h-4 rounded-full border-2 flex items-center justify-center"
-            style={{ borderColor: event.accentColor }}
-          >
-            <motion.div
-              className="w-2 h-2 rounded-full"
-              style={{ background: event.accentColor }}
-              animate={{
-                boxShadow: [
-                  `0 0 0px 0px ${event.accentColor}00`,
-                  `0 0 8px 3px ${event.accentColor}70`,
-                  `0 0 0px 0px ${event.accentColor}00`,
-                ],
-              }}
-              transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </motion.div>
-        </motion.div>
-      </div>
-
-      {/* Mobile Card (second column on mobile) */}
-      <div className="flex md:hidden justify-start pl-4 pr-2">
-        <motion.div style={{ opacity }} className="w-full">
+    <div ref={rowRef} className="relative flex justify-center py-10 md:py-20">
+      {isDesktop ? (
+        <motion.div
+          style={{ transform, opacity: orbitOpacity }}
+          className="relative z-10 w-[min(460px,86vw)] [transform-style:preserve-3d] will-change-transform"
+        >
           <GlassCard event={event} />
         </motion.div>
-      </div>
-
-      {/* ── COLUMN 3: RIGHT card/image on desktop, hidden on mobile ── */}
-      <div className="hidden md:flex justify-start pl-8 md:pl-12">
-        {isEven ? (
-          <motion.div style={{ opacity, x: imgX }} className="w-full flex justify-center max-w-[420px]">
-            <EventImage event={event} index={index} rowRef={rowRef} smx={smx} smy={smy} />
-          </motion.div>
-        ) : (
-          <motion.div style={{ opacity, x: cardX }}>
-            <GlassCard event={event} />
-          </motion.div>
-        )}
-      </div>
+      ) : (
+        <motion.div
+          style={{ opacity: mobileOpacity, y: mobileY }}
+          className="relative z-10 w-full max-w-[440px]"
+        >
+          <GlassCard event={event} />
+        </motion.div>
+      )}
     </div>
   );
 }
@@ -245,7 +204,7 @@ function GlassCard({ event }: { event: (typeof events)[0] }) {
     <BorderGlow
       edgeSensitivity={30}
       glowColor={event.glowColor}
-      backgroundColor="rgba(4, 20, 50, 0.45)"
+      backgroundColor="rgba(8, 26, 58, 0.55)"
       borderRadius={16}
       glowRadius={30}
       glowIntensity={0.8}
@@ -253,9 +212,12 @@ function GlassCard({ event }: { event: (typeof events)[0] }) {
       animated={false}
       colors={event.colors}
       fillOpacity={0}
-      className="w-full max-w-[420px]"
+      className="w-full max-w-[420px] backdrop-blur-2xl backdrop-saturate-150"
     >
-      <div className="relative p-7 overflow-hidden w-full h-full">
+      <div
+        className="relative p-7 w-full h-full rounded-[inherit]"
+        style={{ perspective: "800px", transformStyle: "preserve-3d" }}
+      >
         {/* Top refraction line */}
         <div
           className="absolute inset-x-0 top-0 h-px"
@@ -271,56 +233,30 @@ function GlassCard({ event }: { event: (typeof events)[0] }) {
           }}
         />
 
-        {/* Date — tight above the title */}
-        <div className="mb-2 relative z-10">
+        {/* Date — raised closest to the viewer */}
+        <div className="mb-2 relative z-10" style={{ transform: "translateZ(60px)" }}>
           <span
             className="block text-[10px] font-semibold tracking-[0.2em] uppercase select-none"
-            style={{ color: event.accentColor, opacity: 0.8 }}
+            style={{ color: event.accentColor, opacity: 0.85 }}
           >
             {event.date}
           </span>
         </div>
 
-        <h3 className="text-white font-extrabold text-xl md:text-2xl tracking-tight leading-tight mb-3 relative z-10 text-left">
+        <h3
+          className="text-white font-extrabold text-xl md:text-2xl tracking-tight leading-tight mb-3 relative z-10 text-left"
+          style={{ transform: "translateZ(42px)", filter: "drop-shadow(0 6px 12px rgba(0,0,0,0.5))" }}
+        >
           {event.title}
         </h3>
-        <p className="text-white/55 text-sm leading-relaxed font-light relative z-10 text-left">
+        <p
+          className="text-white/55 text-sm leading-relaxed font-light relative z-10 text-left"
+          style={{ transform: "translateZ(18px)" }}
+        >
           {event.description}
         </p>
       </div>
     </BorderGlow>
-  );
-}
-
-/* ─── Event floating image ─── */
-function EventImage({ event, index, rowRef, smx, smy }: { event: (typeof events)[0]; index: number; rowRef: React.RefObject<HTMLDivElement | null>; smx: any; smy: any }) {
-  // Use a full-viewport scroll hook for continuous floating parallax as it moves across screen
-  const { scrollYProgress: floatProgress } = useScroll({
-    target: rowRef,
-    offset: ["start end", "end start"],
-  });
-
-  // Increased scroll reactivity
-  const y = useTransform(floatProgress, [0, 1], [100, -100]);
-  const rotateRange = index % 2 === 0 ? [-20, 20] : [20, -20];
-  const rotate = useTransform(floatProgress, [0, 1], rotateRange);
-
-  // Mouse reactivity
-  const mx = useTransform(smx, [-1, 1], index % 2 === 0 ? [-40, 40] : [40, -40]);
-  const my = useTransform(smy, [-1, 1], [-40, 40]);
-
-  return (
-    <motion.div
-      className="relative w-full flex justify-center items-center"
-      style={{ y, rotate }}
-    >
-      <motion.img 
-        src={event.imageUrl} 
-        alt={event.title} 
-        style={{ x: mx, y: my }}
-        className="w-full h-auto drop-shadow-[0_20px_30px_rgba(0,0,0,0.4)] object-contain max-w-[250px] md:max-w-[320px]" 
-      />
-    </motion.div>
   );
 }
 
@@ -329,20 +265,6 @@ function EventImage({ event, index, rowRef, smx, smy }: { event: (typeof events)
    ════════════════════════════════════════════ */
 export default function JourneySection() {
   const sectionRef = useRef<HTMLElement>(null);
-
-  // Mouse tracking logic for interactive floating
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const springConfig = { damping: 20, stiffness: 100 };
-  const smx = useSpring(mouseX, springConfig);
-  const smy = useSpring(mouseY, springConfig);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const { clientX, clientY } = e;
-    const { innerWidth, innerHeight } = window;
-    mouseX.set((clientX / innerWidth) * 2 - 1);
-    mouseY.set((clientY / innerHeight) * 2 - 1);
-  };
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -355,16 +277,20 @@ export default function JourneySection() {
     mass: 0.8,
   });
 
-  const lineHeight = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
-
-  /* The center column is 48px wide — line is 1px centered within it */
-  const lineLeft = "calc(50% - 0.5px)";
+  // The 3D orbit only applies where there's room to swing (tablet / desktop).
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   return (
     <section
       id="timeline"
       ref={sectionRef}
-      onMouseMove={handleMouseMove}
       className="relative w-full bg-[#010814] pt-12 pb-8 md:pt-20 md:pb-20 overflow-hidden z-10"
     >
       {/* Ambient Background - Optimized */}
@@ -375,7 +301,7 @@ export default function JourneySection() {
         />
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 relative z-10">
 
         {/* ─── Header ─── */}
         <div className="text-center mb-12 md:mb-16">
@@ -384,7 +310,7 @@ export default function JourneySection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="text-5xl md:text-6xl font-black text-white tracking-tight"
+            className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight"
           >
             The Journey
           </motion.h2>
@@ -412,53 +338,22 @@ export default function JourneySection() {
         */}
         <div className="relative" id="timeline-body">
 
-          {/* ── Faint background rail — spans full height of this block ── */}
-          <div
-            className="absolute top-[24px] bottom-0 w-px pointer-events-none left-6 md:left-1/2 md:-translate-x-1/2"
-            style={{ background: "rgba(255,255,255,0.06)" }}
-          />
-
-          {/* ── Scroll-filled colored line ── */}
-          <div
-            className="absolute top-[24px] w-px overflow-hidden pointer-events-none left-6 md:left-1/2 md:-translate-x-1/2"
-            style={{ height: "calc(100% - 24px)" }}
-          >
-            <motion.div
-              className="w-full origin-top"
-              style={{
-                height: lineHeight,
-                background: "linear-gradient(to bottom, #5BB8FF 0%, #1A6FD4 100%)",
-                boxShadow: "0 0 6px rgba(91,184,255,0.5)",
-              }}
-            />
-          </div>
+          {/* ── 3D energy rod down the centre — energises as you scroll ── */}
+          <TimelineRod progress={smoothProgress} />
 
           {/* ── START IMAGE ── */}
-          <div
-            className="relative z-20 flex justify-start ml-[-16px] md:justify-center md:ml-0 pb-8 -mt-4"
-          >
+          <div data-tl-start className="relative z-20 flex justify-center pb-8 -mt-4">
             <StartImage scrollYProgress={scrollYProgress} />
           </div>
 
           {/* ── EVENT ROWS ── */}
           {events.map((event, index) => (
-            <EventRow key={event.id} event={event} index={index} smx={smx} smy={smy} />
+            <EventRow key={event.id} event={event} index={index} isDesktop={isDesktop} />
           ))}
 
-          {/* ── END IMAGE ── pushed down; cover strip blocks line below image center ── */}
-          <div className="relative z-20 flex justify-start ml-[-16px] md:justify-center md:ml-0" style={{ paddingTop: 24 }}>
-            {/* Downward cover: blocks the rail that bleeds below the center */}
-            <div
-              className="absolute left-6 md:left-1/2 -translate-x-1/2"
-              style={{
-                top: "50%",
-                width: 6,
-                height: "200px",
-                background: "#010814",
-                zIndex: 1,
-              }}
-            />
-            <EndImage scrollYProgress={scrollYProgress} />
+          {/* ── END CARD ── the awakening, revealed at the foot of the line ── */}
+          <div data-tl-end className="relative z-20 flex justify-center" style={{ paddingTop: 24 }}>
+            <EndImage scrollYProgress={scrollYProgress} progress={smoothProgress} />
           </div>
         </div>
       </div>

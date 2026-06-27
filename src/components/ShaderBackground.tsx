@@ -103,8 +103,14 @@ export default function ShaderBackground() {
     const uTime = gl.getUniformLocation(program, "u_time");
     const uRes  = gl.getUniformLocation(program, "u_resolution");
 
-    let animFrame: number;
+    let animFrame = 0;
     let start = performance.now();
+    let pausedAt = 0;
+    let isVisible = true;
+
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
 
     function resize() {
       if (!canvas) return;
@@ -113,21 +119,61 @@ export default function ShaderBackground() {
       gl!.viewport(0, 0, canvas.width, canvas.height);
     }
 
-    function render() {
+    function drawFrame() {
       if (!canvas) return;
       gl!.uniform1f(uTime, (performance.now() - start) / 1000);
       gl!.uniform2f(uRes, canvas.width, canvas.height);
       gl!.drawArrays(gl!.TRIANGLE_STRIP, 0, 4);
+    }
+
+    function render() {
+      drawFrame();
       animFrame = requestAnimationFrame(render);
+    }
+
+    function play() {
+      if (animFrame || reducedMotion) return;
+      if (pausedAt) {
+        start += performance.now() - pausedAt; // resume without a time jump
+        pausedAt = 0;
+      }
+      animFrame = requestAnimationFrame(render);
+    }
+
+    function pause() {
+      if (!animFrame) return;
+      cancelAnimationFrame(animFrame);
+      animFrame = 0;
+      pausedAt = performance.now();
+    }
+
+    // Only animate while the canvas is on screen and the tab is visible.
+    function update() {
+      if (isVisible && !document.hidden) play();
+      else pause();
     }
 
     resize();
     window.addEventListener("resize", resize);
-    render();
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        update();
+      },
+      { threshold: 0 }
+    );
+    io.observe(canvas);
+    document.addEventListener("visibilitychange", update);
+
+    if (reducedMotion) drawFrame(); // single static frame
+    else update();
 
     return () => {
       cancelAnimationFrame(animFrame);
       window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", update);
+      io.disconnect();
     };
   }, []);
 

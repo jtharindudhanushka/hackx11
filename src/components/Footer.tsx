@@ -33,7 +33,7 @@ export default function Footer() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
         <div
           className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1400px] h-[1400px] translate-y-1/2"
-          style={{ opacity: 0.45 }}
+          style={{ opacity: 0.3 }}
         >
           <div className="footer-circle-spin relative w-full h-full">
             <Image
@@ -43,7 +43,7 @@ export default function Footer() {
               style={{
                 objectFit: "contain",
                 filter:
-                  "brightness(0) saturate(100%) invert(30%) sepia(90%) saturate(1500%) hue-rotate(200deg) brightness(1.6) drop-shadow(0 0 40px #1A6FD4) drop-shadow(0 0 100px rgba(26,111,212,0.6))"
+                  "brightness(0) saturate(100%) invert(30%) sepia(90%) saturate(1500%) hue-rotate(200deg) brightness(1.6) drop-shadow(0 0 40px #1A6FD4) drop-shadow(0 0 80px rgba(26,111,212,0.4))"
               }}
             />
           </div>
@@ -123,7 +123,7 @@ export default function Footer() {
 
       {/* ── LAYER 5: Text & logos ── */}
       <div
-        className="absolute bottom-0 inset-x-0 pb-8 px-4 md:px-12"
+        className="absolute bottom-0 inset-x-0 pb-8 px-6 md:px-8 lg:px-12"
         style={{ zIndex: 5 }}
       >
         {/* Responsive layout: stacked on mobile, 2 columns on desktop */}

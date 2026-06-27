@@ -73,13 +73,13 @@ export default function PrizesSection() {
         />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 relative z-10">
 
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">
           <motion.h2
             {...fade(0.08)}
-            className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.05] mb-6"
+            className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.05] mb-6"
           >
             hackX 11.0 Awards
           </motion.h2>
@@ -101,7 +101,7 @@ export default function PrizesSection() {
               <motion.div
                 key={prize.rank}
                 {...fade(0.1 + visualIdx * 0.1)}
-                className={`w-full md:w-[330px] relative group flex flex-col ${orderClass}`}
+                className={`w-full md:flex-1 relative group flex flex-col ${orderClass}`}
                 style={{ alignSelf: "stretch" }}
               >
               <div

@@ -99,6 +99,9 @@
 
   html {
     scroll-behavior: smooth;
+    /* Reserve the scrollbar gutter on both sides so left and right page
+       margins stay symmetric (no content shift from the scrollbar). */
+    scrollbar-gutter: stable both-edges;
   }
 
   body {
@@ -115,6 +118,19 @@
     font-family: 'TT Hoves Pro Expanded', 'TT Hoves Pro', system-ui, sans-serif;
     font-weight: 700; /* Bold */
   }
+}
+
+/* ── Consistent section eyebrow label ──
+   One source of truth for the small uppercase kicker above section titles. */
+.eyebrow {
+  display: block;
+  font-family: 'TT Hoves Pro', system-ui, sans-serif;
+  font-size: 0.75rem;        /* text-xs */
+  font-weight: 700;          /* Bold */
+  line-height: 1;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #5BB8FF;
 }
 
 /* =============================================
@@ -210,6 +226,146 @@
 
 .btn-primary:hover {
   transform: translateY(-2px) scale(1.03);
+}
+
+/* ── Animated download icon (used in primary buttons) ── */
+.dl-icon {
+  position: relative;
+  display: inline-block;
+  flex: none;
+}
+.dl-icon__svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  color: currentColor;
+}
+.dl-icon__arrow {
+  transform-box: fill-box;
+  transform-origin: center;
+  /* gentle idle float */
+  animation: dl-idle 3s ease-in-out infinite;
+}
+@keyframes dl-idle {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-1px); }
+}
+/* On hover of the parent .group, run the downloading loop */
+.group:hover .dl-icon__arrow {
+  animation: dl-download 1.1s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+@keyframes dl-download {
+  0%   { transform: translateY(-90%); opacity: 0; }
+  25%  { transform: translateY(0);    opacity: 1; }
+  60%  { transform: translateY(0);    opacity: 1; }
+  100% { transform: translateY(95%);  opacity: 0; }
+}
+.dl-icon__tray {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+.group:hover .dl-icon__tray {
+  animation: dl-tray 1.1s ease-in-out infinite;
+}
+@keyframes dl-tray {
+  0%, 55%, 100% { transform: scaleX(1);   opacity: 0.85; }
+  78%           { transform: scaleX(1.12); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dl-icon__arrow,
+  .group:hover .dl-icon__arrow,
+  .group:hover .dl-icon__tray {
+    animation: none;
+  }
+}
+
+/* ── Siri-like live gradient orb (AI assistant indicator) ── */
+.siri-orb {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  border-radius: 9999px;
+  overflow: hidden;
+  isolation: isolate;
+  background: radial-gradient(circle at 50% 50%, #0A3878, #041A3A);
+  box-shadow:
+    0 0 10px rgba(91, 184, 255, 0.45),
+    inset 0 0 6px rgba(255, 255, 255, 0.18);
+}
+/* Rotating multi-colour conic wash */
+.siri-orb::before {
+  content: "";
+  position: absolute;
+  inset: -45%;
+  background: conic-gradient(
+    from 0deg,
+    #5BB8FF,
+    #1A6FD4,
+    #8B5CF6,
+    #22D3EE,
+    #5BB8FF
+  );
+  filter: blur(5px);
+  animation: siri-rotate 5s linear infinite;
+}
+/* Drifting liquid highlight */
+.siri-orb__blob {
+  position: absolute;
+  inset: -20%;
+  mix-blend-mode: screen;
+  filter: blur(4px);
+  background:
+    radial-gradient(40% 40% at 30% 30%, rgba(91, 184, 255, 0.95), transparent 60%),
+    radial-gradient(40% 40% at 70% 68%, rgba(139, 92, 246, 0.75), transparent 60%);
+  animation: siri-drift 7s ease-in-out infinite;
+}
+/* Glossy sheen */
+.siri-orb__gloss {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(58% 48% at 34% 26%, rgba(255, 255, 255, 0.55), transparent 60%);
+}
+@keyframes siri-rotate {
+  to { transform: rotate(360deg); }
+}
+@keyframes siri-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(8%, -6%) scale(1.1); }
+  66%      { transform: translate(-6%, 6%) scale(0.94); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .siri-orb::before,
+  .siri-orb__blob {
+    animation: none;
+  }
+}
+
+/* ── Vimeo player volume slider ── */
+.vimeo-volume {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+}
+.vimeo-volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 6px rgba(91, 184, 255, 0.6);
+}
+.vimeo-volume::-moz-range-thumb {
+  width: 11px;
+  height: 11px;
+  border: none;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 6px rgba(91, 184, 255, 0.6);
 }
 
 /* SECONDARY BUTTON: Pure glass with subtle sky border */

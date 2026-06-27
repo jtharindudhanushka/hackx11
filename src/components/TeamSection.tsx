@@ -160,8 +160,10 @@ export default function TeamSection() {
       isMobileRef.current = mobile;
       setIsMobile(mobile);
       if (!mobile) {
-        const val = width * 0.22;
-        setTranslateXStep(Math.max(260, Math.min(val, 310)));
+        // Card is 280px wide (md). Keep the step above that so neighbouring
+        // cards sit side-by-side with a small gap instead of overlapping.
+        const val = width * 0.26;
+        setTranslateXStep(Math.max(304, Math.min(val, 344)));
       }
     };
     handleResize(); // sets isMobileRef.current immediately
@@ -208,7 +210,7 @@ export default function TeamSection() {
         />
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 relative z-10">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
           <div className="max-w-2xl">
@@ -217,7 +219,7 @@ export default function TeamSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="text-xs font-bold tracking-[0.2em] uppercase text-[#5BB8FF] mb-3 block text-center md:text-left"
+              className="eyebrow mb-4 text-center md:text-left"
             >
               Organising Committee
             </motion.span>
