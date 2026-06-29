@@ -1,436 +1,558 @@
 # hackX 11.0 — Website Content
 
-*This document contains all the editable text on the hackX 11.0 website, organised by section in the order they appear on the page. A content editor can update any text here and hand it to a developer to apply the changes.*
-
----
-
-## Page Title & Description
-*(Shown in browser tabs and search results)*
 
 **Title**
-hackX 11.0 — Sri Lanka's Premier National Startup Challenge
+hackX 11.0 — Sri Lanka's Premier Inter-University Startup Challenge
+
 
 **Description**
 Where university students turn bold ideas into real ventures. Backed by the nation. Built by students. Eleven years running.
 
+
 ---
+
 
 ## Navigation Bar
 
+
 **Logo alt text:** hackX Logo
 
+
 **Menu links**
+- About
 - Timeline
+- Rewards
 - Ambassadors
 - Memories
 - FAQ
 
+
 **Buttons**
-- Contact *(ghost button, top right)*
-- Register Now *(primary button, top right)*
+- Contact 
+- Register Now 
+
 
 ---
 
+
 ## Hero Section
+
 
 **Line 1 of heading**
 Sri Lanka's Premier
 
-**Line 2 of heading** *(displayed in sky-blue gradient)*
-National Startup
+
+**Line 2 of heading** 
+Inter-University Startup
+
 
 **Line 3 of heading**
 Challenge.
 
+
 **Subtitle**
-Where university students turn bold ideas into real ventures.
+Where university students transform bold ideas into opportunities.
+
 
 **Primary button**
 Register Now
 
+
 **Secondary button**
 Learn More
+
 
 **Scroll indicator label**
 Scroll to explore
 
+
 ---
+
 
 ## What is hackX?
 
-**Section label** *(small text above heading)*
-What is hackX?
 
 **Heading**
-More Than a Hackathon.
+What is hackX?
+
 
 **Paragraph 1**
-hackX is Sri Lanka's premier inter-university startup challenge, organised by the Industrial Management Science Students' Association at the Department of Industrial Management, University of Kelaniya.
+hackX 11.0 is Sri Lanka's premier inter-university startup challenge, organized by the Industrial Management Science Students' Association at the Department of Industrial Management, University of Kelaniya.
+
 
 **Paragraph 2**
-Since 2015, hackX has brought together the sharpest undergraduate minds from across the country to turn real problems into scalable, investable solutions — through mentorship, business development, prototype building, and a Grand Finals stage.
+hackX provides a platform for undergraduate students to work in teams and transform real-world problems into innovative solutions with startup potential. Whether it is a product, service, or technology-driven solution, participants will receive guidance, mentorship, and industry exposure through multiple phases of the competition to help develop, validate, and refine their ideas into viable business ventures.
+
 
 **Button**
 Delegate Booklet
 
+
 ---
 
+
 ### Stats Block
+
 
 **Stat 1**
 Number: 11
 Label: Editions
-Sub-label: 10+ Years Impact
+Sub-label: More Than a Decade of Innovation
+
 
 **Stat 2**
-Number: 24
+Number: 25+
 Label: Universities
-Sub-label: In 2025
+Sub-label: Represented Nationwide
+
 
 **Stat 3**
 Number: 265+
 Label: Teams Participating
-Sub-label: Across The Country
+Sub-label: Registered in 2025
+
 
 ---
+
 
 ### Video
 
+
 **Label above video**
-Watch — hackX 10.0 Grand Finals
+Recap of hackX National Hackathon Series 2025
+
 
 ---
+
 
 ## Who Can Compete
 
-**Section label**
-Who Can Compete
+
+
+
+
 
 **Heading**
-Built for Builders. Open to All Universities.
+Who Can Compete
+
 
 ---
+
 
 ### Card 1 — Your Team
 
-**Title:** Your Team
+
+**Title:** Go Solo or Build a Team
+
 
 **Description**
-Two to five members. All currently enrolled undergraduates from the same university or higher education institute.
+Participate individually or form a team of two to five members. All team members must be currently enrolled undergraduates from the same university or higher education institute. 
+
 
 ---
+
 
 ### Card 2 — Your Idea
 
+
 **Title:** Your Idea
 
+
 **Description**
-Any real-world problem with a scalable, technology-driven solution. Innovation from any field is welcome: healthcare, agriculture, finance, education, and beyond.
+Present an innovative startup idea, product, service, or solution that addresses a real-world problem or creates meaningful value. Your idea should demonstrate originality, practical potential, and the ability to grow into a sustainable venture. 
+
 
 ---
+
 
 ### Card 3 — Your Entry
 
-**Title:** Your Entry
+
+**Title:** Start Your Journey
+
 
 **Description**
-Completely free. No registration fee, no prerequisites. Sign up, submit your proposal by July 31, and let your idea do the talking.
+Participation is completely free with no registration fees or prerequisites. Simply sign up, submit your proposal, and let your idea do the talking. 
+
 
 ---
 
+
 ## The Journey (Timeline)
+
 
 **Heading**
 The Journey
 
+
 **Subheading**
 Every great venture starts somewhere. Yours starts here.
 
+
 ---
+
 
 ### Stage 1
 
-**Date:** June 23
+
+**Date:** July 1
 **Title:** Registrations Open
 **Description**
-Doors open to universities across Sri Lanka. Free to enter. Just bring an idea worth fighting for.
+Create your team, submit your details, and secure your place in Sri Lanka's premier inter-university startup challenge. 
+
 
 ---
 
+
 ### Stage 2
+
 
 **Date:** July 31
 **Title:** Proposal Submission
 **Description**
-Teams submit structured proposals and a one to two minute product introduction video, screened by industry professionals.
-
+Present your startup concept through a proposal and introductory video, showcasing the problem, solution, and potential behind your idea.
 ---
 
+
 ### Stage 3
+
 
 **Date:** Sep – Oct
 **Title:** designX Workshops
 **Description**
-Four expert-led sessions covering business modelling, startup structuring, and market validation. Exclusive to semi-finalists.
+Refine your business model, validate your solution, and gain valuable insights through expert-led startup development workshops. 
+
 
 ---
+
 
 ### Stage 4
 
+
 **Date:** October 3
-**Title:** ideaX Semi-Finals
+**Title:** ideaX: Semi-Finals
 **Description**
-Thirty teams. One stage. Present a working prototype to a panel of expert judges and earn your spot at the Grand Finals.
+Pitch your idea before an expert judging panel and compete for a place among the nation's top startup teams.
+
 
 ---
 
+
 ### Stage 5
+
 
 **Date:** November 11
 **Title:** Grand Finals
 **Description**
-The main event. Finalist teams present fully developed solutions before industry leaders, investors, and government officials.
+Take the national stage and present your fully developed startup to industry leaders, investors, and distinguished guests. 
+
 
 ---
+
 
 ## Prizes
 
-**Section label**
-What You Win
+
+
+
+
 
 **Heading**
-Built for Builders. Rewarded Like Champions.
+hackX 11.0 Awards
+
 
 **Subheading**
-Three podium spots. Real prizes. Real investor exposure. And recognition on Sri Lanka's biggest student innovation stage.
+Celebrating innovation with remarkable rewards and opportunities for the next generation of entrepreneurs. 
+
 
 ---
+
 
 ### 1st Place Card
 
-**Rank:** 1st
-**Label:** Grand Champions
-**Description**
-The pinnacle. National recognition, investor access, and a prize that matches the ambition.
 
----
+**Rank:** 1st
+**Label:** Champions
+**Description**
+LKR 200,000
+Cash Prize *smaller font size* 
+
 
 ### 2nd Place Card
 
+
 **Rank:** 2nd
-**Label:** Runners-Up
+**Label:** First Runners-Up
 **Description**
-Second on stage. First in line for what comes next.
+LKR 150,000
+Cash Prize *smaller font size* 
+
 
 ---
+
 
 ### 3rd Place Card
 
+
 **Rank:** 3rd
-**Label:** Third Place
+**Label:** Second Runners-Up
 **Description**
-The podium is proof. Your idea earned its place on a national stage.
+LKR 125,000
+Cash Prize *smaller font size* 
+
 
 ---
+
 
 **Label on each card** *(small footer text)*
 Grand Finals · hackX 11.0
 
+
 **Note below all cards**
-Plus: Mentorship access · Investor introductions · National media coverage · hackX Digital Certificate
+Expert mentorship · Industry networking opportunities · National recognition · Investor exposure · Startup development support 
+
 
 ---
 
+
 ## Ambassador Program
 
-**Section label**
-Be The Movement
 
 **Heading**
-Carry hackX to Your Campus.
+The hackX 11.0 Ambassador Network 
+
 
 **Body**
-The hackX 11.0 Campus Ambassador Program connects your university with Sri Lanka's premier startup challenge. Champion innovation on campus, earn points for referring teams, and climb the leaderboard to secure VIP Grand Finals invites, exclusive merchandise, and national recognition. Every ambassador receives a certified digital credential to boost their CV.
+Become the official link between hackX 11.0 and your university. As a hackX Ambassador, you'll promote Sri Lanka's premier inter-university startup challenge on your campus, share competition updates, encourage students to participate, connect the organizing committee with student communities, and gain official recognition, exclusive learning and networking opportunities, certificates, and exciting rewards.
+
 
 **Button**
 Learn More
 
+
 ---
+
 
 ## Memories Section
 
-**Section label**
-A Decade of Making Ideas Happen
 
 **Heading**
-Eleven Years. Hundreds of Teams. One Stage That Changed Everything.
+Moments of Innovation
+
 
 **Body**
-From the very first edition to a Grand Finals night with the Minister of Science and Technology as Chief Guest, hackX has grown into the innovation platform that defines what Sri Lankan university students can build.
+Experience the highlights, energy, and unforgettable moments that have defined hackX over the years. 
+
 
 **Text above button**
 Every name on that list started with one idea. What is yours?
 
+
 **Button**
 Register Now
 
+
 ---
+
 
 ### Memory Card Hover Text
 *(Shown when hovering over each photo in the carousel — currently placeholder copy)*
+
 
 **Label:** Edition
 **Title format:** hackX {n}.0
 **Description:** A description of the breakthrough solutions and memories built during this landmark challenge.
 
+
 > ⚠️ **To do:** Replace the placeholder description above with a real short description for each hackX edition (1.0 through 10.0).
 
+
 ---
+
 
 ## Meet the OC
 
-**Section label**
-Organising Committee
 
 **Heading**
-Meet the OC.
+Contact Us
+
 
 **Body**
-Have a question? Reach the right person directly. Our team is ready to propel your startup journey forward.
+Have a question? Reach the right person directly. Our team is ready to assist you every step of the way. 
+
 
 ---
+
 
 ### OC Members
-> ⚠️ **To do:** All names, roles, emails, and phone numbers below are placeholder data. Replace with real OC details before launch.
-
 **Member 1**
-Name: Ashan Perera
-Role: President — hackX 11.0
-Email: president@hackx.lk
-Phone: +94 77 000 0001
+Name: Praveen Madawalage
+Role: Chief Coordinator
+Email: praveen.hackx@gmail.com
+Phone: +94 77 286 8600 
+
 
 **Member 2**
-Name: Dilmi Rathnayake
-Role: Secretary General
-Email: secretary@hackx.lk
-Phone: +94 77 000 0002
+Name: Tharushi Kulathunga
+Role: Chief Coordinator
+Email: tharushi.hackx@gmail.com
+Phone: +94 70 725 3446 
+
 
 **Member 3**
-Name: Kavinda Silva
-Role: Head of Technology
-Email: tech@hackx.lk
-Phone: +94 77 000 0003
+Name: Sameera Ekanayaka
+Role: Financial Coordinator
+Email: sameera.hackx@gmail.com
+Phone: +94 76 142 7662 
+
 
 **Member 4**
-Name: Nethmi Fernando
-Role: Head of Marketing
-Email: marketing@hackx.lk
-Phone: +94 77 000 0004
+Name: Imasha Karunathilaka
+Role: Financial Coordinator
+Email: imashaa.hackx@gmail.com
+Phone: +94 77 485 2074 
+
 
 **Member 5**
-Name: Isuru Wickrama
-Role: Head of Finance
-Email: finance@hackx.lk
-Phone: +94 77 000 0005
+Name: Tharindu Dhanushka
+Role: Partnership Coordinator
+Email: tharindu.hackx@gmail.com
+Phone: +94 76 219 5995 
+
+
+**Member 6**
+Name: Thilini Bhagya
+Role: Partnership Coordinator
+Email: thilini.hackx@gmail.com
+Phone: +94 76 947 6496 
+
+
+**Member 7**
+Name: Charith Fonseka
+Role: Marketing Coordinator
+Email: charith.hackx@gmail.com
+Phone: +94 78 256 7430 
+
+
+**Member 8**
+Name: Manumi Senevirathna
+Role: Marketing Coordinator
+Email: manumi.hackx@gmail.com
+Phone: +94 77 015 0508 
+
 
 ---
+
 
 ## FAQ
 
-**Section label**
-Everything You Need To Know
 
 **Heading**
 Frequently Asked Questions
 
+
 ---
+
 
 **Q:** Who can register for hackX 11.0?
-**A:** Any currently enrolled undergraduate from a Sri Lankan university or higher education institute. All team members must be from the same institution.
+**A:** hackX is open to undergraduate students from recognized universities and higher education institutions in Sri Lanka.
+
+
+
 
 ---
+
 
 **Q:** How many people can be in a team?
-**A:** Minimum two, maximum five members.
+**A:** You can participate individually or as a team of up to five members. All team members must be undergraduates from the same university or higher education institute. 
+
 
 ---
+
 
 **Q:** Is there a registration fee?
-**A:** No. hackX 11.0 is completely free to enter.
+**A:** No. Registration is completely free, and no fee is charged at any stage of the competition. 
+
 
 ---
+
 
 **Q:** Do I need a finished product to register?
-**A:** No. You just need an idea at registration. A working prototype is required by the ideaX semi-finals stage.
+**A:** No. A prototype is not required during the initial stages. However, teams that advance to the Semi-Finals and Grand Finals will be expected to demonstrate a fully or partially developed prototype to validate their solution. 
+
 
 ---
 
-**Q:** What do I need to submit after registering?
-**A:** A structured startup proposal by July 31, along with a one to two minute product introduction video.
+
+**Q:** What type of ideas can be submitted? 
+**A:** Any innovative startup idea, product, service, or solution that addresses a real-world problem and has the potential to create value and grow into a sustainable venture. 
+
 
 ---
+
 
 **Q:** Can students from non-tech faculties participate?
-**A:** Absolutely. hackX welcomes innovation from any discipline. Healthcare, agriculture, finance, education — any field is fair game as long as there is a technology-driven solution behind it.
+**A:** Absolutely. hackX welcomes innovation from any discipline. Healthcare, agriculture, finance, education or any other field is fair game as long as there is a technology-driven solution behind it.
+
 
 ---
 
-**Q:** What can winners expect at the Grand Finals?
-**A:** Winners receive cash prizes, exclusive recognition on a national stage, and direct exposure to real investor opportunities through our partner network.
-
----
-
-**Q:** What is designX?
-**A:** An exclusive four-part workshop series for semi-finalists, covering business modelling, startup structuring, and market validation, delivered by industry professionals.
-
----
-
-**Q:** When do registrations close?
-**A:** Proposals must be submitted by July 31. Register early to give your team time to prepare a strong submission.
-
----
 
 ## Ask hackX (AI Chat)
 
-**Badge label**
-Ask hackX
 
 **Heading**
-Got a Question? Get an Answer.
+Ask Mascot Anything
+
 
 **Subheading**
-Not sure if your idea qualifies? Wondering what judges look for in a proposal? Ask anything about hackX 11.0 and get an instant AI-powered answer.
+Chat with our AI Assistant to get instant answers about hackX 11.0
+
 
 **Chat assistant name**
-hackX Assistant
+Mascot
+
 
 **Demo chat — User message**
 Does our product need to be fully built by the time we register?
 
+
 **Demo chat — AI response**
 No, it does not. At the registration stage, you only need to submit your idea and a structured proposal outlining the problem, solution, and impact. A working prototype is only required later, by the ideaX Semi-Finals on October 3. Take your time to refine the core concept first!
+
 
 **Input placeholder**
 Ask a question about hackX...
 
+
 **Disclaimer below input**
-Powered by AI. For official queries, contact coordinators.
+Powered by AI. For official queries, contact the relative coordinators.
+
 
 ---
 
+
 ## Footer
+
 
 **Tagline (left column)**
 Sri Lanka's premier national startup challenge for undergraduates across all universities.
 
+
 **Description (right column)**
-Organized by the Dept. of Industrial Management, University of Kelaniya — under the Patronage of the Ministry of Science & Technology and NSF Sri Lanka.
+Organized by the Industrial Management Science Students’ Association, University of Kelaniya in collaboration with the Ministry of Science & Technology and The National Science Foundation of Sri Lanka.
+
 
 **Copyright**
 © 2026 hackX 11.0.
 
+
 **Social links**
+- LinkedIn
 - Facebook
 - Instagram
 - YouTube
 - TikTok
+
+
+

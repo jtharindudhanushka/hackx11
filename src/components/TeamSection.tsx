@@ -21,20 +21,6 @@ const coordinators = [
     avatar: "/OC Images/Draft OC.webp",
   },
   {
-    name: "Tharindu Dhanushka",
-    role: "Partnership Coordinator",
-    email: "tharindu.hackx@gmail.com",
-    phone: "+94 76 219 5995",
-    avatar: "/OC Images/Draft OC.webp",
-  },
-  {
-    name: "Thilini Bhagya",
-    role: "Partnership Coordinator",
-    email: "thilini.hackx@gmail.com",
-    phone: "+94 76 947 6496",
-    avatar: "/OC Images/Draft OC.webp",
-  },
-  {
     name: "Sameera Ekanayaka",
     role: "Financial Coordinator",
     email: "sameera.hackx@gmail.com",
@@ -46,6 +32,20 @@ const coordinators = [
     role: "Financial Coordinator",
     email: "imashaa.hackx@gmail.com",
     phone: "+94 77 485 2074",
+    avatar: "/OC Images/Draft OC.webp",
+  },
+  {
+    name: "Tharindu Dhanushka",
+    role: "Partnership Coordinator",
+    email: "tharindu.hackx@gmail.com",
+    phone: "+94 76 219 5995",
+    avatar: "/OC Images/Draft OC.webp",
+  },
+  {
+    name: "Thilini Bhagya",
+    role: "Partnership Coordinator",
+    email: "thilini.hackx@gmail.com",
+    phone: "+94 76 947 6496",
     avatar: "/OC Images/Draft OC.webp",
   },
   {
@@ -171,15 +171,13 @@ export default function TeamSection() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Auto-scroll only on desktop — reads live ref value inside the interval
+  // Auto-scroll on all devices
   useEffect(() => {
     const timer = setInterval(() => {
-      if (!isMobileRef.current) {
-        setActive((a) => a + 1);
-      }
-    }, 3000);
+      setActive((a) => a + 1);
+    }, 2000);
     return () => clearInterval(timer);
-  }, []); // empty deps — timer is always running, ref controls whether it advances
+  }, []);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -244,7 +242,7 @@ export default function TeamSection() {
           </div>
 
           {/* Controls */}
-          <div className="flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3">
             <button
               onClick={prev}
               className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 bg-white/5 hover:bg-white/10 border border-white/10"
@@ -286,8 +284,8 @@ export default function TeamSection() {
             
             // Dynamic translation for responsive horizontal spread
             const translateX = isMobile
-              ? `calc(${offset} * clamp(200px, 20vw, 320px))`
-              : `${offset * translateXStep}px`; 
+              ? offset * 230 // Solid numeric pixel step for mobile (avoiding calc/clamp issues)
+              : offset * translateXStep; 
             
             const scale = isMobile 
               ? (1 - absOffset * 0.20) 

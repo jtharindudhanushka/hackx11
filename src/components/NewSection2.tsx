@@ -32,6 +32,16 @@ const StatCard = ({
       colors={["#1A6FD4", "#5BB8FF", "#0A3878"]}
     />
     <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/0 group-hover:from-white/[0.03] group-hover:to-transparent transition-colors duration-500 pointer-events-none" />
+    
+    {/* Mobile-only subtle animated glow border since we removed the 3D artifacts from mobile */}
+    <div className="absolute inset-0 rounded-3xl border border-white/0 lg:border-none pointer-events-none" style={{ boxShadow: 'inset 0 0 20px rgba(91,184,255,0.1)' }} />
+    <motion.div 
+      className="absolute inset-0 rounded-3xl pointer-events-none lg:hidden"
+      animate={{ opacity: [0.3, 0.6, 0.3] }}
+      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      style={{ boxShadow: 'inset 0 0 1px 1px rgba(91,184,255,0.2)' }}
+    />
+
     <div className="relative z-10 w-full h-full flex flex-col justify-center items-center p-8 text-center">{children}</div>
   </motion.div>
 );
@@ -90,7 +100,7 @@ export default function NewSection2() {
 
   return (
     <section
-      id="what-is-hackx"
+      id="about"
       ref={sectionRef}
       onMouseMove={handleMouseMove}
       className="relative w-full bg-[#010814] pt-12 md:pt-28 pb-0 overflow-hidden z-10"
@@ -111,12 +121,14 @@ export default function NewSection2() {
         />
       </div>
 
-      {/* Floating 3D Artifact Images - In Front */}
-      <div className="absolute inset-0 max-w-7xl mx-auto pointer-events-none z-[60]">
+
+
+      {/* Floating 3D Artifact Images — desktop only, where they have room to breathe */}
+      <div className="absolute inset-0 max-w-7xl mx-auto pointer-events-none z-[60] hidden lg:block">
         {/* Top Left (Cylinder) */}
         <motion.div
           style={{ y: y1, rotate: rotate1 }}
-          className="absolute top-[-6%] left-[42%] w-[250px] xl:w-[350px] opacity-90 hidden lg:block"
+          className="absolute top-[-6%] left-[42%] w-[250px] xl:w-[350px] opacity-90"
         >
           <motion.img
             src="/section 2/Top left.webp"
@@ -129,7 +141,7 @@ export default function NewSection2() {
         {/* Top Right (Pillar) */}
         <motion.div
           style={{ y: y2, rotate: rotate2 }}
-          className="absolute top-[-4%] -right-[2%] xl:-right-[5%] w-[220px] xl:w-[320px] opacity-90 hidden lg:block"
+          className="absolute top-[-4%] -right-[2%] xl:-right-[5%] w-[220px] xl:w-[320px] opacity-90"
         >
           <motion.img
             src="/section 2/Top Right.webp"
@@ -142,7 +154,7 @@ export default function NewSection2() {
         {/* Bottom Center (Brick) */}
         <motion.div
           style={{ y: y3, rotate: rotate3 }}
-          className="absolute top-[22%] left-[60%] w-[280px] xl:w-[400px] opacity-90 hidden lg:block"
+          className="absolute top-[22%] left-[60%] w-[280px] xl:w-[400px] opacity-90"
         >
           <motion.img
             src="/section 2/Bottom Center.webp"
@@ -168,7 +180,7 @@ export default function NewSection2() {
                 {...fade(0)}
                 className="eyebrow text-center md:text-left"
               >
-                What Is HackX?
+                What Is hackX?
               </motion.span>
               <motion.h2
                 {...fade(0.05)}

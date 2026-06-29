@@ -102,6 +102,26 @@
     /* Reserve the scrollbar gutter on both sides so left and right page
        margins stay symmetric (no content shift from the scrollbar). */
     scrollbar-gutter: stable both-edges;
+    
+    /* Base font size for mobile */
+    font-size: 16px; 
+  }
+
+  /* Responsive proportional scaling for all rem-based sizes (fonts, padding, etc.) */
+  @media (min-width: 768px) {
+    html { font-size: 14px; } /* Scale down slightly for tablets to fit content */
+  }
+
+  @media (min-width: 1024px) {
+    html { font-size: 15px; } /* Small desktops */
+  }
+
+  @media (min-width: 1280px) {
+    html { font-size: 16px; } /* Standard desktops */
+  }
+
+  @media (min-width: 1536px) {
+    html { font-size: 18px; } /* Large ultra-wide monitors */
   }
 
   body {

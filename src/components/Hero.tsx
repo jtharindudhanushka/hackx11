@@ -85,7 +85,7 @@ export default function Hero() {
 
       {/* ── z-5: Hero Title (seen through the cave-opening window) ── */}
       <motion.div
-        className="absolute inset-0 z-5 flex flex-col items-center justify-center pt-0 pb-[20vh] md:justify-start md:pt-[clamp(90px,18vh,200px)] md:pb-0"
+        className="absolute inset-0 z-5 flex flex-col items-center justify-start pt-[19vh] pb-0 md:pt-[clamp(90px,18vh,200px)]"
         style={{
           y: titleY,
           opacity: titleOp,
@@ -106,7 +106,7 @@ export default function Hero() {
             transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
             style={{
               display: "block",
-              fontSize: "clamp(1.6rem, 6vw, 4.5rem)",
+              fontSize: "clamp(2.25rem, 9vw, 4.5rem)",
               color: "#ffffff",
               // NO text shadow per user request
             }}
@@ -121,7 +121,7 @@ export default function Hero() {
             transition={{ duration: 0.9, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
             style={{
               display: "block",
-              fontSize: "clamp(1.6rem, 6vw, 4.5rem)",
+              fontSize: "clamp(2.25rem, 9vw, 4.5rem)",
               background: "linear-gradient(100deg, #5BB8FF 0%, #d6f0ff 50%, #5BB8FF 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -138,7 +138,7 @@ export default function Hero() {
             transition={{ duration: 0.9, delay: 0.56, ease: [0.22, 1, 0.36, 1] }}
             style={{
               display: "block",
-              fontSize: "clamp(1.6rem, 6vw, 4.5rem)",
+              fontSize: "clamp(2.25rem, 9vw, 4.5rem)",
               color: "rgba(255,255,255,0.88)",
             }}
           >
@@ -216,7 +216,7 @@ export default function Hero() {
             </svg>
           </a>
           <a
-            href="#what-is-hackx"
+            href="#about"
             className="btn-secondary w-full max-w-[280px] md:w-auto"
           >
             Learn More

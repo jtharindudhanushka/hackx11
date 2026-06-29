@@ -8,16 +8,50 @@ import Image from "next/image";
 export default function NavBar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
+      
+      const sectionIds = ["about", "timeline", "rewards", "ambassadors", "memories", "faq"];
+      let bestSection = "";
+      const centerY = window.innerHeight / 2;
+      let closestDistance = Infinity;
+
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el) {
+          const { top, bottom } = el.getBoundingClientRect();
+          // If the section crosses the center of the screen, it's the active one
+          if (top <= centerY && bottom >= centerY) {
+            bestSection = id;
+            break;
+          }
+          
+          // Fallback: if no section strictly crosses the center, find the closest one
+          const sectionCenter = (top + bottom) / 2;
+          const distance = Math.abs(centerY - sectionCenter);
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            bestSection = id;
+          }
+        }
+      }
+
+      if (bestSection) {
+        setActiveSection(bestSection);
+      } else if (window.scrollY < 100) {
+        setActiveSection("");
+      }
     };
-    window.addEventListener("scroll", handleScroll);
+    
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinks = ["Timeline", "Ambassadors", "Memories", "FAQ"];
+  const navLinks = ["About", "Timeline", "Rewards", "Ambassadors", "Memories", "FAQ"];
 
   return (
     <motion.header
@@ -64,23 +98,42 @@ export default function NavBar() {
           </Link>
 
           {/* Desktop Links */}
-          <nav className="hidden lg:flex items-center gap-8">
-            {navLinks.map((item) => (
-              <Link
-                key={item}
-                href={`#${item.toLowerCase().replace(/\s+/g, "-")}`}
-                className="text-sm font-medium text-white/65 hover:text-white transition-colors duration-200 tracking-wide"
-              >
-                {item}
-              </Link>
-            ))}
+          <nav className="hidden lg:flex items-center gap-2 bg-white/[0.02] border border-white/[0.06] rounded-full p-1.5 relative backdrop-blur-md">
+            {navLinks.map((item) => {
+              const hrefId = item.toLowerCase().replace(/\s+/g, "-");
+              const isActive = activeSection === hrefId;
+              
+              return (
+                <Link
+                  key={item}
+                  href={`#${hrefId}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById(hrefId)?.scrollIntoView({ behavior: "smooth" });
+                    setActiveSection(hrefId);
+                  }}
+                  className={`relative px-3 lg:px-4 py-1.5 lg:py-2 text-[13px] lg:text-sm xl:text-[15px] font-medium transition-colors duration-300 rounded-full tracking-wide ${
+                    isActive ? "text-white" : "text-white/65 hover:text-white"
+                  }`}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="active-nav-pill"
+                      className="absolute inset-0 bg-white/[0.09] border border-white/[0.14] rounded-full shadow-[inset_0_1px_1px_rgba(255,255,255,0.12),_0_4px_12px_rgba(0,0,0,0.2)]"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10">{item}</span>
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Desktop CTA Buttons & Mobile Hamburger */}
           <div className="flex items-center gap-3 relative z-50">
             <a
               href="#oc"
-              className="hidden md:flex items-center justify-center px-5 py-2 rounded-full text-sm font-medium text-white/70 hover:text-white transition-all duration-300"
+              className="hidden md:flex items-center justify-center px-4 lg:px-5 py-1.5 lg:py-2 rounded-full text-[13px] lg:text-sm xl:text-[15px] font-medium text-white/70 hover:text-white transition-all duration-300"
               style={{
                 background: "rgba(255,255,255,0.06)",
                 border: "1px solid rgba(255,255,255,0.10)",
@@ -93,7 +146,7 @@ export default function NavBar() {
               href={process.env.NEXT_PUBLIC_REGISTRATION_URL || "#"}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:flex items-center justify-center px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-bold text-white transition-all duration-300"
+              className="hidden sm:flex items-center justify-center px-4 lg:px-5 py-1.5 lg:py-2 rounded-full text-[13px] lg:text-sm xl:text-[15px] font-bold text-white transition-all duration-300"
               style={{
                 background: "linear-gradient(135deg, #1A6FD4 0%, #5BB8FF 100%)",
                 boxShadow: "0 0 20px rgba(91,184,255,0.25), inset 0 1px 0 rgba(255,255,255,0.2)",
@@ -135,19 +188,34 @@ export default function NavBar() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.95 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute top-full left-4 right-4 mt-2 p-4 rounded-3xl bg-[#041A3A]/90 backdrop-blur-xl border border-[#5BB8FF]/20 shadow-2xl lg:hidden z-40"
+              className="absolute top-full left-4 right-4 mt-2 p-4 rounded-3xl bg-[#010814]/40 backdrop-blur-2xl border border-white/10 shadow-2xl lg:hidden z-40"
             >
               <nav className="flex flex-col gap-2">
-                {navLinks.map((item) => (
-                  <Link
-                    key={item}
-                    href={`#${item.toLowerCase().replace(/\s+/g, "-")}`}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-colors"
-                  >
-                    {item}
-                  </Link>
-                ))}
+                {navLinks.map((item) => {
+                  const hrefId = item.toLowerCase().replace(/\s+/g, "-");
+                  const isActive = activeSection === hrefId;
+                  
+                  return (
+                    <Link
+                      key={item}
+                      href={`#${hrefId}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setMobileMenuOpen(false);
+                        setTimeout(() => {
+                          document.getElementById(hrefId)?.scrollIntoView({ behavior: "smooth" });
+                        }, 200);
+                      }}
+                      className={`px-4 py-3 rounded-xl text-sm font-semibold transition-colors border ${
+                        isActive
+                          ? "text-white bg-[#1A6FD4]/20 border-[#5BB8FF]/20"
+                          : "text-white/80 border-transparent hover:text-white hover:bg-white/5"
+                      }`}
+                    >
+                      {item}
+                    </Link>
+                  );
+                })}
                 <div className="h-px w-full bg-white/10 my-2" />
                 <a
                   href={process.env.NEXT_PUBLIC_REGISTRATION_URL || "#"}

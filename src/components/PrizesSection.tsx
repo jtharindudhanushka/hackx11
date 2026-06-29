@@ -61,7 +61,7 @@ export default function PrizesSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative w-full bg-[#010814] pt-10 pb-10 md:py-20 overflow-hidden z-10">
+    <section id="rewards" ref={sectionRef} className="relative w-full bg-[#010814] pt-10 pb-10 md:py-20 overflow-hidden z-10">
 
       {/* Ambient deep glow */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -193,20 +193,33 @@ export default function PrizesSection() {
 
                       <p className="text-white font-bold text-lg mb-3 tracking-tight text-center md:text-left">{prize.label}</p>
                       
-                      <div className="text-center md:text-left flex flex-col gap-0.5 mb-6">
-                        <span className="text-white font-extrabold text-2xl tracking-tight select-none">
+                      <div className="text-center md:text-left flex flex-col gap-1 mb-6">
+                        <motion.span 
+                          animate={{ 
+                            textShadow: [
+                              `0 0 8px ${prize.accent}00`, 
+                              `0 0 24px ${prize.accent}90`, 
+                              `0 0 8px ${prize.accent}00`
+                            ] 
+                          }}
+                          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: visualIdx * 0.4 }}
+                          className="text-white font-black tracking-tight select-none"
+                          style={{
+                            fontSize: isFirst ? "2.5rem" : "2rem",
+                            lineHeight: 1.1
+                          }}
+                        >
                           {prize.amount}
-                        </span>
-                        <span className="text-white/40 font-medium text-[10px] tracking-widest uppercase">
+                        </motion.span>
+                        <span className="text-white/50 font-semibold text-[11px] tracking-widest uppercase mt-1">
                           {prize.tagline}
                         </span>
                       </div>
                     </div>
 
-                    {/* Card Footer */}
                     <div className="border-t border-white/5 pt-4 text-center md:text-left relative z-20">
-                      <span className="text-[10px] text-white/30 tracking-widest uppercase font-semibold">
-                        Grand Finals · hackX 11.0
+                      <span className="text-[10px] text-white/30 tracking-widest font-semibold">
+                        GRAND FINALS · hackX 11.0
                       </span>
                     </div>
 

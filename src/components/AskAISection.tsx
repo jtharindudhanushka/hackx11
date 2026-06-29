@@ -127,8 +127,11 @@ export default function AskAISection() {
   const handleSendMessage = async (text: string) => {
     if (!text.trim() || isLoading) return;
 
-    // Append user message to state
-    setMessages((prev) => [...prev, { sender: "user", text }]);
+    // Append user message to state and hide previous menus
+    setMessages((prev) => {
+      const clearedPrev = prev.map(m => ({ ...m, showMenu: false }));
+      return [...clearedPrev, { sender: "user", text }];
+    });
     setIsLoading(true);
 
     try {
@@ -159,7 +162,8 @@ export default function AskAISection() {
           sender: "ai", 
           text: aiReply, 
           tier: data.tier,
-          source: data.source
+          source: data.source,
+          showMenu: true
         }
       ]);
     } catch (error: any) {
@@ -186,7 +190,7 @@ export default function AskAISection() {
       }
 
       setTimeout(() => {
-        setMessages((prev) => [...prev, { sender: "ai", text: fallbackReply }]);
+        setMessages((prev) => [...prev, { sender: "ai", text: fallbackReply, showMenu: true }]);
         setIsLoading(false);
       }, 750);
       return;
@@ -301,8 +305,8 @@ export default function AskAISection() {
                             "Eligibility",
                             "Timeline",
                             "Rules & Guidelines",
-                            "HackX",
-                            "HackX Jr",
+                            "hackX",
+                            "hackX Jr",
                             "Contact",
                           ].map((item) => (
                             <button
@@ -342,32 +346,7 @@ export default function AskAISection() {
               )}
             </div>
 
-            {/* Quick replies for next query, shown only when not loading and there's at least one user query */}
-            {!isLoading && messages.length > 1 && (
-              <div className="px-6 py-3 border-t border-white/5 bg-white/[0.01]">
-                <p className="text-[10px] text-white/40 font-bold uppercase tracking-wider mb-2">Do you want further clarifications?</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {[
-                    "Registration",
-                    "Eligibility",
-                    "Timeline",
-                    "Rules & Guidelines",
-                    "HackX",
-                    "HackX Jr",
-                    "Contact",
-                  ].map((item) => (
-                    <button
-                      type="button"
-                      key={item}
-                      onClick={() => handleMenuClick(item)}
-                      className="px-3 py-1.5 rounded-full border border-white/5 bg-white/5 hover:bg-white/10 text-[11px] font-semibold text-white/70 hover:text-white cursor-pointer transition-colors"
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+
 
             {/* Input Area */}
             <form onSubmit={handleSubmit} className="p-4 bg-white/[0.02] border-t border-white/5">
