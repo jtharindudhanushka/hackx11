@@ -98,7 +98,6 @@
   }
 
   html {
-    scroll-behavior: smooth;
     /* Reserve the scrollbar gutter on both sides so left and right page
        margins stay symmetric (no content shift from the scrollbar). */
     scrollbar-gutter: stable both-edges;
@@ -128,7 +127,6 @@
     background: #010814;
     color: #ffffff;
     font-family: 'TT Hoves Pro', system-ui, sans-serif;
-    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

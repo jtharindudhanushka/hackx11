@@ -179,6 +179,7 @@ export default function NewSection2() {
               <motion.span
                 {...fade(0)}
                 className="eyebrow text-center md:text-left"
+                style={{ textTransform: 'none' }}
               >
                 What Is hackX?
               </motion.span>

@@ -11,56 +11,56 @@ const coordinators = [
     role: "Chief Coordinator",
     email: "praveen.hackx@gmail.com",
     phone: "+94 77 286 8600",
-    avatar: "/OC Images/Draft OC.webp",
+    avatar: "/OC Images/Praveen.png",
   },
   {
     name: "Tharushi Kulathunga",
     role: "Chief Coordinator",
     email: "tharushi.hackx@gmail.com",
     phone: "+94 70 725 3446",
-    avatar: "/OC Images/Draft OC.webp",
+    avatar: "/OC Images/Tharushi.png",
   },
   {
     name: "Sameera Ekanayaka",
     role: "Financial Coordinator",
     email: "sameera.hackx@gmail.com",
     phone: "+94 76 142 7662",
-    avatar: "/OC Images/Draft OC.webp",
+    avatar: "/OC Images/Sameera.png",
   },
   {
     name: "Imasha Karunathilaka",
     role: "Financial Coordinator",
     email: "imashaa.hackx@gmail.com",
     phone: "+94 77 485 2074",
-    avatar: "/OC Images/Draft OC.webp",
+    avatar: "/OC Images/Imasha.png",
   },
   {
     name: "Tharindu Dhanushka",
     role: "Partnership Coordinator",
     email: "tharindu.hackx@gmail.com",
     phone: "+94 76 219 5995",
-    avatar: "/OC Images/Draft OC.webp",
+    avatar: "/OC Images/Tharindu.png",
   },
   {
     name: "Thilini Bhagya",
     role: "Partnership Coordinator",
     email: "thilini.hackx@gmail.com",
     phone: "+94 76 947 6496",
-    avatar: "/OC Images/Draft OC.webp",
+    avatar: "/OC Images/Thilini.png",
   },
   {
     name: "Charith Fonseka",
     role: "Marketing Coordinator",
     email: "charith.hackx@gmail.com",
     phone: "+94 78 256 7430",
-    avatar: "/OC Images/Draft OC.webp",
+    avatar: "/OC Images/Charith.png",
   },
   {
     name: "Manumi Senevirathna",
     role: "Marketing Coordinator",
     email: "manumi.hackx@gmail.com",
     phone: "+94 77 015 0508",
-    avatar: "/OC Images/Draft OC.webp",
+    avatar: "/OC Images/Manumi.png",
   },
 ];
 
@@ -86,7 +86,7 @@ function CoordCard({ coord }: { coord: typeof coordinators[0] }) {
           <img
             src={coord.avatar}
             alt={coord.name}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            className="w-full h-full object-cover object-bottom transition-transform duration-700 group-hover:scale-105"
           />
         </div>
 
@@ -101,10 +101,10 @@ function CoordCard({ coord }: { coord: typeof coordinators[0] }) {
 
         {/* Info overlay (sitting clean on top of the blurred fade background) */}
         <div className="relative z-20 flex flex-col w-full">
-          <p className="text-white font-extrabold text-lg md:text-xl tracking-tight leading-tight mb-1 text-center md:text-left">
+          <p className="text-white font-extrabold text-lg md:text-xl tracking-tight leading-tight mb-1 text-center">
             {coord.name}
           </p>
-          <p className="text-[#5BB8FF] text-xs md:text-sm font-semibold tracking-wide mb-4 text-center md:text-left">
+          <p className="text-[#5BB8FF] text-xs md:text-sm font-semibold tracking-wide mb-4 text-center">
             {coord.role}
           </p>
 
