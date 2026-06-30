@@ -239,14 +239,6 @@ export default function AskAISection() {
           className="text-center mb-10 md:mb-12"
         >
 
-          <motion.span
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="eyebrow mb-4 text-center"
-          >
-            AI Assistant
-          </motion.span>
           <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">Ask Mascot Anything</h2>
           <p className="text-lg text-white/60 font-light max-w-2xl mx-auto text-center">
             Chat with our AI Assistant to get instant answers about hackX 11.0

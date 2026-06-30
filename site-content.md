@@ -19,9 +19,7 @@ Where university students turn bold ideas into real ventures. Backed by the nati
 
 
 **Menu links**
-- About
 - Timeline
-- Rewards
 - Ambassadors
 - Memories
 - FAQ
@@ -359,12 +357,22 @@ Register Now
 *(Shown when hovering over each photo in the carousel — currently placeholder copy)*
 
 
-**Label:** Edition
-**Title format:** hackX {n}.0
-**Description:** A description of the breakthrough solutions and memories built during this landmark challenge.
+**Title format:** Expert Deliberation
+**Description:** Judges evaluating ideas with insight
+
+**Title format:** Focused Audience
+**Description:** Engaged minds absorbing every presentation
+
+**Title format:** Team Showcase
+**Description:** Confident innovators ready to make an impact
+
+**Title format:** Prize Presentation
+**Description:** Celebrating innovation and outstanding achievement
+
+**Title format:** The Team
+**Description:** The team behind hackX National Hackathon Series 2025
 
 
-> ⚠️ **To do:** Replace the placeholder description above with a real short description for each hackX edition (1.0 through 10.0).
 
 
 ---
@@ -400,31 +408,31 @@ Phone: +94 70 725 3446
 
 
 **Member 3**
-Name: Sameera Ekanayaka
-Role: Financial Coordinator
-Email: sameera.hackx@gmail.com
-Phone: +94 76 142 7662 
-
-
-**Member 4**
-Name: Imasha Karunathilaka
-Role: Financial Coordinator
-Email: imashaa.hackx@gmail.com
-Phone: +94 77 485 2074 
-
-
-**Member 5**
 Name: Tharindu Dhanushka
 Role: Partnership Coordinator
 Email: tharindu.hackx@gmail.com
 Phone: +94 76 219 5995 
 
 
-**Member 6**
+**Member 4**
 Name: Thilini Bhagya
 Role: Partnership Coordinator
 Email: thilini.hackx@gmail.com
 Phone: +94 76 947 6496 
+
+
+**Member 5**
+Name: Sameera Ekanayaka
+Role: Financial Coordinator
+Email: sameera.hackx@gmail.com
+Phone: +94 76 142 7662 
+
+
+**Member 6**
+Name: Imasha Karunathilaka
+Role: Financial Coordinator
+Email: imashaa.hackx@gmail.com
+Phone: +94 77 485 2074 
 
 
 **Member 7**

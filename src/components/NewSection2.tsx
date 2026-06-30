@@ -176,18 +176,11 @@ export default function NewSection2() {
           {/* LEFT — Narrative */}
           <div className="lg:col-span-6 flex flex-col space-y-8 lg:pt-4">
             <div className="flex flex-col space-y-3 md:space-y-4">
-              <motion.span
-                {...fade(0)}
-                className="eyebrow text-center md:text-left"
-                style={{ textTransform: 'none' }}
-              >
-                What Is hackX?
-              </motion.span>
               <motion.h2
                 {...fade(0.05)}
                 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.05] text-center md:text-left"
               >
-                More Than a<br className="hidden md:block" /> Hackathon.
+                What is hackX?
               </motion.h2>
             </div>
 
@@ -252,8 +245,8 @@ export default function NewSection2() {
           className="w-full mt-16 md:mt-24 relative z-50"
         >
           {/* Label */}
-          <motion.p {...fade(0.1)} className="text-xs font-bold tracking-[0.2em] uppercase text-white/40 mb-6 text-center">
-            Watch — hackX 10.0 Grand Finals
+          <motion.p {...fade(0.1)} className="text-xs font-bold tracking-[0.2em] text-white/40 mb-6 text-center">
+            Recap of hackX National Hackathon Series 2025
           </motion.p>
 
           <div className="relative w-full rounded-[2rem] p-[1px] group">

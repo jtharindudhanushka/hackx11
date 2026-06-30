@@ -98,7 +98,7 @@ export default function NavBar() {
           </Link>
 
           {/* Desktop Links */}
-          <nav className="hidden lg:flex items-center gap-2 bg-white/[0.02] border border-white/[0.06] rounded-full p-1.5 relative backdrop-blur-md">
+          <nav className="hidden lg:flex items-center gap-2 relative">
             {navLinks.map((item) => {
               const hrefId = item.toLowerCase().replace(/\s+/g, "-");
               const isActive = activeSection === hrefId;

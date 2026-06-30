@@ -3,11 +3,31 @@
 import { motion } from "framer-motion";
 
 const memories = [
-  "https://picsum.photos/seed/hackathon1/800/600",
-  "https://picsum.photos/seed/coding2/800/600",
-  "https://picsum.photos/seed/tech3/800/600",
-  "https://picsum.photos/seed/team4/800/600",
-  "https://picsum.photos/seed/presentation5/800/600",
+  {
+    src: "/Memories/Expert%20Deliberation.webp",
+    title: "Expert Deliberation",
+    description: "Judges evaluating ideas with insight"
+  },
+  {
+    src: "/Memories/Focused%20Audience.webp",
+    title: "Focused Audience",
+    description: "Engaged minds absorbing every presentation"
+  },
+  {
+    src: "/Memories/Team%20Showcase.webp",
+    title: "Team Showcase",
+    description: "Confident innovators ready to make an impact"
+  },
+  {
+    src: "/Memories/Prize%20Presentation.webp",
+    title: "Prize Presentation",
+    description: "Celebrating innovation and outstanding achievement"
+  },
+  {
+    src: "/Memories/The%20Team.webp",
+    title: "The Team",
+    description: "The team behind hackX National Hackathon Series 2025"
+  }
 ];
 
 export default function MemoriesSection() {
@@ -44,8 +64,7 @@ export default function MemoriesSection() {
           style={{ width: "fit-content" }}
         >
           {/* Duplicate the array twice for seamless infinite scroll */}
-          {[...memories, ...memories].map((src, idx) => {
-            const editionNumber = (idx % memories.length) + 1;
+          {[...memories, ...memories].map((memory, idx) => {
             return (
               <div 
                 key={idx} 
@@ -55,17 +74,16 @@ export default function MemoriesSection() {
                 
                 {/* Using img for raw images instead of Next/Image to avoid config issues with external domains during prototyping */}
                 <img 
-                  src={src} 
-                  alt={`hackX ${editionNumber}.0 Memory`} 
+                  src={memory.src} 
+                  alt={memory.title} 
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
                 />
 
                 {/* Hover overlay details */}
-                <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 md:p-8 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/70 backdrop-blur-[2px] translate-y-3 group-hover:translate-y-0">
-                  <span className="text-xs font-semibold tracking-widest text-[#5BB8FF] uppercase mb-1">Edition</span>
-                  <h3 className="text-xl font-extrabold text-white mb-1.5">hackX {editionNumber}.0</h3>
+                <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 md:p-8 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-gradient-to-t from-[#010814]/90 via-transparent to-transparent translate-y-3 group-hover:translate-y-0">
+                  <h3 className="text-xl font-extrabold text-white mb-1.5">{memory.title}</h3>
                   <p className="text-white/70 text-xs md:text-sm font-light leading-relaxed">
-                    A description of the breakthrough solutions and memories built during this landmark challenge.
+                    {memory.description}
                   </p>
                 </div>
               </div>

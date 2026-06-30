@@ -62,9 +62,6 @@ export default function FAQSection() {
           viewport={{ once: true }}
           className="flex flex-col items-center justify-center w-full mb-12 relative z-20 text-center"
         >
-          <p className="eyebrow mb-4">
-            Everything You Need To Know
-          </p>
           <h2 className="text-4xl md:text-5xl xl:text-6xl font-extrabold text-white tracking-tight">
             Frequently Asked Questions
           </h2>
