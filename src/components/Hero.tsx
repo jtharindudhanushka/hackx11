@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import ShaderBackground from './ShaderBackground';
@@ -8,30 +8,37 @@ import UnderwaterEffect from './UnderwaterEffect';
 import HeroForeground from './HeroForeground';
 
 export default function Hero() {
-  const ref = useRef<HTMLDivElement>(null);
+  // Drive everything off the ABSOLUTE page scroll (monotonic) instead of a
+  // section-relative progress. Framer's target progress (with Lenis smooth
+  // scroll) resets back toward 0 once the hero scrolls out of view, which made
+  // the title/subtitle fade back IN as the hero's last sliver left the screen.
+  const { scrollY } = useScroll();
+  const [vh, setVh] = useState(800);
+  useEffect(() => {
+    const f = () => setVh(window.innerHeight);
+    f();
+    window.addEventListener("resize", f);
+    return () => window.removeEventListener("resize", f);
+  }, []);
 
-  // Track the Hero section's scroll relative to the viewport
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
+  // Fade out title and buttons over the first ~half viewport of scrolling
+  const titleOp = useTransform(scrollY, [0, vh * 0.55], [1, 0], { clamp: true });
+  const titleY  = useTransform(scrollY, [0, vh * 0.55], [0, -40], { clamp: true });
 
-  // Fade out title and buttons as the user scrolls down
-  const titleOp = useTransform(scrollYProgress, [0, 0.6], [1, 0], { clamp: true });
-  const titleY  = useTransform(scrollYProgress, [0, 0.6], ["0px", "-40px"], { clamp: true });
-  
-  const botOp   = useTransform(scrollYProgress, [0, 0.5], [1, 0], { clamp: true });
-  const botY    = useTransform(scrollYProgress, [0, 0.5], ["0px", "-20px"], { clamp: true });
+  const botOp   = useTransform(scrollY, [0, vh * 0.45], [1, 0], { clamp: true });
+  const botY    = useTransform(scrollY, [0, vh * 0.45], [0, -20], { clamp: true });
 
   // Zoom in the background and foreground layers (scale 1.0 -> 1.3) over the scroll
-  const zoomScale = useTransform(scrollYProgress, [0, 1], [1.0, 1.3], { clamp: true });
+  const zoomScale = useTransform(scrollY, [0, vh], [1.0, 1.3], { clamp: true });
 
   // BG scroll parallax (makes the background scroll slower)
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0px", "150px"], { clamp: true });
+  const bgY = useTransform(scrollY, [0, vh], [0, 150], { clamp: true });
+
+  // 0 → 1 progress across the first viewport, handed to the foreground layer.
+  const heroProg = useTransform(scrollY, [0, vh], [0, 1], { clamp: true });
 
   return (
     <motion.section
-      ref={ref}
       style={{
         position: "relative",
         zIndex: 1,
@@ -97,6 +104,7 @@ export default function Hero() {
           textAlign: "center",
           lineHeight: 1.07,
           letterSpacing: "-0.025em",
+          textTransform: "uppercase",
           margin: 0, padding: "0 20px",
         }}>
           {/* Line 1 */}
@@ -106,7 +114,7 @@ export default function Hero() {
             transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
             style={{
               display: "block",
-              fontSize: "clamp(2.25rem, 9vw, 4.5rem)",
+              fontSize: "clamp(1.9rem, 7.5vw, 3.75rem)",
               color: "#ffffff",
               // NO text shadow per user request
             }}
@@ -121,7 +129,7 @@ export default function Hero() {
             transition={{ duration: 0.9, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
             style={{
               display: "block",
-              fontSize: "clamp(2.25rem, 9vw, 4.5rem)",
+              fontSize: "clamp(1.9rem, 7.5vw, 3.75rem)",
               background: "linear-gradient(100deg, #5BB8FF 0%, #d6f0ff 50%, #5BB8FF 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -138,7 +146,7 @@ export default function Hero() {
             transition={{ duration: 0.9, delay: 0.56, ease: [0.22, 1, 0.36, 1] }}
             style={{
               display: "block",
-              fontSize: "clamp(2.25rem, 9vw, 4.5rem)",
+              fontSize: "clamp(1.9rem, 7.5vw, 3.75rem)",
               color: "rgba(255,255,255,0.88)",
             }}
           >
@@ -148,7 +156,7 @@ export default function Hero() {
       </motion.div>
 
       {/* ── z-50: Hero Foreground ── */}
-      <HeroForeground scrollProgress={scrollYProgress} />
+      <HeroForeground scrollProgress={heroProg} />
 
       {/* ── Bottom fade overlay to fade the Hero Foreground into the dark background ── */}
       <div style={{

@@ -1,5 +1,13 @@
 "use client";
 
+/* ─────────────────────────────────────────────────────────────
+   /oc — STANDALONE SANDBOX COPY of the "Contact Us" OC section.
+   This is an isolated copy of <TeamSection /> so we can iterate on
+   the OC cards here without touching the live homepage. Once the
+   design is finalized, port the changes back into
+   src/components/TeamSection.tsx.
+   ───────────────────────────────────────────────────────────── */
+
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import BorderGlow from "@/components/ui/BorderGlow";
@@ -310,7 +318,7 @@ function CoordCard({ coord }: { coord: typeof coordinators[0] }) {
         <canvas ref={canvasRef} className="absolute inset-0 z-[11] pointer-events-none" />
 
         {/* Blurred fade overlay from the bottom up behind the text details */}
-        <div 
+        <div
           className="absolute inset-x-0 bottom-0 h-[60%] z-10 bg-gradient-to-t from-[#010814] via-[#010814]/75 to-transparent backdrop-blur-xl pointer-events-none"
           style={{
             maskImage: "linear-gradient(to top, black 35%, transparent 100%)",
@@ -356,7 +364,7 @@ function CoordCard({ coord }: { coord: typeof coordinators[0] }) {
   );
 }
 
-export default function TeamSection() {
+function OCSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const isInteracting = useRef(false);
 
@@ -416,9 +424,9 @@ export default function TeamSection() {
   };
 
   return (
-    <section 
+    <section
       id="oc"
-      className="relative w-full bg-[#010814] pt-10 pb-10 md:py-20 overflow-hidden z-10" 
+      className="relative w-full bg-[#010814] pt-10 pb-10 md:py-20 overflow-hidden z-10"
     >
       {/* Ambient background blur */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -439,7 +447,7 @@ export default function TeamSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.65, delay: 0.07 }}
-              className="text-4xl md:text-5xl font-extrabold text-white tracking-tight text-center md:text-left uppercase"
+              className="text-4xl md:text-5xl font-extrabold text-white tracking-tight text-center md:text-left"
             >
               Contact Us
             </motion.h2>
@@ -481,8 +489,8 @@ export default function TeamSection() {
         {/* Shadow overlays for smooth fade on edges */}
         <div className="absolute top-0 bottom-0 left-0 w-16 md:w-32 bg-gradient-to-r from-[#010814] to-transparent z-20 pointer-events-none" />
         <div className="absolute top-0 bottom-0 right-0 w-16 md:w-32 bg-gradient-to-l from-[#010814] to-transparent z-20 pointer-events-none" />
-        
-        <div 
+
+        <div
           ref={scrollRef}
           onScroll={handleScroll}
           className="flex gap-3 md:gap-4 px-6 md:px-12 py-4 overflow-x-auto snap-x snap-mandatory hide-scrollbar items-center h-[360px] md:h-[460px]"
@@ -498,7 +506,7 @@ export default function TeamSection() {
               <CoordCard coord={coord} />
             </div>
           ))}
-          
+
         </div>
       </div>
 
@@ -508,5 +516,13 @@ export default function TeamSection() {
         style={{ background: "linear-gradient(to bottom, transparent, #010814)" }}
       />
     </section>
+  );
+}
+
+export default function OCSandboxPage() {
+  return (
+    <main style={{ background: "#010814", minHeight: "100vh", width: "100%", overflowX: "clip" }} className="flex items-center">
+      <OCSection />
+    </main>
   );
 }

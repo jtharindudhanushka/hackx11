@@ -41,6 +41,57 @@ const timelineImages = [
   { num: 3, left: 160, width: 140 }, // Center of this image is 230vw (Exactly GF!), ends at 300vw
 ];
 
+// ── Subtle previous-year backdrops ──
+// Faint, blurred, radial-masked photos from past years placed low in the world
+// canvas (zIndex 2 — behind the ground images, mountain and nodes) to fill the
+// empty sky between the mountain and the final reveal. No hard edges: a radial
+// mask feathers every side and the images are heavily dimmed/blurred.
+const timelineBgs = [
+  "/timeline-bgs/registration.webp",
+  "/timeline-bgs/Proposal%20Submission.webp",
+  "/timeline-bgs/Workshops.webp",
+  "/timeline-bgs/Semi%20FInals.webp",
+  "/timeline-bgs/Finals.webp",
+];
+const BG_CX_DESKTOP = [90, 115, 140, 165, 200]; // world-vw centres (before the end image at 160+)
+const BG_CX_MOBILE  = [160, 225, 290, 355, 400];
+
+function TimelineBackdrops({ cx, width = 42 }: { cx: number[]; width?: number }) {
+  return (
+    <>
+      {timelineBgs.map((src, i) => (
+        <div
+          key={src}
+          className="absolute pointer-events-none"
+          style={{
+            left: `${cx[i] - width / 2}vw`,
+            top: "92vh",
+            width: `${width}vw`,
+            height: "96vh", // spans ~92→188vh, centred on the line (140vh)
+            zIndex: 2,
+            opacity: 0.16,
+            WebkitMaskImage: "radial-gradient(ellipse 55% 55% at 50% 50%, #000 26%, transparent 74%)",
+            maskImage: "radial-gradient(ellipse 55% 55% at 50% 50%, #000 26%, transparent 74%)",
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={src}
+            alt=""
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              filter: "grayscale(0.35) brightness(0.62) contrast(1.02) blur(2px)",
+              display: "block",
+            }}
+          />
+        </div>
+      ))}
+    </>
+  );
+}
+
 const BRAND = "#5BB8FF";
 const BRAND2 = "#1A6FD4";
 
@@ -196,19 +247,23 @@ function DesktopJourneySection() {
               className="absolute w-[100vw] flex flex-col items-center text-center px-10"
               style={{ left: 0, top: "12vh", y: introY, opacity: textOp, zIndex: 10 }}
             >
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white" style={{
+              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white uppercase" style={{
                 lineHeight: 1.1,
               }}>
                 Your Journey
               </h1>
               <p className="font-light" style={{
                 marginTop: "1.5rem",
-                color: "rgba(91,184,255,0.6)",
-                fontSize: "clamp(1.2rem, 2vw, 1.8rem)",
+                fontFamily: "'TT Hoves Pro', sans-serif",
+                color: "rgba(255,255,255,0.6)",
+                fontSize: "clamp(0.95rem, 1.6vw, 1.15rem)",
               }}>
                 Every great venture starts somewhere.<br />Yours starts here.
               </p>
             </motion.div>
+
+            {/* ── Subtle previous-year backdrops (fill the empty sky) ── */}
+            <TimelineBackdrops cx={BG_CX_DESKTOP} width={42} />
 
             {/* ── MOUNTAIN ──
                 Bottom fade (black 80% → transparent 90%) keeps the monolith solid down to
@@ -589,13 +644,14 @@ function MobileJourneySection() {
               className="absolute w-[100vw] flex flex-col items-center text-center px-8"
               style={{ left: 0, top: "12vh", y: introY, opacity: textOp, zIndex: 10 }}
             >
-              <h1 className="text-4xl font-extrabold tracking-tight text-white" style={{ lineHeight: 1.1 }}>
+              <h1 className="text-4xl font-extrabold tracking-tight text-white uppercase" style={{ lineHeight: 1.1 }}>
                 Your Journey
               </h1>
               <p className="font-light" style={{
                 marginTop: "1.2rem",
-                color: "rgba(91,184,255,0.6)",
-                fontSize: "clamp(1rem, 4vw, 1.4rem)",
+                fontFamily: "'TT Hoves Pro', sans-serif",
+                color: "rgba(255,255,255,0.6)",
+                fontSize: "clamp(0.9rem, 3.5vw, 1.1rem)",
               }}>
                 Every great venture starts somewhere.<br />Yours starts here.
               </p>
@@ -636,6 +692,9 @@ function MobileJourneySection() {
                 }}
               />
             </motion.div>
+
+            {/* ── Subtle previous-year backdrops (fill the empty sky) ── */}
+            <TimelineBackdrops cx={BG_CX_MOBILE} width={55} />
 
             {/* img2 (ruins) — static ground backdrop on the shared ground (bottom at world
                 196vh), around node 0–1. Slides through the viewport as the world pans. */}

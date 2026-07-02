@@ -547,6 +547,15 @@
   );
 }
 
+/* Hide scrollbar (used by horizontal carousels like the OC/Team strip) */
+.hide-scrollbar {
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* IE/Edge */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;                  /* Chrome/Safari */
+}
+
 /* Premium custom scrollbar styling */
 .custom-scrollbar {
   scrollbar-width: thin;

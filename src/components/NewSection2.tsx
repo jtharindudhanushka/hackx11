@@ -178,7 +178,7 @@ export default function NewSection2() {
             <div className="flex flex-col space-y-3 md:space-y-4">
               <motion.h2
                 {...fade(0.05)}
-                className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.05] text-center md:text-left"
+                className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.05] text-center md:text-left uppercase"
               >
                 What is hackX?
               </motion.h2>

@@ -79,7 +79,7 @@ export default function PrizesSection() {
         <div className="text-center mb-12 md:mb-16">
           <motion.h2
             {...fade(0.08)}
-            className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.05] mb-6"
+            className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.05] mb-6 uppercase"
           >
             hackX 11.0 Awards
           </motion.h2>
