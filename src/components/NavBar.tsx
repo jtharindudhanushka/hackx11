@@ -26,7 +26,8 @@ export default function NavBar() {
       }
       lastScrollY.current = currentScrollY;
       
-      const sectionIds = ["about", "timeline", "rewards", "ambassadors", "memories", "faq"];
+      // "ambassadors" temporarily hidden
+      const sectionIds = ["about", "timeline", "rewards", "memories", "faq"];
       let bestSection = "";
       const centerY = window.innerHeight / 2;
       let closestDistance = Infinity;
@@ -63,7 +64,8 @@ export default function NavBar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinks = ["About", "Timeline", "Rewards", "Ambassadors", "Memories", "FAQ"];
+  // "Ambassadors" temporarily hidden
+  const navLinks = ["About", "Timeline", "Rewards", "Memories", "FAQ"];
 
   return (
     <motion.header

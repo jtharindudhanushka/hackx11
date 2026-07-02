@@ -24,7 +24,7 @@ export default function Home() {
         <CriteriaSection />
         <JourneySection />
         <PrizesSection />
-        <AmbassadorSection />
+        {/* <AmbassadorSection /> */}
         <MemoriesSection />
         <TeamSection />
         <FAQSection />
