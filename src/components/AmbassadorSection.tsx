@@ -60,7 +60,7 @@ export default function AmbassadorSection() {
               {/* Rotating bright arc traced along the map edge */}
               <div className="map-glow-sweep absolute inset-0 z-0 pointer-events-none" style={{ transform: 'scale(1.02)' }}>
                 <img
-                  src="/Sri Lankan Map.png"
+                  src="/Sri Lankan Map.webp"
                   alt=""
                   aria-hidden="true"
                   className="w-full h-full object-contain"
@@ -78,7 +78,7 @@ export default function AmbassadorSection() {
               {/* The actual map image on top */}
               <div className="relative z-10 pointer-events-none">
                 <img
-                  src="/Sri Lankan Map.png"
+                  src="/Sri Lankan Map.webp"
                   alt="Sri Lanka Map"
                   className="w-full h-auto object-contain transition-all duration-700"
                   style={{ filter: 'drop-shadow(0 0 0px transparent)' }}

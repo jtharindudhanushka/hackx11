@@ -44,7 +44,7 @@ export default function HeroForeground({ scrollProgress }: HeroForegroundProps) 
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/Hero Front Layer New.png"
+            src="/Hero Front Layer New.webp"
             alt=""
             style={{
               width: "100%",

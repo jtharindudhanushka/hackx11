@@ -313,7 +313,7 @@ function DesktopJourneySection() {
                 dissolving its pointed floating tip into the dark plain before it's revealed. */}
             <div className="absolute pointer-events-none" style={{ left: "-10vw", top: 0, width: "120vw", height: "230vh", zIndex: 20 }}>
               <img
-                src="/timeline mountain.png"
+                src="/timeline mountain.webp"
                 alt="Mountain"
                 className="w-full h-full object-cover object-top"
                 style={{
@@ -344,7 +344,7 @@ function DesktopJourneySection() {
                 {img.num === 3 ? (
                   <div style={{ width: "100%", height: "100%", WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 22%, black 100%)", maskImage: "linear-gradient(to bottom, transparent 0%, black 22%, black 100%)" }}>
                     <img
-                      src={`/horizontal timeline/${img.num}.png`}
+                      src={`/horizontal timeline/${img.num}.webp`}
                       alt={`Ruins ${img.num}`}
                       style={{
                         height: "100%", width: "100%",
@@ -359,7 +359,7 @@ function DesktopJourneySection() {
                   <div style={{ width: "100%", height: "100%", WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 20%, black 100%)" }}>
                     <div style={{ width: "100%", height: "100%", WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)" }}>
                       <img
-                        src={`/horizontal timeline/${img.num}.png`}
+                        src={`/horizontal timeline/${img.num}.webp`}
                         alt={`Ruins ${img.num}`}
                         style={{
                           height: "100%", width: "100%",
@@ -742,7 +742,7 @@ function MobileJourneySection() {
               style={{ left: "-10vw", top: 0, width: "120vw", height: "300vh", zIndex: 20, x: mountainXStr, opacity: mountainOp, filter: mountainFilter }}
             >
               <img
-                src="/timeline mountain.png"
+                src="/timeline mountain.webp"
                 alt="Mountain"
                 className="w-full h-full object-cover object-top"
                 style={{
@@ -767,7 +767,7 @@ function MobileJourneySection() {
               }}>
                 <div style={{ width: "100%", height: "100%", WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 20%, black 100%)" }}>
                   <div style={{ width: "100%", height: "100%", WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)" }}>
-                    <img src="/horizontal timeline/2.png" alt="Ruins 2"
+                    <img src="/horizontal timeline/2.webp" alt="Ruins 2"
                       style={{ height: "100%", width: "100%", objectFit: "cover", objectPosition: "center bottom", filter: "brightness(0.7) contrast(1.15)", display: "block" }} />
                   </div>
                 </div>
@@ -786,7 +786,7 @@ function MobileJourneySection() {
             }}>
               <div style={{ width: "100%", height: "100%", WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 100%)" }}>
                 <div style={{ width: "100%", height: "100%", WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 3%, black 86%, transparent 100%)" }}>
-                  <img src="/horizontal timeline/3.png" alt="Grand Finals"
+                  <img src="/horizontal timeline/3.webp" alt="Grand Finals"
                     style={{ height: "100%", width: "100%", objectFit: "cover", objectPosition: "center bottom", filter: "brightness(0.85) contrast(1.15)", display: "block" }} />
                 </div>
               </div>

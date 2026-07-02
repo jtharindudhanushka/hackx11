@@ -68,7 +68,7 @@ export default function Hero() {
           style={{ transformOrigin: "center center" }}
         >
           <Image
-            src="/Hero - BG Img.png"
+            src="/Hero - BG Img.webp"
             alt=""
             fill
             sizes="100vw"
