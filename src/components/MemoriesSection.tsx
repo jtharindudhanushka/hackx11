@@ -1,6 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 
 const memories = [
   {
@@ -42,9 +44,10 @@ const layout = [
   "col-span-1 md:col-span-2",                          // The Team
 ];
 
-const MemoryCard = ({ memory, className }: { memory: typeof memories[0]; className: string }) => (
+const MemoryCard = ({ memory, className, onClick }: { memory: typeof memories[0]; className: string; onClick: () => void }) => (
   <div
-    className={`group relative rounded-2xl md:rounded-3xl overflow-hidden border border-white/5 shadow-xl ${className}`}
+    onClick={onClick}
+    className={`group relative rounded-2xl md:rounded-3xl overflow-hidden border border-white/5 shadow-xl cursor-pointer ${className}`}
   >
     {/* eslint-disable-next-line @next/next/no-img-element */}
     <img
@@ -67,6 +70,13 @@ const MemoryCard = ({ memory, className }: { memory: typeof memories[0]; classNa
 );
 
 export default function MemoriesSection() {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <section id="memories" className="relative w-full bg-[#010814] pt-12 pb-10 md:py-20 overflow-hidden z-10">
       {/* Seamless top blend */}
@@ -92,7 +102,12 @@ export default function MemoriesSection() {
       <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-4 auto-rows-[160px] md:auto-rows-[210px]">
           {memories.map((memory, idx) => (
-            <MemoryCard key={`mem-${idx}`} memory={memory} className={layout[idx]} />
+            <MemoryCard 
+              key={`mem-${idx}`} 
+              memory={memory} 
+              className={layout[idx]} 
+              onClick={() => setSelectedImage(memory.src)} 
+            />
           ))}
         </div>
       </div>
@@ -111,6 +126,45 @@ export default function MemoriesSection() {
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
+
+      {/* Lightbox Modal */}
+      {mounted && createPortal(
+        <AnimatePresence>
+          {selectedImage && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedImage(null)}
+              className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 cursor-zoom-out"
+            >
+              {/* Close button */}
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-6 right-6 md:top-10 md:right-10 text-white/50 hover:text-white bg-white/5 hover:bg-white/10 p-3 rounded-full backdrop-blur-md transition-all cursor-pointer z-50"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+              
+              {/* Full size image */}
+              <motion.img
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                src={selectedImage}
+                alt="Fullscreen Memory"
+                className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl cursor-default"
+                onClick={(e) => e.stopPropagation()} // Prevent click from closing when clicking the image itself
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </section>
   );
 }

@@ -32,10 +32,10 @@ const StatCard = ({
       colors={["#1A6FD4", "#5BB8FF", "#0A3878"]}
     />
     <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/0 group-hover:from-white/[0.03] group-hover:to-transparent transition-colors duration-500 pointer-events-none" />
-    
+
     {/* Mobile-only subtle animated glow border since we removed the 3D artifacts from mobile */}
     <div className="absolute inset-0 rounded-3xl border border-white/0 lg:border-none pointer-events-none" style={{ boxShadow: 'inset 0 0 20px rgba(91,184,255,0.1)' }} />
-    <motion.div 
+    <motion.div
       className="absolute inset-0 rounded-3xl pointer-events-none lg:hidden"
       animate={{ opacity: [0.3, 0.6, 0.3] }}
       transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -123,12 +123,12 @@ export default function NewSection2() {
 
 
 
-      {/* Floating 3D Artifact Images — desktop only, where they have room to breathe */}
-      <div className="absolute inset-0 max-w-7xl mx-auto pointer-events-none z-[60] hidden lg:block">
+      {/* Floating 3D Artifact Images — Fully Responsive */}
+      <div className="absolute inset-0 max-w-7xl mx-auto pointer-events-none z-[60]">
         {/* Top Left (Cylinder) */}
         <motion.div
           style={{ y: y1, rotate: rotate1 }}
-          className="absolute top-[-6%] left-[42%] w-[250px] xl:w-[350px] opacity-90"
+          className="absolute top-[60%] left-[-10%] md:left-[5%] lg:left-[42%] lg:top-[-6%] w-[160px] md:w-[220px] lg:w-[250px] xl:w-[350px] opacity-100"
         >
           <motion.img
             src="/section 2/Top left.webp"
@@ -141,7 +141,7 @@ export default function NewSection2() {
         {/* Top Right (Pillar) */}
         <motion.div
           style={{ y: y2, rotate: rotate2 }}
-          className="absolute top-[-4%] -right-[2%] xl:-right-[5%] w-[220px] xl:w-[320px] opacity-90"
+          className="absolute top-[38%] right-[2%] md:right-[5%] lg:top-[-4%] lg:-right-[2%] xl:-right-[5%] w-[150px] md:w-[200px] lg:w-[220px] xl:w-[320px] opacity-90"
         >
           <motion.img
             src="/section 2/Top Right.webp"
@@ -154,7 +154,7 @@ export default function NewSection2() {
         {/* Bottom Center (Brick) */}
         <motion.div
           style={{ y: y3, rotate: rotate3 }}
-          className="absolute top-[22%] left-[60%] w-[280px] xl:w-[400px] opacity-90"
+          className="absolute top-[75%] left-[50%] -translate-x-1/2 lg:top-[22%] lg:left-[60%] lg:translate-x-0 w-[180px] md:w-[250px] lg:w-[280px] xl:w-[400px] opacity-90"
         >
           <motion.img
             src="/section 2/Bottom Center.webp"

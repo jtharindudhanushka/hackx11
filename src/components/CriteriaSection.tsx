@@ -7,19 +7,19 @@ const criteria = [
   {
     title: "Go Solo or Build a Team",
     desc: "Participate individually or form a team of two to five members. All team members must be currently enrolled undergraduates from the same university or higher education institute.",
-    imageUrl: "/criteria-images/icon 1.webp",
+    imageUrl: "/criteria-images/icon-1.webp",
     color: "#5BB8FF",
   },
   {
     title: "Your Idea",
     desc: "Present an innovative startup idea, product, service, or solution that addresses a real-world problem or creates meaningful value. Your idea should demonstrate originality, practical potential, and the ability to grow into a sustainable venture.",
-    imageUrl: "/criteria-images/icon 2.webp",
+    imageUrl: "/criteria-images/icon-2.webp",
     color: "#1A6FD4",
   },
   {
     title: "Start Your Journey",
     desc: "Participation is completely free with no registration fees or prerequisites. Simply sign up, submit your proposal, and let your idea do the talking.",
-    imageUrl: "/criteria-images/icon 3.webp",
+    imageUrl: "/criteria-images/icon-3.webp",
     color: "#5BB8FF",
   },
 ];

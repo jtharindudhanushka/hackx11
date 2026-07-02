@@ -8,7 +8,49 @@ import {
   useSpring,
   useMotionValueEvent,
   useMotionTemplate,
+  AnimatePresence,
 } from "framer-motion";
+
+const SkipButton = ({ containerRef }: { containerRef: React.RefObject<HTMLDivElement> }) => {
+  const [showSkip, setShowSkip] = useState(true);
+  useEffect(() => {
+    const checkScroll = () => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const isNearBottom = rect.bottom <= window.innerHeight + 800;
+      setShowSkip(!isNearBottom);
+    };
+    window.addEventListener("scroll", checkScroll, { passive: true });
+    checkScroll();
+    return () => window.removeEventListener("scroll", checkScroll);
+  }, [containerRef]);
+
+  return (
+    <AnimatePresence>
+      {showSkip && (
+        <motion.button
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 10 }}
+          transition={{ duration: 0.3 }}
+          onClick={() => {
+            if (containerRef.current) {
+              const rect = containerRef.current.getBoundingClientRect();
+              window.scrollBy({ top: rect.bottom, behavior: "smooth" });
+            }
+          }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#041a3a]/80 hover:bg-[#041a3a] backdrop-blur-md border border-white/20 text-white shadow-[0_0_20px_rgba(4,26,58,0.8)] transition-all group cursor-pointer pointer-events-auto"
+        >
+          <span className="font-semibold whitespace-nowrap text-sm tracking-wide">Skip Timeline</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform">
+            <polyline points="13 17 18 12 13 7"></polyline>
+            <polyline points="6 17 11 12 6 7"></polyline>
+          </svg>
+        </motion.button>
+      )}
+    </AnimatePresence>
+  );
+};
 
 // ─────────────────────────────────────────────────────────
 //  LAYOUT CONSTANTS  (desktop – untouched)
@@ -479,6 +521,8 @@ function DesktopJourneySection() {
               zIndex: 100
             }}
           />
+
+          <SkipButton containerRef={containerRef} />
         </div>
       </div>
 
@@ -869,6 +913,8 @@ function MobileJourneySection() {
             background: "linear-gradient(to top, #010814 20%, rgba(1,8,20,0.85) 50%, transparent 100%)",
             opacity: exitFadeOp, zIndex: 100,
           }} />
+
+          <SkipButton containerRef={containerRef} />
         </div>
       </div>
 
