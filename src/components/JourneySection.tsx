@@ -289,11 +289,11 @@ function DesktopJourneySection() {
               className="absolute w-[100vw] flex flex-col items-center text-center px-10"
               style={{ left: 0, top: "12vh", y: introY, opacity: textOp, zIndex: 10 }}
             >
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white uppercase" style={{
+              <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white uppercase" style={{
                 lineHeight: 1.1,
               }}>
                 Your Journey
-              </h1>
+              </h2>
               <p className="font-light" style={{
                 marginTop: "1.5rem",
                 fontFamily: "'TT Hoves Pro', sans-serif",
@@ -703,9 +703,9 @@ function MobileJourneySection() {
               className="absolute w-[100vw] flex flex-col items-center text-center px-8"
               style={{ left: 0, top: "12vh", x: introX, y: introY, opacity: textOp, zIndex: 10 }}
             >
-              <h1 className="text-4xl font-extrabold tracking-tight text-white uppercase" style={{ lineHeight: 1.1 }}>
+              <h2 className="text-4xl font-extrabold tracking-tight text-white uppercase" style={{ lineHeight: 1.1 }}>
                 Your Journey
-              </h1>
+              </h2>
               <p className="font-light" style={{
                 marginTop: "1.2rem",
                 fontFamily: "'TT Hoves Pro', sans-serif",
