@@ -94,7 +94,7 @@ export default function CriteriaSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8, delay: idx * 0.15, ease: [0.16, 1, 0.3, 1] }}
-                className="relative p-[1px] rounded-3xl bg-white/[0.04] overflow-hidden group transition-all duration-300"
+                className="relative p-[1px] rounded-3xl bg-white/[0.12] overflow-hidden group transition-all duration-300"
               >
                 {/* Rotating Conic Shine Border (appears on hover) */}
                 <div 

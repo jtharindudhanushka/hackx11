@@ -376,15 +376,26 @@ function DesktopJourneySection() {
                       x: isGF ? "-50%" : "0%", // Center GF exactly over the coordinate
                       alignItems: isGF ? "center" : "flex-start",
                       textAlign: isGF ? "center" : ("left" as any),
-                      ...(isBelow ? { top: "140vh", paddingTop: "16px" } : { bottom: "60vh", paddingBottom: isGF ? "80px" : "16px" }),
-                      width: isGF ? "20vw" : "15vw",
-                      minWidth: isGF ? "260px" : "210px",
+                      ...(isGF
+                        ? { top: "140vh", marginTop: "-55px" }
+                        : isBelow
+                          ? { top: "140vh", paddingTop: "16px" }
+                          : { bottom: "60vh", paddingBottom: "16px" }),
+                      width: isGF ? "260px" : "210px",
                       maxWidth: isGF ? "320px" : "260px",
                       opacity: nodeOps[i],
                       y: nodeYs[i],
                     }}
                   >
-                    <div className="font-bold uppercase" style={{
+                    {isGF && (
+                      <div className="absolute pointer-events-none" style={{
+                        left: "50%", top: "50%", transform: "translate(-50%, -50%)",
+                        width: "180%", height: "180%",
+                        background: "radial-gradient(ellipse at center, rgba(1,8,20,0.9) 0%, rgba(1,8,20,0.6) 40%, transparent 70%)",
+                        zIndex: -1,
+                      }} />
+                    )}
+                    <div className="font-bold uppercase tracking-wide" style={{
                       color: BRAND,
                       fontSize: isGF ? "1rem" : "0.75rem", letterSpacing: "0.15em",
                       marginBottom: "0.3rem",
@@ -490,9 +501,9 @@ function DesktopJourneySection() {
 //  First node pushed out to 170vw so there's clear EMPTY GROUND after the
 //  mountain exits (~panVal -66) before the first text arrives.
 // ─────────────────────────────────────────────────────────
-const SX_M       = [160, 225, 290, 355, 420];  // vw positions
-const CAM_END_M  = -370;                         // -(420 - 50)
-const LINE_W_M   = 370;  // 50 → 420vw (Grand Finals). Begins behind the mountain centre.
+const SX_M       = [160, 225, 290, 355, 460];  // vw positions, pushed GF out to 460 to clear Semi-Finals
+const CAM_END_M  = -410;                         // -(460 - 50)
+const LINE_W_M   = 410;  // 50 → 460vw (Grand Finals). Begins behind the mountain centre.
                          // node0 at 160vw slides in from the right just as the mountain
                          // exits (~panVal -76) — timeline starts with minimal empty ground.
 
@@ -505,8 +516,8 @@ function MobileJourneySection() {
   const p = useSpring(scrollYProgress, { stiffness: 80, damping: 25, restDelta: 0.001 });
 
   const introY    = useTransform(p, [0, 0.20], ["0vh", "90vh"]);
-  const textOp    = useTransform(p, [0.05, 0.12], [1, 0]);
-
+  // Fade out text completely BEFORE the mountain starts fading
+  const textOp    = useTransform(p, [0.02, 0.08], [1, 0]);
   // Pan starts at p=0.05 (≈ ¼ through the mountain drop phase 0→0.20)
   // so the horizontal timeline begins appearing while the mountain is still visible.
   // Line fill starts at 0.16 (as the mountain exits at 0.22) so it visibly emerges from
@@ -516,6 +527,10 @@ function MobileJourneySection() {
   const worldX    = useMotionTemplate`${panVal}vw`;
   const worldY    = useTransform(p, [0, 0.20, 0.87, 1.0], ["0vh", "-90vh", "-90vh", "-100vh"]);
 
+  // Keep the text horizontally centered on screen by counter-panning it against the world
+  const introXNum    = useTransform(panVal, (v) => -v);
+  const introX       = useMotionTemplate`${introXNum}vw`;
+
   // Mountain exit animation:
   // Combines counter-pan (keeps mountain screen-fixed) + leftward slide (p=0.05→0.22).
   // Net effect: mountain is stable on screen until scroll starts, then sweeps left and vanishes.
@@ -523,13 +538,13 @@ function MobileJourneySection() {
     // Current world pan (same mapping as panVal but computed here for use in functional form)
     const pan = pVal < 0.05 ? 0 : pVal > 0.87 ? CAM_END_M
       : ((pVal - 0.05) / 0.82) * CAM_END_M;
-    // Slide: 0 → -110vw from p=0.05 to p=0.22
-    const slideT = pVal < 0.05 ? 0 : Math.min(1, (pVal - 0.05) / 0.17);
-    // counter-pan (-pan) keeps it screen-fixed; slide (-110*t) pushes it left
-    return -pan + (-110 * slideT);
+    // Counter-pan (-pan) keeps it screen-fixed. 
+    // Slide is completely removed so the cropped container edges NEVER enter the viewport.
+    return -pan;
   });
   const mountainXStr   = useMotionTemplate`${mountainXNum}vw`;
-  const mountainOp     = useTransform(p, [0.07, 0.22], [1, 0]);
+  // Start fading mountain ONLY AFTER the text has completely faded out (0.08)
+  const mountainOp     = useTransform(p, [0.08, 0.22], [1, 0]);
   // Blur ramps up as mountain exits — softens the edge before it fully disappears
   const mountainBlurN  = useTransform(p, [0.07, 0.21], [0, 16]);
   const mountainFilter = useMotionTemplate`blur(${mountainBlurN}px)`;
@@ -629,7 +644,7 @@ function MobileJourneySection() {
               }}
             >
               <div className="font-extrabold tracking-tight" style={{
-                fontSize: "clamp(3rem, 22vw, 7rem)",
+                fontSize: "clamp(4rem, 28vw, 10rem)",
                 background: "linear-gradient(to bottom, #ffffff, #041a3a)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
@@ -642,7 +657,7 @@ function MobileJourneySection() {
             {/* Intro text */}
             <motion.div
               className="absolute w-[100vw] flex flex-col items-center text-center px-8"
-              style={{ left: 0, top: "12vh", y: introY, opacity: textOp, zIndex: 10 }}
+              style={{ left: 0, top: "12vh", x: introX, y: introY, opacity: textOp, zIndex: 10 }}
             >
               <h1 className="text-4xl font-extrabold tracking-tight text-white uppercase" style={{ lineHeight: 1.1 }}>
                 Your Journey
@@ -687,14 +702,14 @@ function MobileJourneySection() {
                 alt="Mountain"
                 className="w-full h-full object-cover object-top"
                 style={{
-                  WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 12%, black 58%, transparent 66%)",
-                  maskImage: "linear-gradient(to bottom, transparent 0%, black 12%, black 58%, transparent 66%)",
+                  WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 12%, black 45%, transparent 55%)",
+                  maskImage: "linear-gradient(to bottom, transparent 0%, black 12%, black 45%, transparent 55%)",
                 }}
               />
             </motion.div>
 
             {/* ── Subtle previous-year backdrops (fill the empty sky) ── */}
-            <TimelineBackdrops cx={BG_CX_MOBILE} width={55} />
+            <TimelineBackdrops cx={BG_CX_MOBILE} width={90} />
 
             {/* img2 (ruins) — static ground backdrop on the shared ground (bottom at world
                 196vh), around node 0–1. Slides through the viewport as the world pans. */}
@@ -715,18 +730,18 @@ function MobileJourneySection() {
               </div>
             ))}
 
-            {/* img3 (Grand Finals) — STATIC, centered on the GF node at 420vw.
-                left=345vw, width=150vw → center=420vw. Slides in from the right like a
+            {/* img3 (Grand Finals) — STATIC, centered on the GF node at 460vw.
+                left=385vw, width=150vw → center=460vw. Slides in from the right like a
                 sidescroller; objectFit=cover fills the narrow mobile viewport. */}
             <div className="absolute pointer-events-none" style={{
-              left: "345vw",
+              left: "385vw",
               top: "96vh",        // pushed down ~10vh; rides the world on the shared ground
               height: "110vh",
               width: "150vw",
               zIndex: 3,
             }}>
               <div style={{ width: "100%", height: "100%", WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 100%)" }}>
-                <div style={{ width: "100%", height: "100%", WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 14%, black 86%, transparent 100%)" }}>
+                <div style={{ width: "100%", height: "100%", WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 3%, black 86%, transparent 100%)" }}>
                   <img src="/horizontal timeline/3.png" alt="Grand Finals"
                     style={{ height: "100%", width: "100%", objectFit: "cover", objectPosition: "center bottom", filter: "brightness(0.85) contrast(1.15)", display: "block" }} />
                 </div>
@@ -764,15 +779,25 @@ function MobileJourneySection() {
                       x: isGF ? "-50%" : "0%",
                       alignItems: isGF ? "center" : "flex-start",
                       textAlign: isGF ? "center" : ("left" as any),
-                      ...(isBelow
-                        ? { top: "140vh", paddingTop: "16px" }
-                        : { bottom: "60vh", paddingBottom: isGF ? "80px" : "16px" }),
+                      ...(isGF
+                        ? { top: "140vh", marginTop: "-55px" } // Centered vertically on the line
+                        : isBelow
+                          ? { top: "140vh", paddingTop: "16px" }
+                          : { bottom: "60vh", paddingBottom: "16px" }),
                       // vw-based width: scales with screen, no fixed pixel minWidth to avoid overflow
                       width: isGF ? "44vw" : "40vw",
                       opacity: nodeOps[i],
                       y: nodeYs[i],
                     }}
                   >
+                    {isGF && (
+                      <div className="absolute pointer-events-none" style={{
+                        left: "50%", top: "50%", transform: "translate(-50%, -50%)",
+                        width: "180%", height: "180%",
+                        background: "radial-gradient(ellipse at center, rgba(1,8,20,0.9) 0%, rgba(1,8,20,0.6) 40%, transparent 70%)",
+                        zIndex: -1,
+                      }} />
+                    )}
                     <div className="font-bold uppercase" style={{
                       color: BRAND,
                       fontSize: isGF ? "clamp(0.65rem, 3vw, 0.9rem)" : "clamp(0.55rem, 2.5vw, 0.75rem)",

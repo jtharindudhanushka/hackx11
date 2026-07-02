@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import BorderGlow from "@/components/ui/BorderGlow";
 
 /* ─── OC Data ─── */
@@ -65,7 +65,52 @@ const coordinators = [
 ];
 
 
-function CoordCard({ coord }: { coord: typeof coordinators[0] }) {
+function CoordCard({ coord, index }: { coord: typeof coordinators[0], index: number }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  
+  // Parallax motion values
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const smoothX = useSpring(mouseX, { damping: 30, stiffness: 150, mass: 0.5 });
+  const smoothY = useSpring(mouseY, { damping: 30, stiffness: 150, mass: 0.5 });
+
+  // Move image inversely to mouse (max 15px shift). 
+  // Image will be scaled to 1.15 so it has plenty of bleed room to avoid clipping edges.
+  const imgX = useTransform(smoothX, [-1, 1], [15, -15]);
+  const imgY = useTransform(smoothY, [-1, 1], [15, -15]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    // Normalize -1 to 1
+    mouseX.set((e.clientX - rect.left - centerX) / centerX);
+    mouseY.set((e.clientY - rect.top - centerY) / centerY);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+  // Generate 3 deterministic "random" dots for this specific card
+  const dots = [0, 1, 2].map((i) => {
+    const seed = index * 3 + i;
+    const isHorizontal = seed % 2 === 0;
+    const delay = (seed * 0.7) % 3;
+    const duration = 3 + ((seed * 1.3) % 4); // 3 to 7 seconds
+    // Map seed to grid positions (16px grid intervals)
+    const position = 16 * ((seed % 10) + 2); 
+    
+    return {
+      isHorizontal,
+      delay,
+      duration,
+      position
+    };
+  });
+
   return (
     <BorderGlow
       edgeSensitivity={30}
@@ -80,31 +125,49 @@ function CoordCard({ coord }: { coord: typeof coordinators[0] }) {
       fillOpacity={0}
       className="w-full h-full group"
     >
-      <div className="relative w-full h-full flex flex-col justify-end p-5 md:p-6 rounded-[24px] overflow-hidden bg-gradient-to-br from-[#010814] to-[#041226]">
+      <div 
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className="relative w-full h-full flex flex-col justify-end p-5 md:p-6 rounded-[24px] overflow-hidden bg-[#010814]"
+      >
         
-        {/* Animated Grid & Glow Background (Behind the person) */}
-        <div className="absolute inset-0 z-0 overflow-hidden opacity-50 group-hover:opacity-80 transition-opacity duration-700">
-          {/* Grid pattern */}
-          <div 
-            className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:16px_16px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_80%)]"
-          />
-          {/* Subtle glowing blob */}
-          <div className="absolute -bottom-10 -left-10 w-40 h-40 rounded-full bg-gradient-to-tr from-[#5BB8FF]/20 to-transparent blur-3xl opacity-30 group-hover:opacity-60 transform group-hover:scale-125 transition-all duration-700 animate-pulse"></div>
+        {/* Radar Ripple Background */}
+        <div className="absolute inset-0 z-0 overflow-hidden opacity-70 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none flex items-center justify-center">
+          {[0, 1, 2, 3].map((i) => (
+            <motion.div
+              key={i}
+              className="absolute rounded-full border-[1.5px] border-[#5BB8FF]/20"
+              initial={{ width: 0, height: 0, opacity: 0.6 }}
+              animate={{ width: "250%", height: "250%", opacity: 0 }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "linear",
+                delay: i * 2,
+              }}
+              style={{ aspectRatio: "1/1" }}
+            />
+          ))}
+          {/* Subtle glowing core */}
+          <div className="absolute w-32 h-32 rounded-full bg-gradient-to-tr from-[#1A6FD4]/30 to-[#5BB8FF]/10 blur-3xl group-hover:scale-125 transition-transform duration-700"></div>
         </div>
 
         {/* Background Image Container */}
         <div className="absolute inset-0 z-[1] overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          {/* Parallax Image */}
+          <motion.img
             src={coord.avatar}
             alt={coord.name}
-            className="w-full h-full object-cover object-bottom transform group-hover:scale-[1.03] group-hover:-rotate-1 transition-all duration-700 ease-out"
+            style={{ x: imgX, y: imgY, scale: 1.1 }}
+            className="w-full h-full object-cover object-bottom transition-transform duration-700 ease-out"
           />
         </div>
 
         {/* Light Sweep Effect (Over the image) */}
         <div className="absolute inset-0 z-[2] overflow-hidden pointer-events-none rounded-[24px]">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out"></div>
+          {/* duration-0 ensures it instantly snaps back on un-hover without playing a reverse sweep, while group-hover:duration-1000 plays the smooth sweep on hover */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-[150%] group-hover:translate-x-[150%] transition-none group-hover:transition-transform group-hover:duration-1000 ease-in-out"></div>
         </div>
 
         {/* Blurred fade overlay from the bottom up behind the text details */}
@@ -351,7 +414,7 @@ export default function TeamSection() {
           {/* 3 cycles: start in cycle 1 (scrollLeft=cycleWidth), reset when past cycle 2 or before cycle 0.5 */}
           {[...coordinators, ...coordinators, ...coordinators].map((coord, idx) => (
             <div key={idx} className="relative w-[220px] h-[320px] md:w-[280px] md:h-[420px] shrink-0">
-              <CoordCard coord={coord} />
+              <CoordCard coord={coord} index={idx} />
             </div>
           ))}
           
