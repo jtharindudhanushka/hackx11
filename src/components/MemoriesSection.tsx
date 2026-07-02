@@ -4,11 +4,19 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 
+/* Chronological event order: opening → networking → sessions → judging →
+   showcase → awards → merch → group photo. The feature card is always
+   index 0, so the day's opening moment leads the grid. */
 const memories = [
   {
-    src: "/Memories/Expert%20Deliberation.webp",
-    title: "Expert Deliberation",
-    description: "Judges evaluating ideas with insight"
+    src: "/Memories/Opening%20Ceremony.webp",
+    title: "Opening Ceremony",
+    description: "Kicking off a day of innovation"
+  },
+  {
+    src: "/Memories/Networking%20Moments.webp",
+    title: "Networking Moments",
+    description: "Building connections beyond the competition"
   },
   {
     src: "/Memories/Focused%20Audience.webp",
@@ -21,9 +29,19 @@ const memories = [
     description: "Confident innovators ready to make an impact"
   },
   {
+    src: "/Memories/Expert%20Deliberation.webp",
+    title: "Expert Deliberation",
+    description: "Judges evaluating ideas with insight"
+  },
+  {
     src: "/Memories/Prize%20Presentation.webp",
     title: "Prize Presentation",
     description: "Celebrating innovation and outstanding achievement"
+  },
+  {
+    src: "/Memories/Official%20Merch.webp",
+    title: "Official Merchandise",
+    description: "A memory to wear beyond the event"
   },
   {
     src: "/Memories/The%20Team.webp",
@@ -32,23 +50,27 @@ const memories = [
   }
 ];
 
-/* Bento spans per card.
-   Mobile (2 cols): first card is a full-width feature, the rest tile 2-up.
-   Desktop (6 cols): first card is a large 2×2 feature on the left, the other
-   four fill the right in a 2×2 arrangement — every cell tiles with no gaps. */
-const layout = [
-  "col-span-2 row-span-1 md:col-span-2 md:row-span-2", // Expert Deliberation (feature)
-  "col-span-1 md:col-span-2",                          // Focused Audience
-  "col-span-1 md:col-span-2",                          // Team Showcase
-  "col-span-1 md:col-span-2",                          // Prize Presentation
-  "col-span-1 md:col-span-2",                          // The Team
+type Memory = (typeof memories)[number];
+
+/* Desktop (6 cols): index 0 is a large 2×2 feature, indices 1-4 fill the
+   remaining 2×2 block, and indices 5-7 form a closing row — 18 cells,
+   no gaps. Mobile shows a rotating 5-card window (feature + 2×2) instead
+   of cramming all 8 in, cycling automatically. */
+const desktopLayout = [
+  "col-span-2 row-span-2", // feature
+  "col-span-2",
+  "col-span-2",
+  "col-span-2",
+  "col-span-2",
+  "col-span-2",
+  "col-span-2",
+  "col-span-2",
 ];
 
-const MemoryCard = ({ memory, className, onClick }: { memory: typeof memories[0]; className: string; onClick: () => void }) => (
-  <div
-    onClick={onClick}
-    className={`group relative rounded-2xl md:rounded-3xl overflow-hidden border border-white/5 shadow-xl cursor-pointer ${className}`}
-  >
+const mobileLayout = ["col-span-2", "col-span-1", "col-span-1", "col-span-1", "col-span-1"];
+
+const MemoryFace = ({ memory }: { memory: Memory }) => (
+  <>
     {/* eslint-disable-next-line @next/next/no-img-element */}
     <img
       src={memory.src}
@@ -66,16 +88,84 @@ const MemoryCard = ({ memory, className, onClick }: { memory: typeof memories[0]
         {memory.description}
       </p>
     </div>
+  </>
+);
+
+const MemoryCard = ({
+  memory,
+  className,
+  onClick,
+  delay = 0
+}: {
+  memory: Memory;
+  className: string;
+  onClick: () => void;
+  delay?: number;
+}) => (
+  <motion.div
+    initial={{ opacity: 0, y: 24, scale: 0.96 }}
+    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+    viewport={{ once: true, amount: 0.3 }}
+    transition={{ duration: 0.5, delay, ease: "easeOut" }}
+    onClick={onClick}
+    className={`group relative rounded-2xl md:rounded-3xl overflow-hidden border border-white/5 shadow-xl cursor-pointer ${className}`}
+  >
+    <MemoryFace memory={memory} />
+  </motion.div>
+);
+
+/* Mobile rotator: the 5 slot elements are permanent (same className, same
+   DOM position, never mount/unmount), so the grid itself never reflows.
+   Only the image+caption inside each slot crossfades when the memory it's
+   showing changes — a pure opacity swap with zero layout movement. */
+const MemorySlot = ({
+  memory,
+  className,
+  onClick
+}: {
+  memory: Memory;
+  className: string;
+  onClick: () => void;
+}) => (
+  <div
+    onClick={onClick}
+    className={`group relative rounded-2xl overflow-hidden border border-white/5 shadow-xl cursor-pointer ${className}`}
+  >
+    <AnimatePresence initial={false}>
+      <motion.div
+        key={memory.title}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 1, ease: "easeInOut" }}
+        className="absolute inset-0"
+      >
+        <MemoryFace memory={memory} />
+      </motion.div>
+    </AnimatePresence>
   </div>
 );
+
+const MOBILE_WINDOW = 5;
+const MOBILE_ROTATE_MS = 5000;
 
 export default function MemoriesSection() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [mobileStart, setMobileStart] = useState(0);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setMobileStart((prev) => (prev + MOBILE_WINDOW) % memories.length);
+    }, MOBILE_ROTATE_MS);
+    return () => clearInterval(id);
+  }, []);
+
+  const mobileVisible = Array.from({ length: MOBILE_WINDOW }, (_, i) => memories[(mobileStart + i) % memories.length]);
 
   return (
     <section id="memories" className="relative w-full bg-[#010814] pt-12 pb-10 md:py-20 overflow-hidden z-10">
@@ -98,15 +188,33 @@ export default function MemoriesSection() {
         </motion.div>
       </div>
 
-      {/* Bento grid */}
+      {/* Bento grid — rotating window on mobile, full grid on desktop */}
       <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 relative z-10">
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-4 auto-rows-[160px] md:auto-rows-[210px]">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="grid grid-cols-2 gap-3 auto-rows-[160px] md:hidden"
+        >
+          {mobileVisible.map((memory, i) => (
+            <MemorySlot
+              key={`slot-${i}`}
+              memory={memory}
+              className={mobileLayout[i]}
+              onClick={() => setSelectedImage(memory.src)}
+            />
+          ))}
+        </motion.div>
+
+        <div className="hidden md:grid grid-cols-6 gap-4 auto-rows-[210px]">
           {memories.map((memory, idx) => (
-            <MemoryCard 
-              key={`mem-${idx}`} 
-              memory={memory} 
-              className={layout[idx]} 
-              onClick={() => setSelectedImage(memory.src)} 
+            <MemoryCard
+              key={memory.title}
+              memory={memory}
+              className={desktopLayout[idx]}
+              onClick={() => setSelectedImage(memory.src)}
+              delay={(idx % 6) * 0.08}
             />
           ))}
         </div>
