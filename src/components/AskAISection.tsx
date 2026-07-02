@@ -291,7 +291,7 @@ export default function AskAISection() {
 
                       {/* Initial Quick Menu Options */}
                       {msg.showMenu && (
-                        <div className="mt-4 flex flex-col gap-2 max-w-[280px]">
+                        <div className="mt-3 flex flex-row flex-wrap gap-2">
                           {[
                             "Registration",
                             "Eligibility",
@@ -305,10 +305,9 @@ export default function AskAISection() {
                               type="button"
                               key={item}
                               onClick={() => handleMenuClick(item)}
-                              className="flex items-center justify-between px-4 py-2.5 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 hover:border-white/10 text-white/80 hover:text-white text-xs font-semibold transition-all text-left cursor-pointer group"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 hover:bg-[#1A6FD4]/20 hover:border-[#5BB8FF]/30 text-white/70 hover:text-white text-[11px] font-medium transition-all cursor-pointer whitespace-nowrap"
                             >
                               <span>{item}</span>
-                              <span className="text-[#5BB8FF] group-hover:translate-x-0.5 transition-transform">&rsaquo;</span>
                             </button>
                           ))}
                         </div>
