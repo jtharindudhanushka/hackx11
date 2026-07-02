@@ -11,7 +11,7 @@ import {
   AnimatePresence,
 } from "framer-motion";
 
-const SkipButton = ({ containerRef }: { containerRef: React.RefObject<HTMLDivElement> }) => {
+const SkipButton = ({ containerRef }: { containerRef: React.RefObject<HTMLDivElement | null> }) => {
   const [showSkip, setShowSkip] = useState(true);
   useEffect(() => {
     const checkScroll = () => {
