@@ -21,6 +21,16 @@ const tierLabels: Record<number, string> = {
   6: "LLM",
 };
 
+// Only allow safe URL schemes for links rendered from chatbot responses.
+// Neutralizes javascript:/data: etc. while leaving all legitimate links unchanged.
+function safeHref(url: string): string {
+  const trimmed = url.trim();
+  if (/^(https?:|mailto:|tel:)/i.test(trimmed) || /^[/#]/.test(trimmed)) {
+    return trimmed;
+  }
+  return "#";
+}
+
 // Safe client-side markdown formatter for React to render bold text and external links
 function formatMessageText(text: string) {
   const lines = text.split("\n");
@@ -47,10 +57,10 @@ function formatMessageText(text: string) {
           const textVal = linkMatch[1];
           const urlVal = linkMatch[2];
           elements.push(
-            <a 
-              key={key++} 
-              href={urlVal} 
-              target="_blank" 
+            <a
+              key={key++}
+              href={safeHref(urlVal)}
+              target="_blank"
               rel="noopener noreferrer" 
               className="text-[#5BB8FF] hover:underline font-medium"
             >
@@ -98,7 +108,7 @@ export default function AskAISection() {
   // Mount logic to prepare session id and debug state
   useEffect(() => {
     // Generate unique session ID matching widget.js
-    const newSessionId = "session_" + Math.random().toString(36).substr(2, 9) + "_" + Date.now();
+    const newSessionId = "session_" + Math.random().toString(36).substring(2, 11) + "_" + Date.now();
     setSessionId(newSessionId);
 
     // Check debug mode params or local storage
