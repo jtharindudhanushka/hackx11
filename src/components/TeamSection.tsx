@@ -64,223 +64,8 @@ const coordinators = [
   },
 ];
 
-/* ─────────────────────────────────────────────────────────────
-   useHoverReveal — Lando-style cursor-trail reveal (no WebGL).
-
-   A 2D canvas sits over the base photo. As the pointer moves, we
-   stamp feathered, jittered brush blobs into an offscreen alpha
-   "mask", then composite the overlay image through that mask
-   (destination-in). After a short hold the mask is eroded through a
-   noise texture (destination-out) so the trail dissolves like ink —
-   giving the sticker-peel look. The rAF loop runs ONLY while hovering
-   (+ a short fade tail). Disabled on touch / coarse-pointer devices and
-   when prefers-reduced-motion is set (the static photo just shows).
-   ───────────────────────────────────────────────────────────── */
-function useHoverReveal(
-  containerRef: React.RefObject<HTMLDivElement | null>,
-  canvasRef: React.RefObject<HTMLCanvasElement | null>,
-  overlaySrc: string,
-  radiusRatio = 0.26,
-  fade = 0.12, // ink-dissolve erosion strength per frame
-  holdFrames = 28,
-) {
-  useEffect(() => {
-    const container = containerRef.current;
-    const canvas = canvasRef.current;
-    if (!container || !canvas) return;
-
-    // Only enable where a precise pointer can hover; respect reduced motion.
-    const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!canHover || reduce) return;
-
-    const vctx = canvas.getContext("2d");
-    if (!vctx) return;
-
-    // Offscreen alpha mask.
-    const mask = document.createElement("canvas");
-    const mctx = mask.getContext("2d");
-    if (!mctx) return;
-
-    // Pre-rendered feathered brush sprite (drawImage is far cheaper than
-    // building a radial gradient on every stamp).
-    const brush = document.createElement("canvas");
-    brush.width = brush.height = 128;
-    const bctx = brush.getContext("2d")!;
-    const bg = bctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-    bg.addColorStop(0, "rgba(255,255,255,1)");
-    bg.addColorStop(0.55, "rgba(255,255,255,0.85)");
-    bg.addColorStop(1, "rgba(255,255,255,0)");
-    bctx.fillStyle = bg;
-    bctx.beginPath();
-    bctx.arc(64, 64, 64, 0, Math.PI * 2);
-    bctx.fill();
-
-    // Smooth "cloudy" noise texture — used to erode the mask into organic
-    // tendrils during the fade, giving an ink-dissolving-in-water look
-    // instead of a flat linear fade. Rebuilt whenever the canvas resizes.
-    const noise = document.createElement("canvas");
-    function buildNoise() {
-      // Very fine cells (a few device-px each) → no visible "bubbles". The
-      // slight blur on upscale melts the grid into a silky, near-uniform
-      // texture, so the dissolve reads smooth with only a whisper of grain.
-      const cell = 3; // device px per noise cell (smaller = smoother)
-      const lw = Math.max(2, Math.round(W / cell));
-      const lh = Math.max(2, Math.round(H / cell));
-      const low = document.createElement("canvas");
-      low.width = lw; low.height = lh;
-      const lctx = low.getContext("2d")!;
-      const img = lctx.createImageData(lw, lh);
-      for (let i = 0; i < lw * lh; i++) {
-        img.data[i * 4] = 255;
-        img.data[i * 4 + 1] = 255;
-        img.data[i * 4 + 2] = 255;
-        // Bias toward lower alpha so the erosion tendrils stay fine.
-        img.data[i * 4 + 3] = Math.floor(Math.pow(Math.random(), 1.4) * 255);
-      }
-      lctx.putImageData(img, 0, 0);
-      noise.width = W; noise.height = H;
-      const nctx = noise.getContext("2d")!;
-      nctx.imageSmoothingEnabled = true;
-      nctx.filter = "blur(1.2px)"; // silk-smooth the upscaled grid
-      nctx.drawImage(low, 0, 0, W, H);
-      nctx.filter = "none";
-    }
-
-    const overlay = new Image();
-    let ready = false;
-    let ox = 0, oy = 0, ow = 0, oh = 0; // cover-fit box for the overlay
-    let W = 0, H = 0, dpr = 1, r = 60;
-
-    const OVERLAY_SCALE = 1.04; // very slight zoom on the revealed figure
-    function computeCover() {
-      const iw = overlay.naturalWidth, ih = overlay.naturalHeight;
-      if (!iw || !ih) return;
-      const s = Math.max(W / iw, H / ih) * OVERLAY_SCALE;
-      ow = iw * s; oh = ih * s;
-      ox = (W - ow) / 2; oy = H - oh; // center horizontally, anchor to bottom
-    }
-
-    function layout() {
-      const rect = container!.getBoundingClientRect();
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      W = Math.max(1, Math.round(rect.width * dpr));
-      H = Math.max(1, Math.round(rect.height * dpr));
-      canvas!.width = W; canvas!.height = H;
-      canvas!.style.width = `${rect.width}px`;
-      canvas!.style.height = `${rect.height}px`;
-      mask.width = W; mask.height = H;
-      r = Math.max(40 * dpr, rect.width * dpr * radiusRatio);
-      buildNoise();
-      if (ready) computeCover();
-    }
-
-    let lastX = 0, lastY = 0, hasLast = false, hovering = false;
-    let sinceStamp = 0, raf = 0, running = false;
-
-    overlay.onload = () => { ready = true; computeCover(); };
-    overlay.src = overlaySrc;
-
-    function stampBlob(x: number, y: number) {
-      for (let k = 0; k < 3; k++) {
-        const jr = r * (0.55 + Math.random() * 0.55);
-        const jx = x + (Math.random() - 0.5) * r * 0.6;
-        const jy = y + (Math.random() - 0.5) * r * 0.6;
-        mctx!.globalAlpha = 0.5 + Math.random() * 0.4;
-        mctx!.drawImage(brush, jx - jr, jy - jr, jr * 2, jr * 2);
-      }
-      mctx!.globalAlpha = 1;
-    }
-
-    function stampLine(x0: number, y0: number, x1: number, y1: number) {
-      const dist = Math.hypot(x1 - x0, y1 - y0);
-      const step = Math.max(1, r * 0.2);
-      const n = Math.max(1, Math.ceil(dist / step));
-      for (let i = 1; i <= n; i++) {
-        const t = i / n;
-        stampBlob(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t);
-      }
-    }
-
-    function frame() {
-      sinceStamp++;
-
-      if (sinceStamp > holdFrames) {
-        // Hover trail: hold, then ink-dissolve fade out.
-        const t = sinceStamp - holdFrames;
-        mctx!.globalCompositeOperation = "destination-out";
-        mctx!.globalAlpha = fade;
-        mctx!.drawImage(noise, 0, 0);
-        mctx!.globalAlpha = 1;
-        mctx!.fillStyle = `rgba(0,0,0,${Math.min(0.22, 0.012 + t * 0.0035)})`;
-        mctx!.fillRect(0, 0, W, H);
-        mctx!.globalCompositeOperation = "source-over";
-      }
-
-      vctx!.clearRect(0, 0, W, H);
-      if (ready) {
-        // Compose the suit over an opaque dark backdrop, clipped to the mask —
-        // so where the suit PNG is transparent the person's photo never bleeds
-        // through inside the reveal.
-        vctx!.globalCompositeOperation = "source-over";
-        vctx!.fillStyle = "#010814"; // card background
-        vctx!.fillRect(0, 0, W, H);
-        vctx!.drawImage(overlay, ox, oy, ow, oh);
-        vctx!.globalCompositeOperation = "destination-in";
-        vctx!.drawImage(mask, 0, 0);
-        vctx!.globalCompositeOperation = "source-over";
-      }
-
-      // Stop once the pointer is gone and the trail has fully faded.
-      const faded = sinceStamp > holdFrames + 90;
-      if (!hovering && faded) {
-        running = false;
-        vctx!.clearRect(0, 0, W, H);
-        mctx!.clearRect(0, 0, W, H);
-        return;
-      }
-      raf = requestAnimationFrame(frame);
-    }
-
-    function ensureRunning() {
-      if (!running) { running = true; sinceStamp = 0; raf = requestAnimationFrame(frame); }
-    }
-
-    function onMove(e: PointerEvent) {
-      const rect = container!.getBoundingClientRect();
-      const x = (e.clientX - rect.left) * dpr;
-      const y = (e.clientY - rect.top) * dpr;
-      hovering = true;
-      if (hasLast) stampLine(lastX, lastY, x, y); else stampBlob(x, y);
-      lastX = x; lastY = y; hasLast = true;
-      sinceStamp = 0; // reset the hold timer on each new reveal
-      ensureRunning();
-    }
-    function onEnter() { hovering = true; hasLast = false; sinceStamp = 0; ensureRunning(); }
-    function onLeave() { hovering = false; hasLast = false; }
-
-    layout();
-    const ro = new ResizeObserver(layout);
-    ro.observe(container);
-    container.addEventListener("pointerenter", onEnter);
-    container.addEventListener("pointermove", onMove);
-    container.addEventListener("pointerleave", onLeave);
-
-    return () => {
-      ro.disconnect();
-      container.removeEventListener("pointerenter", onEnter);
-      container.removeEventListener("pointermove", onMove);
-      container.removeEventListener("pointerleave", onLeave);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, [containerRef, canvasRef, overlaySrc, radiusRatio, fade, holdFrames]);
-}
 
 function CoordCard({ coord }: { coord: typeof coordinators[0] }) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  useHoverReveal(cardRef, canvasRef, "/OC/HoverOverlay.webp");
-
   return (
     <BorderGlow
       edgeSensitivity={30}
@@ -295,31 +80,44 @@ function CoordCard({ coord }: { coord: typeof coordinators[0] }) {
       fillOpacity={0}
       className="w-full h-full group"
     >
-      <div ref={cardRef} className="relative w-full h-full flex flex-col justify-end p-5 md:p-6 rounded-[24px] overflow-hidden">
+      <div className="relative w-full h-full flex flex-col justify-end p-5 md:p-6 rounded-[24px] overflow-hidden bg-gradient-to-br from-[#010814] to-[#041226]">
+        
+        {/* Animated Grid & Glow Background (Behind the person) */}
+        <div className="absolute inset-0 z-0 overflow-hidden opacity-50 group-hover:opacity-80 transition-opacity duration-700">
+          {/* Grid pattern */}
+          <div 
+            className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:16px_16px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_80%)]"
+          />
+          {/* Subtle glowing blob */}
+          <div className="absolute -bottom-10 -left-10 w-40 h-40 rounded-full bg-gradient-to-tr from-[#5BB8FF]/20 to-transparent blur-3xl opacity-30 group-hover:opacity-60 transform group-hover:scale-125 transition-all duration-700 animate-pulse"></div>
+        </div>
+
         {/* Background Image Container */}
-        <div className="absolute inset-0 z-0 overflow-hidden">
+        <div className="absolute inset-0 z-[1] overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={coord.avatar}
             alt={coord.name}
-            className="w-full h-full object-cover object-bottom"
+            className="w-full h-full object-cover object-bottom transform group-hover:scale-[1.03] group-hover:-rotate-1 transition-all duration-700 ease-out"
           />
         </div>
 
-        {/* Cursor-trail reveal layer (sits above the photo, below the text) */}
-        <canvas ref={canvasRef} className="absolute inset-0 z-[11] pointer-events-none" />
+        {/* Light Sweep Effect (Over the image) */}
+        <div className="absolute inset-0 z-[2] overflow-hidden pointer-events-none rounded-[24px]">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out"></div>
+        </div>
 
         {/* Blurred fade overlay from the bottom up behind the text details */}
         <div 
-          className="absolute inset-x-0 bottom-0 h-[60%] z-10 bg-gradient-to-t from-[#010814] via-[#010814]/75 to-transparent backdrop-blur-xl pointer-events-none"
+          className="absolute inset-x-0 bottom-0 h-[60%] z-[3] bg-gradient-to-t from-[#010814] via-[#010814]/80 to-transparent backdrop-blur-md pointer-events-none transition-all duration-500 group-hover:h-[65%]"
           style={{
-            maskImage: "linear-gradient(to top, black 35%, transparent 100%)",
-            WebkitMaskImage: "linear-gradient(to top, black 35%, transparent 100%)",
+            maskImage: "linear-gradient(to top, black 40%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to top, black 40%, transparent 100%)",
           }}
         />
 
-        {/* Info overlay (sitting clean on top of the blurred fade background) */}
-        <div className="relative z-20 flex flex-col w-full">
+        {/* Info overlay */}
+        <div className="relative z-[4] flex flex-col w-full transform group-hover:-translate-y-1 transition-transform duration-500">
           <p className="text-white font-extrabold text-lg md:text-xl tracking-tight leading-tight mb-1 text-center">
             {coord.name}
           </p>
@@ -379,6 +177,8 @@ export default function TeamSection() {
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const el = e.currentTarget;
+    if (el.dataset.animating === "true") return; // Do not interfere during button animation
+    
     const { cycleWidth } = getMetrics();
     // Seamless loop: when past 2 cycles jump back 1 cycle, when before 1 cycle jump forward 1 cycle
     if (el.scrollLeft >= cycleWidth * 2) {
@@ -388,31 +188,87 @@ export default function TeamSection() {
     }
   };
 
-  // Auto-advance scroll natively
+  // Auto-advance scroll natively using requestAnimationFrame for maximum smoothness
   useEffect(() => {
-    const timer = setInterval(() => {
+    let rafId: number;
+    let lastTime = performance.now();
+    let accumulatedScroll = 0;
+
+    const tick = (now: number) => {
+      const dt = Math.min(now - lastTime, 50); // cap delta time
+      lastTime = now;
+
       const el = scrollRef.current;
-      if (el && !isInteracting.current) {
+      if (el && !isInteracting.current && el.dataset.animating !== "true") {
         const { cycleWidth } = getMetrics();
-        // If we've scrolled past 1 full cycle, jump back by 1 cycle instantly (no glitch)
         if (el.scrollLeft >= cycleWidth * 2) {
           el.scrollLeft -= cycleWidth;
         } else {
-          el.scrollLeft += 1;
+          // Accumulate fractional pixels for smooth slow-speed crawling
+          accumulatedScroll += 0.03 * dt; // approx 1.8px per frame at 60fps
+          if (accumulatedScroll >= 1) {
+            el.scrollLeft += Math.floor(accumulatedScroll);
+            accumulatedScroll -= Math.floor(accumulatedScroll);
+          }
         }
       }
-    }, 16); // ~60fps smooth crawl
-    return () => clearInterval(timer);
+      rafId = requestAnimationFrame(tick);
+    };
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
   }, []);
+
+  const smoothScroll = (delta: number) => {
+    const el = scrollRef.current;
+    if (!el || el.dataset.animating === "true") return;
+    
+    el.dataset.animating = "true";
+    isInteracting.current = true;
+    
+    let start = el.scrollLeft;
+    let target = start + delta;
+    const duration = 600; // subtle, smooth duration
+    const startTime = performance.now();
+    // Ease Out Quint for a very smooth, subtle deceleration
+    const ease = (t: number) => 1 - Math.pow(1 - t, 5);
+    
+    const animate = (now: number) => {
+      const t = Math.min(1, (now - startTime) / duration);
+      let currentPos = start + (target - start) * ease(t);
+      
+      const { cycleWidth } = getMetrics();
+      // Handle wrapping safely during animation without visual jumps
+      if (currentPos >= cycleWidth * 2) {
+        currentPos -= cycleWidth;
+        start -= cycleWidth;
+        target -= cycleWidth;
+      } else if (currentPos < cycleWidth * 0.5) {
+        currentPos += cycleWidth;
+        start += cycleWidth;
+        target += cycleWidth;
+      }
+      
+      el.scrollLeft = currentPos;
+      
+      if (t < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        el.dataset.animating = "false";
+        // Brief delay before resuming auto-scroll
+        setTimeout(() => { isInteracting.current = false; }, 50);
+      }
+    };
+    requestAnimationFrame(animate);
+  };
 
   const next = () => {
     const { totalItemWidth } = getMetrics();
-    scrollRef.current?.scrollBy({ left: totalItemWidth, behavior: "smooth" });
+    smoothScroll(totalItemWidth);
   };
 
   const prev = () => {
     const { totalItemWidth } = getMetrics();
-    scrollRef.current?.scrollBy({ left: -totalItemWidth, behavior: "smooth" });
+    smoothScroll(-totalItemWidth);
   };
 
   return (
@@ -485,7 +341,7 @@ export default function TeamSection() {
         <div 
           ref={scrollRef}
           onScroll={handleScroll}
-          className="flex gap-3 md:gap-4 px-6 md:px-12 py-4 overflow-x-auto snap-x snap-mandatory hide-scrollbar items-center h-[360px] md:h-[460px]"
+          className="flex gap-3 md:gap-4 px-6 md:px-12 py-4 overflow-x-auto hide-scrollbar items-center h-[360px] md:h-[460px] cursor-grab active:cursor-grabbing"
           onMouseEnter={() => { isInteracting.current = true; }}
           onMouseLeave={() => { isInteracting.current = false; }}
           onTouchStart={() => { isInteracting.current = true; }}
@@ -494,7 +350,7 @@ export default function TeamSection() {
         >
           {/* 3 cycles: start in cycle 1 (scrollLeft=cycleWidth), reset when past cycle 2 or before cycle 0.5 */}
           {[...coordinators, ...coordinators, ...coordinators].map((coord, idx) => (
-            <div key={idx} className="relative w-[220px] h-[320px] md:w-[280px] md:h-[420px] shrink-0 snap-center">
+            <div key={idx} className="relative w-[220px] h-[320px] md:w-[280px] md:h-[420px] shrink-0">
               <CoordCard coord={coord} />
             </div>
           ))}
