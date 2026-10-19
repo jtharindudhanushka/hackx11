@@ -63,7 +63,7 @@ export default function PreorderTshirtPage() {
               className="group relative flex items-center justify-between gap-6 rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-md px-6 py-6 md:px-8 md:py-8 transition-all duration-300 hover:bg-brand-dark-blue/60 hover:border-brand-sky/40 hover:shadow-[0_0_30px_rgba(91,184,255,0.1)]"
             >
               <div className="flex flex-col gap-2">
-                <span className="text-[10px] tracking-[0.2em] font-mono text-white/40 group-hover:text-brand-sky transition-colors">
+                <span className="font-display text-lg md:text-2xl font-bold tracking-[0.15em] text-white/50 group-hover:text-brand-sky transition-colors">
                   LEVEL
                 </span>
                 <span className="font-display text-4xl md:text-5xl font-bold text-white tracking-tight">
