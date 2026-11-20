@@ -1,107 +1,50 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useLenis } from "lenis/react";
 
 // ── Event config ──────────────────────────────────────────────
-const EVENT_START = new Date("2026-11-11T09:00:00+05:30").getTime();
-const HIDE_AFTER = new Date("2026-11-11T23:59:59+05:30").getTime();
+const HIDE_AFTER = new Date("2026-12-31T23:59:59+05:30").getTime();
 const SHOW_DELAY_MS = 2600; // preloader (1.5s) + a beat of hero
-const SEEN_KEY = "hackx11-grandfinals-seen";
-const VIMEO_ID = 1203805610; // same video as the "What is hackX" section
-const CLIP_START = 0;
-const CLIP_END = 12; // seconds — loop just a short teaser
-const VIDEO_GIVE_UP_MS = 9000; // if it hasn't started by then, keep the poster
+const SEEN_KEY = "hackx11-champions-seen";
+const SLIDE_MS = 5000; // time each winner photo stays on screen
+const ALBUM_URL =
+  "https://www.xtreamyouth.com/events/community/university-of-kelaniya/hackx-national-hackathon-series-2026-grand-finals/";
+const TRACK = "hackX 11.0";
+const WINNERS = [
+  { place: 1, photo: "/winners/place-1.webp", label: "1st Place", team: "Crisis Crew", from: "Sri Lanka Institute of Information Technology (SLIIT)" },
+  { place: 2, photo: "/winners/place-2.webp", label: "2nd Place", team: "Vector 0", from: "University of Peradeniya" },
+  { place: 3, photo: "/winners/place-3.webp", label: "3rd Place", team: "Division Zero", from: "University of Kelaniya" },
+] as const;
 
 // Title-sequence beats (ms on screen). After the last one, the final reveal holds.
 const BEATS = [1100, 1300, 1100, 1300];
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-function useCountdown(target: number) {
-  const [now, setNow] = useState(() => Date.now());
-  useEffect(() => {
-    const t = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(t);
-  }, []);
-  const diff = Math.max(0, target - now);
-  return {
-    d: Math.floor(diff / 86400000),
-    h: Math.floor((diff / 3600000) % 24),
-    m: Math.floor((diff / 60000) % 60),
-    s: Math.floor((diff / 1000) % 60),
-    live: diff === 0,
-  };
-}
-
-function isSlowConnection() {
-  try {
-    const c = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
-    if (!c) return false;
-    return !!c.saveData || /(^|-)2g$/.test(c.effectiveType || "");
-  } catch {
-    return false;
-  }
-}
-
-/** Full-bleed muted teaser. Preloads during the title beats; poster covers any gap. */
-function TeaserVideo({ show }: { show: boolean }) {
-  const hostRef = useRef<HTMLDivElement>(null);
-  const [poster, setPoster] = useState("");
-  const [playing, setPlaying] = useState(false);
-
-  useEffect(() => {
-    fetch(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${VIMEO_ID}&width=1280`)
-      .then((r) => r.json())
-      .then((d) => d.thumbnail_url && setPoster(d.thumbnail_url))
-      .catch(() => {});
-  }, []);
-
-  useEffect(() => {
-    if (isSlowConnection() || !hostRef.current) return;
-    let player: import("@vimeo/player").default | null = null;
-    let cancelled = false;
-    let giveUp: ReturnType<typeof setTimeout>;
-
-    import("@vimeo/player").then(({ default: Player }) => {
-      if (cancelled || !hostRef.current) return;
-      player = new Player(hostRef.current, {
-        id: VIMEO_ID,
-        background: true,
-        muted: true,
-        dnt: true,
-        quality: "540p",
-      });
-      giveUp = setTimeout(() => {
-        player?.destroy().catch(() => {});
-        player = null;
-      }, VIDEO_GIVE_UP_MS);
-      player.on("playing", () => {
-        clearTimeout(giveUp);
-        setPlaying(true);
-      });
-      player.on("timeupdate", ({ seconds }: { seconds: number }) => {
-        if (seconds >= CLIP_END) player?.setCurrentTime(CLIP_START).catch(() => {});
-      });
-      if (CLIP_START) player.setCurrentTime(CLIP_START).catch(() => {});
-    });
-
-    return () => {
-      cancelled = true;
-      clearTimeout(giveUp);
-      player?.destroy().catch(() => {});
-    };
-  }, []);
-
+/** Full-bleed winner photos, cross-fading with a slow push-in. */
+function WinnerSlides({ show, index }: { show: boolean; index: number }) {
   return (
     <motion.div
       className="gf-video"
       initial={false}
-      animate={{ opacity: show ? 1 : 0, scale: show ? 1 : 1.06 }}
+      animate={{ opacity: show ? 1 : 0 }}
       transition={{ duration: 0.9, ease: EASE }}
     >
-      {poster && <img src={poster} alt="" className="gf-poster" />}
-      <div ref={hostRef} className="gf-vimeo" style={{ visibility: playing ? "visible" : "hidden" }} />
+      {WINNERS.map((w, i) => (
+        <motion.img
+          key={w.photo}
+          src={w.photo}
+          alt=""
+          className="gf-slide"
+          initial={false}
+          animate={{ opacity: i === index ? 1 : 0, scale: i === index ? 1 : 1.08 }}
+          transition={{
+            opacity: { duration: 1.2, ease: "easeInOut" },
+            scale: { duration: i === index ? SLIDE_MS / 1000 + 1.2 : 1.2, ease: "linear" },
+          }}
+        />
+      ))}
       <div className="gf-legibility" />
     </motion.div>
   );
@@ -142,6 +85,14 @@ export default function GrandFinalsPopup() {
   const reduce = useReducedMotion();
   const lenis = useLenis();
   const final = step >= BEATS.length;
+  const [slide, setSlide] = useState(0);
+
+  // Cycle the winner photos once the final reveal is up
+  useEffect(() => {
+    if (!open || !final || reduce) return;
+    const t = setInterval(() => setSlide((s) => (s + 1) % WINNERS.length), SLIDE_MS);
+    return () => clearInterval(t);
+  }, [open, final, reduce]);
 
   useEffect(() => {
     if (Date.now() > HIDE_AFTER) return;
@@ -185,7 +136,6 @@ export default function GrandFinalsPopup() {
     };
   }, [open, lenis, close]);
 
-  const c = useCountdown(EVENT_START);
   const rise = (delay: number) => ({
     initial: { opacity: 0, y: 14 },
     animate: { opacity: 1, y: 0 },
@@ -199,7 +149,7 @@ export default function GrandFinalsPopup() {
           key="gf"
           role="dialog"
           aria-modal="true"
-          aria-label="hackX 11.0 Grand Finals — 11th November at Waters Edge"
+          aria-label="hackX 11.0 Grand Finals — meet the champions"
           className="gf-root"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -208,7 +158,7 @@ export default function GrandFinalsPopup() {
         >
           <div className="gf-abyss" />
 
-          <TeaserVideo show={final} />
+          <WinnerSlides show={final} index={slide} />
 
           {/* Cinematic letterbox */}
           <motion.div className="gf-bar gf-bar-top" initial={{ scaleY: 0 }} animate={{ scaleY: 1 }} transition={{ duration: 0.7, ease: EASE }} />
@@ -236,7 +186,7 @@ export default function GrandFinalsPopup() {
                 />
               )}
               {step === 3 && (
-                <Beat key="b3" className="gf-headline gf-huge" lines={["The Grand Finals"]} />
+                <Beat key="b3" className="gf-headline gf-huge" lines={["Meet the Champions"]} />
               )}
             </AnimatePresence>
           </div>
@@ -246,44 +196,39 @@ export default function GrandFinalsPopup() {
             <div className="gf-final">
               <motion.img src="/hackxlogo.webp" alt="hackX 11.0" className="gf-logo-sm" {...rise(0.05)} />
               <p className="gf-eyebrow">
-                <Line delay={0.15}>The Grand Finals, Happening At</Line>
+                <Line delay={0.15}>The Grand Finals · 11 November 2026</Line>
               </p>
-              <h2 className="gf-venue">
-                <Line delay={0.25}>Waters Edge</Line>
+              <h2 className="gf-venue gf-congrats">
+                <Line delay={0.25}>Congratulations!</Line>
               </h2>
-              <motion.p className="gf-when" {...rise(0.5)}>
-                11 November 2026 <span>·</span> 9 AM Onwards
+              <motion.p className="gf-when" {...rise(0.45)}>
+                To the {TRACK} champions, and to every team that made it to the finals.
               </motion.p>
 
-              <motion.div className="gf-countdown" {...rise(0.62)}>
-                {c.live ? (
-                  <span className="gf-live">● Happening Now</span>
-                ) : (
-                  (
-                    [
-                      ["Days", c.d],
-                      ["Hrs", c.h],
-                      ["Min", c.m],
-                      ["Sec", c.s],
-                    ] as const
-                  ).map(([k, v]) => (
-                    <div key={k} className="gf-cd">
-                      <span>{String(v).padStart(2, "0")}</span>
-                      <small>{k}</small>
-                    </div>
-                  ))
-                )}
-              </motion.div>
+              <motion.ol className="gf-podium" {...rise(0.58)}>
+                {WINNERS.map((w, i) => (
+                  <li key={w.place} className={`gf-winner gf-p${w.place}${i === slide ? " gf-on" : ""}`}>
+                    <span className="gf-place">{w.label}</span>
+                    <strong className="gf-team">{w.team}</strong>
+                    <small className="gf-from">{w.from}</small>
+                  </li>
+                ))}
+              </motion.ol>
 
-              <motion.div {...rise(0.74)}>
-                <button
-                  className="btn-primary w-full max-w-[260px] sm:w-[245px] h-[50px] px-5 flex items-center justify-center text-[14px] sm:text-[15px] font-semibold whitespace-nowrap gap-2 shrink-0 cursor-pointer"
-                  onClick={close}
+              <motion.div className="gf-actions" {...rise(0.74)}>
+                <a
+                  href={ALBUM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary w-full max-w-[260px] sm:w-[245px] h-[50px] px-5 flex items-center justify-center text-[14px] sm:text-[15px] font-semibold whitespace-nowrap gap-2 shrink-0"
                 >
-                  <span>Dive In</span>
+                  <span>View Photo Album</span>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
+                    <path d="M7 17 17 7M8 7h9v9" />
                   </svg>
+                </a>
+                <button className="gf-ghost" onClick={close}>
+                  Explore the Site
                 </button>
               </motion.div>
             </div>
@@ -310,9 +255,7 @@ const css = `
 .gf-abyss{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,#061733 0%,#020b1c 55%,#010814 100%)}
 
 .gf-video{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.gf-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.gf-vimeo{position:absolute;inset:0}
-.gf-vimeo iframe{position:absolute;top:50%;left:50%;width:max(100vw,177.78vh);height:max(100vh,56.25vw);transform:translate(-50%,-50%);border:0}
+.gf-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;will-change:opacity,transform}
 .gf-legibility{position:absolute;inset:0;background:linear-gradient(180deg,rgba(1,8,20,.15) 0%,transparent 30%,rgba(1,8,20,.55) 62%,rgba(1,8,20,.92) 100%)}
 
 .gf-bar{position:absolute;left:0;right:0;height:clamp(28px,7vh,72px);background:#000;z-index:3}
@@ -335,11 +278,6 @@ const css = `
   font-size:clamp(3rem,10vw,8rem);color:#fff;text-shadow:0 6px 40px rgba(0,0,0,.5)}
 .gf-when{margin:12px 0 20px;font-size:clamp(1rem,1.8vw,1.3rem);font-weight:400;color:rgba(255,255,255,.85)}
 .gf-when span{color:#5BB8FF;margin:0 .4em}
-.gf-countdown{display:flex;gap:10px;margin-bottom:22px}
-.gf-cd{min-width:60px;padding:8px 6px;text-align:center;border-radius:14px;background:rgba(1,8,20,.55);border:1px solid rgba(91,184,255,.25);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-.gf-cd span{display:block;font-size:1.35rem;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
-.gf-cd small{font-size:11px;color:rgba(255,255,255,.6)}
-.gf-live{color:#5BB8FF;font-weight:600}
 
 .gf-skip{position:absolute;z-index:5;right:20px;bottom:calc(clamp(28px,7vh,72px) + 14px);padding:8px 18px;border-radius:999px;font-size:13px;
   color:rgba(255,255,255,.75);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);cursor:pointer}
@@ -347,10 +285,33 @@ const css = `
   background:rgba(1,8,20,.4);border:1px solid rgba(255,255,255,.2);cursor:pointer}
 .gf-skip:hover,.gf-close:hover{background:rgba(255,255,255,.15)}
 
+.gf-root{--gf-accent:#5BB8FF}
+.gf-final{top:clamp(28px,7vh,72px);overflow-y:auto;scrollbar-width:none}
+.gf-final>:first-child{margin-top:auto}
+.gf-congrats{font-size:clamp(2rem,7vw,5.5rem)}
+.gf-podium{list-style:none;margin:0 0 22px;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:min(100%,860px);align-items:end}
+.gf-winner{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px 14px;border-radius:16px;background:rgba(1,8,20,.55);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.gf-p1{order:2;padding:22px 14px;border-color:var(--gf-accent);box-shadow:0 0 40px -12px var(--gf-accent)}
+.gf-p2{order:1}.gf-p3{order:3}
+.gf-winner{transition:border-color .5s,background .5s}
+.gf-on{border-color:rgba(255,255,255,.55);background:rgba(1,8,20,.72)}
+.gf-p1.gf-on{border-color:var(--gf-accent)}
+.gf-place{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gf-accent)}
+.gf-team{font-size:clamp(1.05rem,1.6vw,1.35rem);font-weight:600;line-height:1.15}
+.gf-p1 .gf-team{font-size:clamp(1.25rem,2vw,1.7rem)}
+.gf-from{font-size:12px;line-height:1.35;color:rgba(255,255,255,.65)}
+.gf-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;width:100%}
+.gf-ghost{height:50px;padding:0 22px;border-radius:999px;font-size:14px;font-weight:500;color:#fff;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);cursor:pointer}
+.gf-ghost:hover{background:rgba(255,255,255,.14)}
+
 @media (max-width:767px){
   .gf-final{bottom:calc(clamp(28px,7vh,72px) + 20px)}
   .gf-when{margin:10px 0 16px}
-  .gf-countdown{gap:8px;margin-bottom:18px}
-  .gf-cd{min-width:54px}
+  .gf-podium{grid-template-columns:1fr;gap:8px;margin-bottom:16px}
+  .gf-winner{flex-direction:row;flex-wrap:wrap;justify-content:center;column-gap:8px;row-gap:2px;padding:10px 12px}
+  .gf-p1{order:0;padding:12px}.gf-p2,.gf-p3{order:0}
+  .gf-from{width:100%}
+  .gf-ghost{height:44px}
+  .gf-logo-sm{width:84px;margin-bottom:6px}
 }
 `;
